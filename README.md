@@ -1,7 +1,7 @@
 staticjinja
 ===========
 
-Script to easily deploy static sites using the jinja2 templating system.
+Script to easily deploy static sites using the extremely handy [jinja2](http://jinja.pocoo.org/docs/) templating language.
 
 Requirements
 ------------
