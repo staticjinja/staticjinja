@@ -3,6 +3,13 @@ staticjinja
 
 Script to easily deploy static sites using the extremely handy [jinja2](http://jinja.pocoo.org/docs/) templating language.
 
+Rationale
+---------
+
+If you are deploying a static website that could benefit from factoring out data or modularizing html pages (especially convenient when prototyping) then you are going to want to use a templating engine of some sort. jinja2 is an extremely powerful tool in this regard.
+
+This project takes away the pain of managing the jinja API and lets you focus on just deploying a site.
+
 Requirements
 ------------
 
