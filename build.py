@@ -10,7 +10,14 @@ from jinja2 import Environment, FileSystemLoader
 
 
 def build_template(env, template_name, **kwargs):
-    """Compile a template."""
+    """Compile a template.
+    *   env should be a Jinja environment variable indicating where to find the
+        templates.
+    *   template_name should be the name of the template as it appears inside
+        of `./templates`.
+    *   kwargs should be a series of key-value pairs. These items will be
+        passed to the template to be used as needed.
+    """
     print "Building %s..." % template_name
     template = env.get_template(template_name)
     with open(template_name, "w") as f:
@@ -18,20 +25,23 @@ def build_template(env, template_name, **kwargs):
 
 
 def parse_csv(filename):
-    """Read data from a CSV."""
+    """Read data from a CSV.
+    This will return a list of dictionaries, with key-value pairs corresponding
+    to each column in the parsed csv.
+    """
     with open(filename, 'rb') as f:
         return list(csv.DictReader(f))
 
 
-def build_index(env):
-    """Build the index page."""
+def main():
+    """Compile each of the templates."""
+    env = Environment(loader=FileSystemLoader(searchpath="./templates"))
+
+    # Add any instructions to build templates here
     build_template(env, 'index.html')
 
-
-def main():
-    env = Environment(loader=FileSystemLoader(searchpath="./templates"))
-    build_index(env)
     print "Templates built."
+    return 0
 
 
 if __name__ == "__main__":
