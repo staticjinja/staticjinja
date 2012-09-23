@@ -1,1 +1,2 @@
 Jinja2==2.5.2
+Hamlish-Jinja==0.2.0

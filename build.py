@@ -3,10 +3,12 @@ Simple static page generator.
 Uses jinja2 to compile templates.
 Templates should live inside `./templates` and will be compiled in '.'.
 """
-import csv
-import sys
-
+from hamlish_jinja import HamlishExtension
 from jinja2 import Environment, FileSystemLoader
+from jinja2.exceptions import TemplateNotFound
+import csv
+import os
+import sys
 
 
 def build_template(env, template_name, **kwargs):
@@ -18,9 +20,11 @@ def build_template(env, template_name, **kwargs):
     *   kwargs should be a series of key-value pairs. These items will be
         passed to the template to be used as needed.
     """
+    name, ext = os.path.splitext(template_name)
     print "Building %s..." % template_name
     template = env.get_template(template_name)
-    with open(template_name, "w") as f:
+    output_name = '%s.html' % name
+    with open(output_name, "w") as f:
         f.write(template.render(**kwargs))
 
 
@@ -35,11 +39,14 @@ def parse_csv(filename):
 
 def main():
     """Compile each of the templates."""
-    env = Environment(loader=FileSystemLoader(searchpath="./templates"))
+    path = "./templates"
+    env = Environment(loader=FileSystemLoader(searchpath=path), extensions=[HamlishExtension])
 
     # Add any instructions to build templates here
-    build_template(env, 'index.html')
-
+    files = os.listdir(path)
+    for file in files:
+        if not file.startswith('_'):
+            build_template(env, file)
     print "Templates built."
     return 0
 

@@ -13,15 +13,18 @@ This project takes away the pain of managing the jinja API and lets you focus on
 Requirements
 ------------
 
+pip install requirements.txt
+
 * jinja2 (`pip install jinja2`)
+* [hamlish-jinja](https://github.com/Pitmairen/hamlish-jinja) for [haml](http://haml.info/) support
 * (optional, for automatic compilation) watchdog (`pip install watchdog`)
 
 Setup
 -----
 
-To compile the templates run `python build.py`. This will look execute the `main` function in `build.py` (which is set by default to build the `index.html` file inside of `./templates`).
+To compile the templates run `python build.py`. This will look execute the `main` function in `build.py` (looks for every file inside `./templates` not starting with `_`).
 
-To compile additional pages, you will need to add more functions specifying how to compile each page. For pages which are loading any data, and therefore don't require a context, adding the line `build_template(env, 'mypage.html')` to `main` is sufficient. For pages which require a context of some sort, you will need to write a custom function that `main` calls, passing context data as extra arguments to `build_template`.
+For pages which require a context of some sort, you will need to write a custom function that `main` calls, passing context data as extra arguments to `build_template`.
 
 Automatic Compilation
 ---------------------
