@@ -3,12 +3,15 @@ Simple static page generator.
 Uses jinja2 to compile templates.
 Templates should live inside `./templates` and will be compiled in '.'.
 """
-from hamlish_jinja import HamlishExtension
-from jinja2 import Environment, FileSystemLoader
-from jinja2.exceptions import TemplateNotFound
 import csv
 import os
 import sys
+
+from hamlish_jinja import HamlishExtension
+from jinja2 import Environment, FileSystemLoader
+
+
+TEMPLATE_DIR = "./templates"
 
 
 def build_template(env, template_name, **kwargs):
@@ -39,14 +42,15 @@ def parse_csv(filename):
 
 def main():
     """Compile each of the templates."""
-    path = "./templates"
-    env = Environment(loader=FileSystemLoader(searchpath=path), extensions=[HamlishExtension])
+    env = Environment(loader=FileSystemLoader(searchpath=TEMPLATE_DIR),
+                      extensions=[HamlishExtension])
 
     # Add any instructions to build templates here
-    files = os.listdir(path)
-    for file in files:
-        if not file.startswith('_'):
-            build_template(env, file)
+    filenames = os.listdir(TEMPLATE_DIR)
+    for filename in filenames:
+        # Don't compile partials or hidden files
+        if not (filename.startswith('_') or filename.startswith(".")):
+            build_template(env, filename)
     print "Templates built."
     return 0
 
@@ -74,9 +78,9 @@ if __name__ == "__main__":
         # Start watching for any changes
         event_handler = JinjaEventHandler()
         observer = Observer()
-        observer.schedule(event_handler, path="./templates")
+        observer.schedule(event_handler, path=TEMPLATE_DIR)
         observer.start()
-        print "Watching ./templates for changes..."
+        print "Watching '%s' for changes..." % TEMPLATE_DIR
         print "Press Ctrl+C to stop."
         try:
             while True:
