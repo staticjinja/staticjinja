@@ -7,11 +7,19 @@ import csv
 import os
 import sys
 
-from hamlish_jinja import HamlishExtension
 from jinja2 import Environment, FileSystemLoader
 
 
+# Directory to search for templates
 TEMPLATE_DIR = "./templates"
+# Any extensions that should be added to Jinja
+JINJA_EXTENSIONS = []
+
+try:
+    from hamlish_jinja import HamlishExtension
+    JINJA_EXTENSIONS.append(HamlishExtension)
+except ImportError:
+    pass
 
 
 def build_template(env, template_name, **kwargs):
@@ -40,16 +48,25 @@ def parse_csv(filename):
         return list(csv.DictReader(f))
 
 
+def should_compile(filename):
+    """Check if the file should be compiled.
+    -   Hidden files will not be compiled.
+    -   Files prefixed with an underscore are assumed to be partials and will
+        not be compiled.
+    """
+    # Don't compile partials or hidden files
+    return not (filename.startswith('_') or filename.startswith("."))
+
+
 def main():
     """Compile each of the templates."""
     env = Environment(loader=FileSystemLoader(searchpath=TEMPLATE_DIR),
-                      extensions=[HamlishExtension])
+                      extensions=JINJA_EXTENSIONS)
 
     # Add any instructions to build templates here
     filenames = os.listdir(TEMPLATE_DIR)
     for filename in filenames:
-        # Don't compile partials or hidden files
-        if not (filename.startswith('_') or filename.startswith(".")):
+        if should_compile(filename):
             build_template(env, filename)
     print "Templates built."
     return 0
