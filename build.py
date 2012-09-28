@@ -12,6 +12,7 @@ from jinja2 import Environment, FileSystemLoader
 
 # Directory to search for templates
 TEMPLATE_DIR = "./templates"
+
 # Any extensions that should be added to Jinja
 JINJA_EXTENSIONS = []
 
@@ -58,16 +59,31 @@ def should_compile(filename):
     return not (filename.startswith('_') or filename.startswith("."))
 
 
+# Map of filenames to context generators
+# Used to generate contexts for specific templates
+CONTEXTS = {}
+
+
+def context_generator(filename):
+    """Register a context generator for the matching filename."""
+    def wrapper(func):
+        CONTEXTS[filename] = func
+        return func
+    return wrapper
+
+
 def main():
     """Compile each of the templates."""
     env = Environment(loader=FileSystemLoader(searchpath=TEMPLATE_DIR),
                       extensions=JINJA_EXTENSIONS)
-
-    # Add any instructions to build templates here
     filenames = os.listdir(TEMPLATE_DIR)
     for filename in filenames:
         if should_compile(filename):
-            build_template(env, filename)
+            try:
+                context = CONTEXTS[filename]()
+            except KeyError:
+                context = {}
+            build_template(env, filename, **context)
     print "Templates built."
     return 0
 
