@@ -5,8 +5,8 @@ Templates should live inside `./templates` and will be compiled in '.'.
 """
 import inspect
 import os
-import time
 
+import easywatch
 from jinja2 import Environment, FileSystemLoader
 
 
@@ -52,29 +52,6 @@ def render_templates(env, contexts, filter_func=None):
         build_template(env, filename, **context)
 
 
-def watch(path, **kwargs):
-    """Watch a directory for changes.
-    -   path should be the directory to watch
-    -   kwargs should be a mapping of watchdog EventHandler method names to
-        handlers (e.g., on_modified)
-    """
-    from watchdog.observers import Observer
-    from watchdog.events import FileSystemEventHandler
-
-    # Start watching for any changes
-    EventHandler = type("EventHandler", (FileSystemEventHandler,), kwargs)
-    event_handler = EventHandler()
-    observer = Observer()
-    observer.schedule(event_handler, path=path)
-    observer.start()
-    try:
-        while True:
-            time.sleep(1)
-    except KeyboardInterrupt:
-        observer.stop()
-    observer.join()
-
-
 def main(searchpath="templates", filter_func=None, contexts=None,
          extensions=None, autoreload=True):
     """
@@ -114,11 +91,12 @@ def main(searchpath="templates", filter_func=None, contexts=None,
         print "Watching '%s' for changes..." % searchpath
         print "Press Ctrl+C to stop."
 
-        def on_modified(self, event):
-            if event.src_path.startswith(template_path):
-                render_templates(env, contexts, filter_func=should_render)
-                print "Templates built."
-        watch("./" + searchpath, on_modified=on_modified)
+        def handler(event_type, src_path):
+            if event_type == "modified":
+                if src_path.startswith(template_path):
+                    render_templates(env, contexts, filter_func=should_render)
+                    print "Templates built."
+        easywatch.watch("./" + searchpath, handler)
 
         print "Process killed"
     return 0
