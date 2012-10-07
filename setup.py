@@ -11,8 +11,8 @@ setup(
     author_email="cbautista2010@gmail.com",
     url="https://github.com/Ceasar/staticjinja",
     keywords=["jinja", "static", "website"],
-    packages=["staticjinja"]
-    classifiers=[                                                                       │~                                                                                   
+    packages=["staticjinja"],
+    classifiers=[
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
