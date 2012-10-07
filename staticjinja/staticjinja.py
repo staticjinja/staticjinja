@@ -77,6 +77,19 @@ def watch(path, **kwargs):
 
 def main(searchpath="templates", filter_func=None, contexts=None,
          extensions=None, autoreload=True):
+    """
+    Render each of the templates and then recompile on any changes.
+    -   searchpath should be the directory that contains the template.
+        Defaults to "templates"
+    -   filter_func should be a function that takes a filename and returns
+        a boolean indicating whether or not a template should be rendered.
+        Defaults to ignore any files with '.' or '_' prefixes.
+    -   contexts should be a map of template names to functions where each
+        function should return a context for that template.
+    -   extensions should be any extensions to add to the Environment.
+    -   autoreload should be a boolean indicating whether or not to
+        automatically recompile templates. Defaults to true.
+    """
     if contexts is None:
         contexts = {}
     if extensions is None:
