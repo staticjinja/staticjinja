@@ -64,7 +64,7 @@ def render_templates(env, contexts=None, filter_func=None, rules=None):
 
         # get the context
         for regex, context_generator in contexts:
-            if re.match(regex, filename):
+            if re.match(regex, template_name):
                 try:
                     context = context_generator(filename)
                 except TypeError:
