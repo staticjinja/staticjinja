@@ -11,7 +11,7 @@ import easywatch
 from jinja2 import Environment, FileSystemLoader
 
 
-def build_template(env, template_name, **kwargs):
+def build_template(env, template, **kwargs):
     """Compile a template.
     *   env should be a Jinja environment variable indicating where to find the
         templates.
@@ -20,11 +20,10 @@ def build_template(env, template_name, **kwargs):
     *   kwargs should be a series of key-value pairs. These items will be
         passed to the template to be used as needed.
     """
-    template = env.get_template(template_name)
-    head, tail = os.path.split(template_name)
+    head, tail = os.path.split(template.name)
     if head and not os.path.exists(head):
         os.makedirs(head)
-    template.stream(**kwargs).dump(tail)
+    template.stream(**kwargs).dump(template.name)
 
 
 def should_render(filename):
@@ -60,13 +59,13 @@ def render_templates(env, contexts=None, filter_func=None, rules=None):
     for template_name in env.list_templates(filter_func=filter_func):
         print "Building %s..." % template_name
 
-        filename = env.get_template(template_name).filename
+        template = env.get_template(template_name)
 
         # get the context
         for regex, context_generator in contexts:
             if re.match(regex, template_name):
                 try:
-                    context = context_generator(filename)
+                    context = context_generator(template)
                 except TypeError:
                     context = context_generator()
                 break
@@ -76,10 +75,10 @@ def render_templates(env, contexts=None, filter_func=None, rules=None):
         # build the template
         for regex, func in rules:
             if re.match(regex, template_name):
-                func(env, filename, **context)
+                func(env, template, **context)
                 break
         else:
-            build_template(env, template_name, **context)
+            build_template(env, template, **context)
 
 
 def main(searchpath="templates", filter_func=None, contexts=None,

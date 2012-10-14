@@ -105,19 +105,25 @@ import staticjinja
 from extensions import MarkdownExtension
 
 
-def get_contents(filename):
-    with open(filename) as f:
+def get_contents(template):
+    with open(template.filename) as f:
         return {'post': f.read()}
 
 
-def build_post(env, filename, **kwargs):
+def build_post(env, template, **kwargs):
     """
     Render a file using "_post.html".
     """
     template = env.get_template("_post.html")
-    _, tail = os.path.split(filename)
+    head, tail = os.path.split(template.name)
     title, _ = tail.split('.')
-    template.stream(**kwargs).dump(title + ".html")
+    if head:
+        out = "%s/%s.html" % (head, title)
+        if not os.path.exists(head):
+            os.makedirs(head)
+    else:
+    	out = "%s.html" % (title, )
+    template.stream(**kwargs).dump(out)
 
 
 if __name__ == "__main__":
