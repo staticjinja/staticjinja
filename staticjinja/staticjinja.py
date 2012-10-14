@@ -5,6 +5,7 @@ Templates should live inside `./templates` and will be compiled in '.'.
 """
 import inspect
 import os
+import re
 
 import easywatch
 from jinja2 import Environment, FileSystemLoader
@@ -35,25 +36,54 @@ def should_render(filename):
     return not (filename.startswith('_') or filename.startswith("."))
 
 
-def render_templates(env, contexts, filter_func=None):
+def render_templates(env, contexts=None, filter_func=None, rules=None):
     """Render each template inside of `env`.
     -   env should be a Jinja environment object.
+    -   contexts should be a list of regex-function pairs where the
+        function should return a context for that template and the regex,
+        if matched against a filename, will cause the context to be used.
     -   filter_func should be a function that takes a filename and returns
         a boolean indicating whether or not a template should be rendered.
+    -   rules are used to override template compilation. The value of rules
+        should be a list of `regex`-`function` pairs where `function` takes
+        a jinja2 Environment, the filename, and the context and builds the
+        template, and `regex` is a regex that if matched against a filename
+        will cause `function` to be used instead of the default.
     """
     if contexts is None:
-        contexts = {}
-    for filename in env.list_templates(filter_func=filter_func):
-        try:
-            context = contexts[filename]()
-        except KeyError:
+        contexts = []
+    if filter_func is None:
+        filter_func = should_render
+    if rules is None:
+        rules = []
+
+    for template_name in env.list_templates(filter_func=filter_func):
+        print "Building %s..." % template_name
+
+        filename = env.get_template(template_name).filename
+
+        # get the context
+        for regex, context_generator in contexts:
+            if re.match(regex, filename):
+                try:
+                    context = context_generator(filename)
+                except TypeError:
+                    context = context_generator()
+                break
+        else:
             context = {}
-        print "Building %s..." % filename
-        build_template(env, filename, **context)
+
+        # build the template
+        for regex, func in rules:
+            if re.match(regex, template_name):
+                func(env, filename, **context)
+                break
+        else:
+            build_template(env, template_name, **context)
 
 
 def main(searchpath="templates", filter_func=None, contexts=None,
-         extensions=None, autoreload=True):
+         extensions=None, rules=None, autoreload=True):
     """
     Render each of the templates and then recompile on any changes.
     -   searchpath should be the directory that contains the template.
@@ -67,12 +97,8 @@ def main(searchpath="templates", filter_func=None, contexts=None,
     -   autoreload should be a boolean indicating whether or not to
         automatically recompile templates. Defaults to true.
     """
-    if contexts is None:
-        contexts = {}
     if extensions is None:
         extensions = []
-    if filter_func is None:
-        filter_func = should_render
 
     # Get calling module
     mod = inspect.getmodule(inspect.stack()[1][0])
@@ -84,8 +110,11 @@ def main(searchpath="templates", filter_func=None, contexts=None,
     loader = FileSystemLoader(searchpath=searchpath)
     env = Environment(loader=loader,
                       extensions=extensions)
-    render_templates(env, contexts, filter_func=filter_func)
-    print "Templates built."
+
+    def build_all():
+        render_templates(env, contexts, filter_func=filter_func, rules=rules)
+        print "Templates built."
+    build_all()
 
     if autoreload:
         print "Watching '%s' for changes..." % searchpath
@@ -94,8 +123,7 @@ def main(searchpath="templates", filter_func=None, contexts=None,
         def handler(event_type, src_path):
             if event_type == "modified":
                 if src_path.startswith(template_path):
-                    render_templates(env, contexts, filter_func=should_render)
-                    print "Templates built."
+                    build_all()
         easywatch.watch("./" + searchpath, handler)
 
         print "Process killed"
