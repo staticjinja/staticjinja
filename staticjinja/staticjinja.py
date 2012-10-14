@@ -57,24 +57,29 @@ def render_templates(env, contexts=None, filter_func=None, rules=None):
     if rules is None:
         rules = []
 
-    for filename in env.list_templates(filter_func=filter_func):
-        print "Building %s..." % filename
+    for template_name in env.list_templates(filter_func=filter_func):
+        print "Building %s..." % template_name
+
+        filename = env.get_template(template_name).filename
 
         # get the context
         for regex, context_generator in contexts:
             if re.match(regex, filename):
-                context = context_generator()
+                try:
+                    context = context_generator(filename)
+                except TypeError:
+                    context = context_generator()
                 break
         else:
             context = {}
 
         # build the template
         for regex, func in rules:
-            if re.match(regex, filename):
-                func(env, env.get_template(filename).filename, **context)
+            if re.match(regex, template_name):
+                func(env, filename, **context)
                 break
         else:
-            build_template(env, filename, **context)
+            build_template(env, template_name, **context)
 
 
 def main(searchpath="templates", filter_func=None, contexts=None,

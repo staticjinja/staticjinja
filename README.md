@@ -64,7 +64,9 @@ def index():
     return {'knights': knights}
 
 if __name__ == "__main__":
-    staticjinja.main(contexts={'index.html': index})
+    staticjinja.main(contexts=[
+        'index.html': index,
+    ])
 ```
 
 You can then use the context in `templates/index.html` as usual.
@@ -85,6 +87,61 @@ You can then use the context in `templates/index.html` as usual.
 ```
 
 This example is trivial, but a more interesting context generator might read data from a CSV or pull data from an API.
+
+### Compilation Rules
+
+Sometimes you'll find yourself needing to override how a template is actualy compiled. For instance, you might want to integrate Markdown in a way that doesn't require you putting
+jinja syntax in the source.
+
+To do this, we can write a handler by registering a regex and a compilation function (a "rule").
+
+```python
+# build.py
+import os
+
+import staticjinja
+
+# Custom MarkdownExtension
+from extensions import MarkdownExtension
+
+
+def build_post(env, template_name, **kwargs):
+    """
+    Render the contents of `template_name` as 'post' inside of the template
+    '_post.html'.
+    """
+    template = env.get_template("_post.html")
+    with open(template_name) as md:
+        kwargs['post'] = md.read()
+    _, tail = os.path.split(template_name)
+    title, _ = tail.split('.')
+    template.stream(**kwargs).dump(title + ".html")
+
+
+if __name__ == "__main__":
+    staticjinja.main(extensions=[
+        MarkdownExtension,
+    ], rules=[
+        ('.*.md', build_post),
+    ])
+```
+
+Note the rule we defined at the bottom. It tells staticjinja to check if the filename matches the `.*.md` regex, and if it does, to compile the file using `build_post`.
+
+Now in `templates/_post.html`...
+
+```html
+{% extends "_base.html" %}
+{% block content %}
+<div class="post">
+{% markdown %}
+{{ post }}
+{% endmarkdown %}
+</div>
+{% endblock %}
+```
+
+Now you can drop markdown files into your `templates` directory and they'll be compiled into valid html.
 
 ### Configuration
 
