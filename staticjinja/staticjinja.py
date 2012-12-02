@@ -32,7 +32,8 @@ def should_render(filename):
     -   Files prefixed with an underscore are assumed to be partials and will
         not be rendered.
     """
-    return not (filename.startswith('_') or filename.startswith("."))
+    _, tail = os.path.split(filename)
+    return not (tail.startswith('_') or tail.startswith("."))
 
 
 def render_templates(env, contexts=None, filter_func=None, rules=None):
