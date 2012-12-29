@@ -11,7 +11,7 @@ import easywatch
 from jinja2 import Environment, FileSystemLoader
 
 
-def build_template(env, template, **kwargs):
+def build_template(env, template, outpath, **kwargs):
     """Compile a template.
     *   env should be a Jinja environment variable indicating where to find the
         templates.
@@ -21,9 +21,11 @@ def build_template(env, template, **kwargs):
         passed to the template to be used as needed.
     """
     head, tail = os.path.split(template.name)
-    if head and not os.path.exists(head):
-        os.makedirs(head)
-    template.stream(**kwargs).dump(template.name)
+    if head:
+        head = os.path.join(outpath, head)
+        if not os.path.exists(head):
+            os.makedirs(head)
+    template.stream(**kwargs).dump(os.path.join(outpath, template.name))
 
 
 def should_render(filename):
@@ -36,7 +38,7 @@ def should_render(filename):
     return not (tail.startswith('_') or tail.startswith("."))
 
 
-def render_templates(env, contexts=None, filter_func=None, rules=None):
+def render_templates(env, outpath, contexts=None, filter_func=None, rules=None):
     """Render each template inside of `env`.
     -   env should be a Jinja environment object.
     -   contexts should be a list of regex-function pairs where the
@@ -79,10 +81,10 @@ def render_templates(env, contexts=None, filter_func=None, rules=None):
                 func(env, template, **context)
                 break
         else:
-            build_template(env, template, **context)
+            build_template(env, template, outpath, **context)
 
 
-def main(searchpath="templates", filter_func=None, contexts=None,
+def main(searchpath="templates", outpath="", filter_func=None, contexts=None,
          extensions=None, rules=None, autoreload=True):
     """
     Render each of the templates and then recompile on any changes.
@@ -101,7 +103,7 @@ def main(searchpath="templates", filter_func=None, contexts=None,
         extensions = []
 
     # Get calling module
-    mod = inspect.getmodule(inspect.stack()[1][0])
+    mod = inspect.getmodule(inspect.stack()[-1][0])
     # Absolute path to project
     project_path = os.path.realpath(os.path.dirname(mod.__file__))
     # Absolute path to templates
@@ -112,7 +114,7 @@ def main(searchpath="templates", filter_func=None, contexts=None,
                       extensions=extensions)
 
     def build_all():
-        render_templates(env, contexts, filter_func=filter_func, rules=rules)
+        render_templates(env, outpath, contexts, filter_func=filter_func, rules=rules)
         print "Templates built."
     build_all()
 
