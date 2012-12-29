@@ -49,6 +49,13 @@ Press Ctrl+C to stop.
 
 Left to the defaults, this will search `./templates` recursively for any templates and build them to `.`, ignoring any files that start with `_` or `.`. Furthermore, if you go on to change a template, it will automatically recompile it.
 
+# Basic Configuration
+
+### Templates and output directories
+
+To set a different templates directory, use the `searchpath="templated_dir_name"` keyword argument to `staticjinja.main()` (default is `templates`, inside the directory of `build.py`).
+
+To set a different output directory, use the `outpath="output_dir"` (default is the directory of `build.py`).
 
 # Advanced Configuration
 
