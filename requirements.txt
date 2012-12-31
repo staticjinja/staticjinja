@@ -1,3 +1,9 @@
-easywatch==0.0.1
-Jinja2==2.5.2
+Jinja2==2.6
+PyYAML==3.10
+argh==0.21.0
+argparse==1.2.1
+easywatch==0.0.2
+pathtools==0.1.2
+staticjinja==0.0.7
 watchdog==0.6.0
+wsgiref==0.1.2
