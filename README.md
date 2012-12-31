@@ -53,9 +53,11 @@ Left to the defaults, this will search `./templates` recursively for any templat
 
 ### Templates and output directories
 
-To set a different templates directory, use the `searchpath="templated_dir_name"` keyword argument to `staticjinja.main()` (default is `templates`, inside the directory of `build.py`).
-
-To set a different output directory, use the `outpath="output_dir"` (default is the directory of `build.py`).
+*   To set a different templates directory, use the `searchpath="templated_dir_name"` keyword argument to `staticjinja.main()` (default is `./templates`).
+*   To set a different output directory, use the `outpath="output_dir"` (default is `.`).
+*   To add Jinja extensions, simply pass a list of extensions to main: `staticjinja.main(extensions=[extension1, extension2])`
+*   To change what constitutes a template, simply pass a function which given a filename, returns a boolean indicating whether the file should be considered a template. `staticjinja.main(filter_func=my_func)`
+*   To disable autoreloading, set autoreload to False. `staticjinja.main(autoreload=False)`
 
 # Advanced Configuration
 
@@ -170,12 +172,3 @@ Now we just implement `templates/_post.html`...
 ...and now you can drop markdown files into your `templates` directory and they'll be compiled into valid html.
 
 **Note:** You can grab the MarkdownExtension from [here](http://silas.sewell.org/blog/2010/05/10/jinja2-markdown-extension/).
-
-### Configuration
-
-If you need further configuration, there are a few options:
-
-*   To change where staticjinja looks for templates, simply pass the name of the directory you wish to use: `staticjinja.main(searchpath='mypath')`
-*   To add Jinja extensions, simply pass a list of extensions to main: `staticjinja.main(extensions=[extension1, extension2])`
-*   To change what constitutes a template, simply pass a function which given a filename, returns a boolean indicating whether the file should be considered a template. `staticjinja.main(filter_func=my_func)`
-*   To disable autoreloading, set autoreload to False. `staticjinja.main(autoreload=False)`

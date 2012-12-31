@@ -17,6 +17,7 @@ def build_template(env, template, outpath, **kwargs):
         templates.
     *   template_name should be the name of the template as it appears inside
         of `./templates`.
+    *   outpath should be the name of the directory to build the template to
     *   kwargs should be a series of key-value pairs. These items will be
         passed to the template to be used as needed.
     """
@@ -38,9 +39,11 @@ def should_render(filename):
     return not (tail.startswith('_') or tail.startswith("."))
 
 
-def render_templates(env, outpath, contexts=None, filter_func=None, rules=None):
+def render_templates(env, outpath, contexts=None, filter_func=None,
+                     rules=None):
     """Render each template inside of `env`.
     -   env should be a Jinja environment object.
+    *   outpath should be the name of the directory to build the template to
     -   contexts should be a list of regex-function pairs where the
         function should return a context for that template and the regex,
         if matched against a filename, will cause the context to be used.
@@ -84,7 +87,7 @@ def render_templates(env, outpath, contexts=None, filter_func=None, rules=None):
             build_template(env, template, outpath, **context)
 
 
-def main(searchpath="templates", outpath="", filter_func=None, contexts=None,
+def main(searchpath="templates", outpath=".", filter_func=None, contexts=None,
          extensions=None, rules=None, autoreload=True):
     """
     Render each of the templates and then recompile on any changes.
@@ -114,7 +117,8 @@ def main(searchpath="templates", outpath="", filter_func=None, contexts=None,
                       extensions=extensions)
 
     def build_all():
-        render_templates(env, outpath, contexts, filter_func=filter_func, rules=rules)
+        render_templates(env, outpath, contexts, filter_func=filter_func,
+                         rules=rules)
         print "Templates built."
     build_all()
 
