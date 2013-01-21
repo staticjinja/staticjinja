@@ -1,7 +1,7 @@
 from distutils.core import setup
 
-from staticjinja import __version__
-
+__version_info__ = ('0', '0', '7')
+__version__ = '.'.join(__version_info__)
 
 setup(
     name="staticjinja",
@@ -12,6 +12,7 @@ setup(
     url="https://github.com/Ceasar/staticjinja",
     keywords=["jinja", "static", "website"],
     packages=["staticjinja"],
+    install_requires=["easywatch", "jinja2"],
     classifiers=[
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
