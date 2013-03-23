@@ -11,7 +11,7 @@ import easywatch
 from jinja2 import Environment, FileSystemLoader
 
 
-def build_template(env, template, outpath, **kwargs):
+def build_template(env, template, outpath, encoding, **kwargs):
     """Compile a template.
     *   env should be a Jinja environment variable indicating where to find the
         templates.
@@ -26,7 +26,7 @@ def build_template(env, template, outpath, **kwargs):
         head = os.path.join(outpath, head)
         if not os.path.exists(head):
             os.makedirs(head)
-    template.stream(**kwargs).dump(os.path.join(outpath, template.name))
+    template.stream(**kwargs).dump(os.path.join(outpath, template.name), encoding)
 
 
 def should_render(filename):
@@ -40,7 +40,7 @@ def should_render(filename):
 
 
 def render_templates(env, outpath, contexts=None, filter_func=None,
-                     rules=None):
+                     rules=None, encoding="utf8"):
     """Render each template inside of `env`.
     -   env should be a Jinja environment object.
     *   outpath should be the name of the directory to build the template to
@@ -84,11 +84,11 @@ def render_templates(env, outpath, contexts=None, filter_func=None,
                 func(env, template, **context)
                 break
         else:
-            build_template(env, template, outpath, **context)
+            build_template(env, template, outpath, encoding, **context)
 
 
 def main(searchpath="templates", outpath=".", filter_func=None, contexts=None,
-         extensions=None, rules=None, autoreload=True):
+         extensions=None, rules=None, autoreload=True, encoding="utf8"):
     """
     Render each of the templates and then recompile on any changes.
     -   searchpath should be the directory that contains the template.
@@ -112,13 +112,13 @@ def main(searchpath="templates", outpath=".", filter_func=None, contexts=None,
     # Absolute path to templates
     template_path = os.path.join(project_path, searchpath)
 
-    loader = FileSystemLoader(searchpath=searchpath)
+    loader = FileSystemLoader(searchpath=searchpath, encoding=encoding)
     env = Environment(loader=loader,
                       extensions=extensions)
 
     def build_all():
         render_templates(env, outpath, contexts, filter_func=filter_func,
-                         rules=rules)
+                         rules=rules, encoding=encoding)
         print "Templates built."
     build_all()
 
