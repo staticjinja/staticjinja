@@ -7,7 +7,6 @@ import inspect
 import os
 import re
 
-import easywatch
 from jinja2 import Environment, FileSystemLoader
 
 
@@ -26,10 +25,11 @@ def build_template(env, template, outpath, encoding, **kwargs):
         head = os.path.join(outpath, head)
         if not os.path.exists(head):
             os.makedirs(head)
-    template.stream(**kwargs).dump(os.path.join(outpath, template.name), encoding)
+    template.stream(**kwargs).dump(os.path.join(outpath, template.name),
+                                   encoding)
 
 
-def should_render(filename):
+def _filter_func(filename):
     """Check if the file should be rendered.
     -   Hidden files will not be rendered.
     -   Files prefixed with an underscore are assumed to be partials and will
@@ -58,7 +58,7 @@ def render_templates(env, outpath, contexts=None, filter_func=None,
     if contexts is None:
         contexts = []
     if filter_func is None:
-        filter_func = should_render
+        filter_func = _filter_func
     if rules is None:
         rules = []
 
@@ -105,16 +105,14 @@ def main(searchpath="templates", outpath=".", filter_func=None, contexts=None,
     if extensions is None:
         extensions = []
 
-    # Get calling module
-    mod = inspect.getmodule(inspect.stack()[-1][0])
+    calling_module = inspect.getmodule(inspect.stack()[-1][0])
     # Absolute path to project
-    project_path = os.path.realpath(os.path.dirname(mod.__file__))
+    project_path = os.path.realpath(os.path.dirname(calling_module.__file__))
     # Absolute path to templates
     template_path = os.path.join(project_path, searchpath)
 
     loader = FileSystemLoader(searchpath=searchpath, encoding=encoding)
-    env = Environment(loader=loader,
-                      extensions=extensions)
+    env = Environment(loader=loader, extensions=extensions)
 
     def build_all():
         render_templates(env, outpath, contexts, filter_func=filter_func,
@@ -123,6 +121,7 @@ def main(searchpath="templates", outpath=".", filter_func=None, contexts=None,
     build_all()
 
     if autoreload:
+        import easywatch
         print "Watching '%s' for changes..." % searchpath
         print "Press Ctrl+C to stop."
 
