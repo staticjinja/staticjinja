@@ -1,3 +1,5 @@
+
+
 # staticjinja
 
 Library to easily deploy static sites using the extremely handy [jinja2](http://jinja.pocoo.org/docs/) templating language.
@@ -8,11 +10,13 @@ Building index.html...
 Templates built.
 ```
 
+
 # Rationale
 
 When deploying a static website that could benefit from factored out data or modular html pages (especially convenient when prototyping), a templating engine can be of great use. jinja2 is an extremely powerful tool in this regard.
 
 This project takes away the pain of managing the jinja API and lets you focus on just deploying a site.
+
 
 # Requirements
 
@@ -31,11 +35,12 @@ If you're just looking to render simple data-less templates, you get up and runn
 
 ```python
 # build.py
-import staticjinja
+from staticjinja import Renderer
 
 
 if __name__ == "__main__":
-    staticjinja.main()
+    renderer = Renderer()
+    renderer.run(debug=True, use_reloader=True)
 ```
 
 Then just run `python build.py` to compile the templates.
@@ -53,11 +58,17 @@ Left to the defaults, this will search `./templates` recursively for any templat
 
 ### Templates and output directories
 
-*   To set a different templates directory, use the `searchpath="templated_dir_name"` keyword argument to `staticjinja.main()` (default is `./templates`).
-*   To set a different output directory, use the `outpath="output_dir"` (default is `.`).
-*   To add Jinja extensions, simply pass a list of extensions to main: `staticjinja.main(extensions=[extension1, extension2])`
-*   To change what constitutes a template, simply pass a function which given a filename, returns a boolean indicating whether the file should be considered a template. `staticjinja.main(filter_func=my_func)`
-*   To disable autoreloading, set autoreload to False. `staticjinja.main(autoreload=False)`
+The Renderer can be configured by adding keyword arguments to `__init__`.
+
+*   To configure the templates directory, set `searchpath="templated_dir_name"` keyword argument (default is `./templates`).
+*   To configure the output directory, set `outpath="output_dir"` (default is `.`).
+*   To add Jinja extensions, set `extensions=[extension1, extension2, ...]`
+*   To configure what constitutes a template, subclass Renderer and override `filter_func` with a function which, given a filename, returns a boolean indicating whether the file should be considered a template.
+
+`renderer.run` can also be configured.
+
+*   To enable automatic reloading, set `use_reloader` to True.
+*   To enable logs, set `debug` to True.
 
 # Advanced Configuration
 
@@ -69,7 +80,7 @@ For instance:
 
 ```python
 # build.py
-import staticjinja
+from staticjinja import Renderer
 
 def index():
     knights = [
@@ -80,9 +91,10 @@ def index():
     return {'knights': knights}
 
 if __name__ == "__main__":
-    staticjinja.main(contexts=[
+    renderer = Renderer(contexts=[
         ('index.html', index),
     ])
+    renderer.run(debug=True, use_reloader=True)
 ```
 
 You can then use the context in `templates/index.html` as usual.
@@ -114,7 +126,7 @@ To do this, just write a handler by registering a regex and a compilation functi
 # build.py
 import os
 
-import staticjinja
+from staticjinja import Renderer
 
 # Custom MarkdownExtension
 from extensions import MarkdownExtension
@@ -144,13 +156,14 @@ def build_post(env, template, **kwargs):
 
 
 if __name__ == "__main__":
-    staticjinja.main(extensions=[
+    renderer = Renderer(extensions=[
         MarkdownExtension,
     ], contexts=[
         ('.*.md', get_contents),
     ], rules=[
         ('.*.md', build_post),
     ])
+    renderer.run(debug=True, use_reloader=True)
 ```
 
 Note the rule we defined at the bottom. It tells staticjinja to check if the filename matches the `.*.md` regex, and if it does, to compile the file using `build_post`.

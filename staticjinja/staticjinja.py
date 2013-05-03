@@ -1,7 +1,6 @@
 """
 Simple static page generator.
 Uses jinja2 to compile templates.
-Templates should live inside `./templates` and will be compiled in '.'.
 """
 import inspect
 import os
@@ -9,127 +8,164 @@ import re
 
 from jinja2 import Environment, FileSystemLoader
 
+# TODO: See about relative import
+import logs as logging
 
-def build_template(env, template, outpath, encoding, **kwargs):
-    """Compile a template.
-    *   env should be a Jinja environment variable indicating where to find the
-        templates.
-    *   template_name should be the name of the template as it appears inside
-        of `./templates`.
-    *   outpath should be the name of the directory to build the template to
-    *   kwargs should be a series of key-value pairs. These items will be
-        passed to the template to be used as needed.
+
+class Renderer(object):
+    """The renderer object.
+
+    :param template_folder: the directory containing the templates. Defaults to
+                            ``'templates'``
+    :param extensions: list of extensions to add to the Environment
+    :param contexts: list of regex-function pairs. the function should return a
+                     context for that template. the regex, if matched against
+                     a filename, will cause the context to be used.
+    :param rules: used to override template compilation. The value of rules
+                  should be a list of `regex, function` pairs where `function`
+                  takes a jinja2 Environment, the filename, and the context and
+                  renders the template, and `regex` is a regex that if matched
+                  against a filename will cause `function` to be used instead
+                  of the default.
+    :param encoding: the encoding of templates to use. Defaults to 'utf8'
     """
-    head, tail = os.path.split(template.name)
-    if head:
-        head = os.path.join(outpath, head)
-        if not os.path.exists(head):
-            os.makedirs(head)
-    template.stream(**kwargs).dump(os.path.join(outpath, template.name),
-                                   encoding)
+    debug_log_format = None
 
+    def __init__(self,
+                 template_folder="templates",
+                 outpath=".",
+                 extensions=None,
+                 contexts=None,
+                 rules=None,
+                 encoding="utf8"):
 
-def _filter_func(filename):
-    """Check if the file should be rendered.
-    -   Hidden files will not be rendered.
-    -   Files prefixed with an underscore are assumed to be partials and will
-        not be rendered.
-    """
-    _, tail = os.path.split(filename)
-    return not (tail.startswith('_') or tail.startswith("."))
+        # TODO: Remove this
+        calling_module = inspect.getmodule(inspect.stack()[-1][0])
+        # Absolute path to project
+        project_path = os.path.realpath(os.path.dirname(
+            calling_module.__file__))
+        # Absolute path to templates
+        template_path = os.path.join(project_path, template_folder)
 
+        self.template_folder = template_path
+        self.outpath = outpath
+        if extensions is None:
+            self.extensions = []
+        self.contexts = contexts
+        self.rules = rules
+        self.encoding = encoding
 
-def render_templates(env, outpath, contexts=None, filter_func=None,
-                     rules=None, encoding="utf8"):
-    """Render each template inside of `env`.
-    -   env should be a Jinja environment object.
-    *   outpath should be the name of the directory to build the template to
-    -   contexts should be a list of regex-function pairs where the
-        function should return a context for that template and the regex,
-        if matched against a filename, will cause the context to be used.
-    -   filter_func should be a function that takes a filename and returns
-        a boolean indicating whether or not a template should be rendered.
-    -   rules are used to override template compilation. The value of rules
-        should be a list of `regex`-`function` pairs where `function` takes
-        a jinja2 Environment, the filename, and the context and builds the
-        template, and `regex` is a regex that if matched against a filename
-        will cause `function` to be used instead of the default.
-    """
-    if contexts is None:
-        contexts = []
-    if filter_func is None:
-        filter_func = _filter_func
-    if rules is None:
-        rules = []
+        loader = FileSystemLoader(searchpath=template_folder,
+                                  encoding=encoding)
+        self._env = Environment(loader=loader, extensions=extensions)
 
-    for template_name in env.list_templates(filter_func=filter_func):
-        print "Building %s..." % template_name
+        self.logger_name = __name__
+        self.logger = logging.create_logger(self)
 
-        template = env.get_template(template_name)
+        self.debug = False
 
-        # get the context
-        for regex, context_generator in contexts:
+    @property
+    def template_names(self):
+        return self._env.list_templates(filter_func=self.filter_func)
+
+    def get_template(self, template_name):
+        """Get a Template object from the environment.
+
+        :param template_name: the name of the template
+        """
+        return self._env.get_template(template_name)
+
+    def get_context(self, template_name):
+        """Get the context for a template.
+
+        By default, this function will return an empty context.
+
+        If a matching context_generator can be found, it will be passed the
+        template and executed. The context generator should return a dictionary
+        representing the context.
+
+        :param template_name: the name of the template
+        """
+        for regex, context_generator in self.contexts:
             if re.match(regex, template_name):
                 try:
-                    context = context_generator(template)
+                    return context_generator(self.get_template(template_name))
                 except TypeError:
-                    context = context_generator()
+                    return context_generator()
+        return {}
+
+    def filter_func(self, filename):
+        """Check if the file should be rendered.
+
+        Hidden files will not be rendered.
+
+        Files prefixed with an underscore are assumed to be partials and will
+        not be rendered.
+
+        :param filename: the name of the file to check
+        """
+        _, tail = os.path.split(filename)
+        return not (tail.startswith('_') or tail.startswith("."))
+
+    def _ensure_dir(self, template_name):
+        """Ensure the output directory for a template exists."""
+        head, tail = os.path.split(template_name)
+        if head:
+            file_dirpath = os.path.join(self.outpath, head)
+            if not os.path.exists(file_dirpath):
+                os.makedirs(file_dirpath)
+
+    def render_template(self, template_name):
+        """Render a template.
+
+        If a matching Rule can be found, rendering will be delegated to the
+        rule.
+
+        :param template_name: the name of the template
+        """
+        self.logger.info("Rendering %s..." % template_name)
+
+        template = self.get_template(template_name)
+        context = self.get_context(template_name)
+        for regex, render_func in self.rules:
+            if re.match(regex, template.name):
+                render_func(self, template, **context)
                 break
         else:
-            context = {}
+            self._ensure_dir(template.name)
+            fp = os.path.join(self.outpath, template.name)
+            template.stream(**context).dump(fp, self.encoding)
 
-        # build the template
-        for regex, func in rules:
-            if re.match(regex, template_name):
-                func(env, template, **context)
-                break
-        else:
-            build_template(env, template, outpath, encoding, **context)
+    def render_templates(self):
+        """Render each of the templates."""
+        for template_name in self.template_names:
+            self.render_template(template_name)
 
-
-def main(searchpath="templates", outpath=".", filter_func=None, contexts=None,
-         extensions=None, rules=None, autoreload=True, encoding="utf8"):
-    """
-    Render each of the templates and then recompile on any changes.
-    -   searchpath should be the directory that contains the template.
-        Defaults to "templates"
-    -   filter_func should be a function that takes a filename and returns
-        a boolean indicating whether or not a template should be rendered.
-        Defaults to ignore any files with '.' or '_' prefixes.
-    -   contexts should be a map of template names to functions where each
-        function should return a context for that template.
-    -   extensions should be any extensions to add to the Environment.
-    -   autoreload should be a boolean indicating whether or not to
-        automatically recompile templates. Defaults to true.
-    """
-    if extensions is None:
-        extensions = []
-
-    calling_module = inspect.getmodule(inspect.stack()[-1][0])
-    # Absolute path to project
-    project_path = os.path.realpath(os.path.dirname(calling_module.__file__))
-    # Absolute path to templates
-    template_path = os.path.join(project_path, searchpath)
-
-    loader = FileSystemLoader(searchpath=searchpath, encoding=encoding)
-    env = Environment(loader=loader, extensions=extensions)
-
-    def build_all():
-        render_templates(env, outpath, contexts, filter_func=filter_func,
-                         rules=rules, encoding=encoding)
-        print "Templates built."
-    build_all()
-
-    if autoreload:
+    def _watch(self):
+        """Watch and reload templates."""
         import easywatch
-        print "Watching '%s' for changes..." % searchpath
-        print "Press Ctrl+C to stop."
+
+        self.logger.info("Watching '%s' for changes..." %
+                          self.template_folder)
+        self.logger.info("Press Ctrl+C to stop.")
 
         def handler(event_type, src_path):
+            template_name = os.path.relpath(src_path, self.template_folder)
             if event_type == "modified":
-                if src_path.startswith(template_path):
-                    build_all()
-        easywatch.watch("./" + searchpath, handler)
+                if src_path.startswith(self.template_folder):
+                    self.render_template(template_name)
+        easywatch.watch(self.template_folder, handler)
 
-        print "Process killed"
-    return 0
+    def run(self, debug=False, use_reloader=False):
+        """Run the renderer.
+
+        :param debug: if given, then display logs
+        :param reload: if given, reload templates on modification
+        """
+        if debug:
+            self.debug = True
+
+        self.render_templates()
+
+        if use_reloader:
+            self._watch()
