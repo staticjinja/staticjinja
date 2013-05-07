@@ -49,15 +49,14 @@ class Renderer(object):
 
         self.template_folder = template_path
         self.outpath = outpath
-        if extensions is None:
-            self.extensions = []
-        self.contexts = contexts
-        self.rules = rules
+        self.extensions = extensions or []
+        self.contexts = contexts or []
+        self.rules = rules or []
         self.encoding = encoding
 
         loader = FileSystemLoader(searchpath=template_folder,
                                   encoding=encoding)
-        self._env = Environment(loader=loader, extensions=extensions)
+        self._env = Environment(loader=loader, extensions=self.extensions)
 
         self.logger_name = __name__
         self.logger = logging.create_logger(self)
@@ -169,3 +168,21 @@ class Renderer(object):
 
         if use_reloader:
             self._watch()
+
+
+def main(*args, **kwargs):
+    if 'autoreload' in kwargs:
+    	autoreload = True
+    	del kwargs['autoreload']
+    else:
+    	autoreload = False
+    if 'filter_func' in kwargs:
+    	filter_func = kwargs['filter_func']
+    	del kwargs['filter_func']
+    else:
+    	filter_func = None
+    renderer = Renderer(*args, **kwargs)
+    if filter_func:
+        renderer.filter_func = filter_func
+    if autoreload:
+        renderer.run(debug=True, use_reloader=True)
