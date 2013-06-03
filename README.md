@@ -31,7 +31,24 @@ This project takes away the pain of managing the jinja API and lets you focus on
 
 # Getting Started
 
-If you're just looking to render simple data-less templates, you get up and running by just setting up a simple build script in your project.
+If you're just looking to render simple data-less templates, you get up and running with the following shortcut
+
+```
+python -m staticjinja
+```
+
+```
+Building index.html...
+Templates built.
+Watching 'templates' for changes...
+Press Ctrl+C to stop.
+```
+
+This will search `./templates` recursively for any templates and build them to `.`, ignoring any files that start with `_` or `.`. Furthermore, if you go on to change a template, it will automatically recompile it.
+
+# Basic Configuration
+
+To get a behavior like the default above, you can set up a simple build script in your project.
 
 ```python
 # build.py
@@ -44,17 +61,6 @@ if __name__ == "__main__":
 ```
 
 Then just run `python build.py` to compile the templates.
-
-```
-Building index.html...
-Templates built.
-Watching 'templates' for changes...
-Press Ctrl+C to stop.
-```
-
-Left to the defaults, this will search `./templates` recursively for any templates and build them to `.`, ignoring any files that start with `_` or `.`. Furthermore, if you go on to change a template, it will automatically recompile it.
-
-# Basic Configuration
 
 ### Templates and output directories
 
