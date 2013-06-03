@@ -1,15 +1,19 @@
+#-*- coding:utf-8 -*-
+
 """
 Simple static page generator.
 Uses jinja2 to compile templates.
 """
+
+from __future__ import absolute_import
+
 import inspect
 import os
 import re
 
 from jinja2 import Environment, FileSystemLoader
 
-# TODO: See about relative import
-import logs as logging
+from . import logs as logging
 
 
 class Renderer(object):
