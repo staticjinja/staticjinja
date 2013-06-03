@@ -43,13 +43,16 @@ class Renderer(object):
                  rules=None,
                  encoding="utf8"):
 
-        # TODO: Remove this
-        calling_module = inspect.getmodule(inspect.stack()[-1][0])
-        # Absolute path to project
-        project_path = os.path.realpath(os.path.dirname(
-            calling_module.__file__))
-        # Absolute path to templates
-        template_path = os.path.join(project_path, template_folder)
+        if os.path.isabs(template_folder):
+            template_path = template_folder
+        else:
+            # TODO: Remove this
+            calling_module = inspect.getmodule(inspect.stack()[-1][0])
+            # Absolute path to project
+            project_path = os.path.realpath(os.path.dirname(
+                calling_module.__file__))
+            # Absolute path to templates
+            template_path = os.path.join(project_path, template_folder)
 
         self.template_folder = template_path
         self.outpath = outpath
