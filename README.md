@@ -1,11 +1,10 @@
 
-
 # staticjinja
 
 Library to easily deploy static sites using the extremely handy [jinja2](http://jinja.pocoo.org/docs/) templating language.
 
 ```bash
-$ python build.py
+$ python -m staticjinja
 Building index.html...
 Templates built.
 ```
@@ -21,7 +20,7 @@ This project takes away the pain of managing the jinja API and lets you focus on
 # Requirements
 
 * jinja2
-* (optional, for automatic compilation) [watchdog](http://packages.python.org/watchdog/)
+* (optional, for automatic compilation) [easywatch](https://github.com/Ceasar/easywatch)
 
 
 # Installation
@@ -29,29 +28,29 @@ This project takes away the pain of managing the jinja API and lets you focus on
 `pip install staticjinja`
 
 
-# Getting Started
+# Quickstart
 
-If you're just looking to render simple data-less templates, you get up and running with the following shortcut
+If you're just looking to render simple data-less templates, you can get up and running with the following shortcut:
 
-```
-python -m staticjinja
-```
-
-```
+```bash
+$ python -m staticjinja
 Building index.html...
 Templates built.
 Watching 'templates' for changes...
 Press Ctrl+C to stop.
 ```
 
-This will search `./templates` recursively for any templates and build them to `.`, ignoring any files that start with `_` or `.`. Furthermore, if you go on to change a template, it will automatically recompile it.
+This will recursively search `./templates` for template files and build them to `.`, ignoring any files whose names start with `_` or `.`.
 
-# Basic Configuration
+If `easywatch` is installed, this will also monitor the files in `./templates` and recompile them if they change.
 
-To get a behavior like the default above, you can set up a simple build script in your project.
+## Basic configuration
+
+The command line shortcut is nice, but sometimes your project needs something different than the defaults.
+
+To change things, you can use a build script. A minimal build script looks something like this:
 
 ```python
-# build.py
 from staticjinja import Renderer
 
 
@@ -60,35 +59,39 @@ if __name__ == "__main__":
     renderer.run(debug=True, use_reloader=True)
 ```
 
-Then just run `python build.py` to compile the templates.
+Then you can change things by passing keyword arguments to `Renderer.__init__`.
 
-### Templates and output directories
+*   To change the templates directory, pass in `searchpath="templated_dir_name"` (default is `./templates`).
+*   To change the output directory, pass in `outpath="output_dir"` (default is `.`).
+*   To add Jinja extensions, pass in `extensions=[extension1, extension2, ...]`.
+*   To change which files get rendered, subclass Renderer and override `filter_func`.
 
-The Renderer can be configured by adding keyword arguments to `__init__`.
+You can also change how the script runs by passing in parameters to `Renderer.run`.
 
-*   To configure the templates directory, set `searchpath="templated_dir_name"` keyword argument (default is `./templates`).
-*   To configure the output directory, set `outpath="output_dir"` (default is `.`).
-*   To add Jinja extensions, set `extensions=[extension1, extension2, ...]`
-*   To configure what constitutes a template, subclass Renderer and override `filter_func` with a function which, given a filename, returns a boolean indicating whether the file should be considered a template.
+*   To enable automatic reloading, pass in `use_reloader=True`.
+*   To enable logs, pass in `debug=True`.
+ 
+Finally, just save the script as _build.py_ (or something similar) and run it with your Python interpreter.
 
-`renderer.run` can also be configured.
+```bash
+$ python build.py
+Building index.html...
+Templates built.
+Watching 'templates' for changes...
+Press Ctrl+C to stop.
+```
 
-*   To enable automatic reloading, set `use_reloader` to True.
-*   To enable logs, set `debug` to True.
+## Loading Data
 
-# Advanced Configuration
+Some applications render templates based on data sources (e.g. CSVs or JSON files).
 
-### Contexts
-
-For applications whose templates require data ("contexts"), you will need to define a mapping between filenames and functions which generate the contexts.
-
-For instance:
+To get data to templates you can set up a mapping between filenames and functions which generate dictionaries containing the data:
 
 ```python
-# build.py
 from staticjinja import Renderer
 
-def index():
+def get_knights():
+    """Generate knights of the round table."""
     knights = [
         'sir arthur',
         'sir lancelot',
@@ -98,20 +101,20 @@ def index():
 
 if __name__ == "__main__":
     renderer = Renderer(contexts=[
-        ('index.html', index),
+        ('index.html', get_knights),
     ])
     renderer.run(debug=True, use_reloader=True)
 ```
 
-You can then use the context in `templates/index.html` as usual.
+You can then use the data in `templates/index.html` as usual.
 
 ```html
-# templates/index.html
+<!-- templates/index.html -->
 {% extends "_base.html" %}
 {% block body %}
 <h1>Hello world!</h1>
 <p>This is an example web page.</p>
-<h3>Knights</h3>
+<h3>Knights of the Round Table</h3>
 <ul>
 {% for knight in knights }}
     <li>{{ knight }}</li>
@@ -120,16 +123,13 @@ You can then use the context in `templates/index.html` as usual.
 {% endblock %}
 ```
 
-This example is trivial, but a more interesting context generator might read data from a JSON or CSV file or pull data from an API.
+## Compilation Rules
 
-### Compilation Rules
-
-Sometimes you'll find yourself needing to override how a template is compiled. For instance, you might want to integrate Markdown in a way that doesn't require you putting jinja syntax in the source.
+Sometimes you'll find yourself needing to change how a template is compiled. For instance, you might want to integrate Markdown in a way that doesn't require you putting jinja syntax in the source.
 
 To do this, just write a handler by registering a regex and a compilation function (a "rule").
 
 ```python
-# build.py
 import os
 
 from staticjinja import Renderer
@@ -138,43 +138,40 @@ from staticjinja import Renderer
 from extensions import MarkdownExtension
 
 
-# context generator
-def get_contents(template):
+def get_post_contents(template):
     with open(template.filename) as f:
         return {'post': f.read()}
 
 
 # compilation rule
-def build_post(env, template, **kwargs):
-    """
-    Render a file using "_post.html".
-    """
-    template = env.get_template("_post.html")
-    head, tail = os.path.split(template.name)
-    title, _ = tail.split('.')
+def render_post(env, template, **kwargs):
+    """Render a template as a post."""
+    post_template = env.get_template("_post.html")
+    head, tail = os.path.split(post_template.name)
+    post_title, _ = tail.split('.')
     if head:
-        out = "%s/%s.html" % (head, title)
+        out = "%s/%s.html" % (head, post_title)
         if not os.path.exists(head):
             os.makedirs(head)
     else:
-    	out = "%s.html" % (title, )
-    template.stream(**kwargs).dump(out)
+    	out = "%s.html" % (post_title, )
+    post_template.stream(**kwargs).dump(out)
 
 
 if __name__ == "__main__":
     renderer = Renderer(extensions=[
         MarkdownExtension,
     ], contexts=[
-        ('.*.md', get_contents),
+        ('.*.md', get_post_contents),
     ], rules=[
-        ('.*.md', build_post),
+        ('.*.md', render_post),
     ])
     renderer.run(debug=True, use_reloader=True)
 ```
 
-Note the rule we defined at the bottom. It tells staticjinja to check if the filename matches the `.*.md` regex, and if it does, to compile the file using `build_post`.
+Note the rule we defined at the bottom. It tells staticjinja to check if the filename matches the `.*.md` regex, and if it does, to compile the file using `render_post`.
 
-Now we just implement `templates/_post.html`...
+Now just implement `templates/_post.html`...
 
 ```html
 <!-- templates/_post.html -->
@@ -188,6 +185,6 @@ Now we just implement `templates/_post.html`...
 {% endblock %}
 ```
 
-...and now you can drop markdown files into your `templates` directory and they'll be compiled into valid html.
+...and now you can drop markdown files into your `templates` directory and they'll be compiled into HTML.
 
 **Note:** You can grab the MarkdownExtension from [here](http://silas.sewell.org/blog/2010/05/10/jinja2-markdown-extension/).
