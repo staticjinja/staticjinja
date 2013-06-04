@@ -1,15 +1,19 @@
+#-*- coding:utf-8 -*-
+
 """
 Simple static page generator.
 Uses jinja2 to compile templates.
 """
+
+from __future__ import absolute_import
+
 import inspect
 import os
 import re
 
 from jinja2 import Environment, FileSystemLoader
 
-# TODO: See about relative import
-import logs as logging
+from . import logs as logging
 
 
 class Renderer(object):
@@ -39,13 +43,16 @@ class Renderer(object):
                  rules=None,
                  encoding="utf8"):
 
-        # TODO: Remove this
-        calling_module = inspect.getmodule(inspect.stack()[-1][0])
-        # Absolute path to project
-        project_path = os.path.realpath(os.path.dirname(
-            calling_module.__file__))
-        # Absolute path to templates
-        template_path = os.path.join(project_path, template_folder)
+        if os.path.isabs(template_folder):
+            template_path = template_folder
+        else:
+            # TODO: Remove this
+            calling_module = inspect.getmodule(inspect.stack()[-1][0])
+            # Absolute path to project
+            project_path = os.path.realpath(os.path.dirname(
+                calling_module.__file__))
+            # Absolute path to templates
+            template_path = os.path.join(project_path, template_folder)
 
         self.template_folder = template_path
         self.outpath = outpath
