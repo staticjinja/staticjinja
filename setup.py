@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup, find_packages
 
 __version_info__ = ('0', '1', '2')
 __version__ = '.'.join(__version_info__)
@@ -25,4 +25,5 @@ setup(
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     ],
+    use_2to3=True,
 )
