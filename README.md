@@ -61,7 +61,7 @@ if __name__ == "__main__":
 
 Then you can change things by passing keyword arguments to `Renderer.__init__`.
 
-*   To change the templates directory, pass in `searchpath="templated_dir_name"` (default is `./templates`).
+*   To change the templates directory, pass in `template_folder="templated_folder_name"` (default is `./templates`).
 *   To change the output directory, pass in `outpath="output_dir"` (default is `.`).
 *   To add Jinja extensions, pass in `extensions=[extension1, extension2, ...]`.
 *   To change which files get rendered, subclass Renderer and override `filter_func`.
