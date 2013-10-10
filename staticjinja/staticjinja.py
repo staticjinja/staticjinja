@@ -10,6 +10,8 @@ from __future__ import absolute_import
 import inspect
 import os
 import re
+import time
+import traceback
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -159,7 +161,24 @@ class Renderer(object):
             template_name = os.path.relpath(src_path, self.template_folder)
             if event_type == "modified":
                 if src_path.startswith(self.template_folder):
-                    self.render_template(template_name)
+                    try:
+                        if self.filter_func(template_name):
+                            self.render_template(template_name)
+                        else:
+                            # Wait a bit, since some editors (e.g., vim) make
+                            # the file disappear when writing, and inotify might
+                            # be too fast, put it in the template_names list and
+                            # later fail when trying to access it.
+                            time.sleep(0.1)
+
+                            # As reported in #16, when an ignored file is changed,
+                            # some dependency management would be required. For
+                            # example, if a _base.html is modified, only those files
+                            # importing it should be regenerated. In the meanwhile...
+                            self.render_templates()
+                    except:
+                        # Keep working, but show exceptions
+                        traceback.print_exc()
         easywatch.watch(self.template_folder, handler)
 
     def run(self, debug=False, use_reloader=False):
