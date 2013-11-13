@@ -100,18 +100,41 @@ class Renderer(object):
                     return context_generator()
         return {}
 
-    def filter_func(self, filename):
-        """Check if the file should be rendered.
+    def is_partial(self, filename):
+        """Check if a file is a Partial.
 
-        Hidden files will not be rendered.
+        A Partial is not rendered but may be used by Templates.
 
-        Files prefixed with an underscore are assumed to be partials and will
-        not be rendered.
+        By default, any file prefixed with an `_` is considered a Partial.
 
         :param filename: the name of the file to check
         """
         _, tail = os.path.split(filename)
-        return not (tail.startswith('_') or tail.startswith("."))
+        return tail.startswith('_')
+
+    def is_ignored(self, filename):
+        """Check if a file is an ignored file.
+
+        An ignored file is neither rendered nor affects rendering.
+
+        :param filename: the name of the file to check
+        """
+        _, tail = os.path.split(filename)
+        return tail.startswith(".")
+
+    def is_template(self, filename):
+        """Check if a file is a Template.
+
+        :param filename: the name of the file to check
+        """
+        return not self.is_partial(filename) and not self.is_ignored(filename)
+
+    def filter_func(self, filename):
+        """Check if the file should be rendered.
+
+        :param filename: the name of the file to check
+        """
+        return self.is_template(filename)
 
     def _ensure_dir(self, template_name):
         """Ensure the output directory for a template exists."""
@@ -156,10 +179,13 @@ class Renderer(object):
         self.logger.info("Press Ctrl+C to stop.")
 
         def handler(event_type, src_path):
-            template_name = os.path.relpath(src_path, self.template_folder)
+            filename = os.path.relpath(src_path, self.template_folder)
             if event_type == "modified":
                 if src_path.startswith(self.template_folder):
-                    self.render_template(template_name)
+                    if self.is_partial(filename):
+                        self.render_templates()
+                    elif self.is_template(filename):
+                        self.render_template(filename)
         easywatch.watch(self.template_folder, handler)
 
     def run(self, debug=False, use_reloader=False):
