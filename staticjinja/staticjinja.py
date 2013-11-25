@@ -54,7 +54,7 @@ class Renderer(object):
 
     @property
     def template_names(self):
-        return self._env.list_templates(filter_func=self.filter_func)
+        return self._env.list_templates(filter_func=self.is_template)
 
     def get_template(self, template_name):
         """Get a Template object from the environment.
@@ -110,13 +110,6 @@ class Renderer(object):
         :param filename: the name of the file to check
         """
         return not self.is_partial(filename) and not self.is_ignored(filename)
-
-    def filter_func(self, filename):
-        """Check if the file should be rendered.
-
-        :param filename: the name of the file to check
-        """
-        return self.is_template(filename)
 
     def _ensure_dir(self, template_name):
         """Ensure the output directory for a template exists."""
