@@ -48,7 +48,9 @@ If `easywatch` is installed, this will also monitor the files in `./templates` a
 
 The command line shortcut is convenient, but sometimes your project needs something different than the defaults.
 
-To change things, you can use a build script. A minimal build script looks something like this:
+To change behavior, you can use a build script.
+
+A minimal build script looks something like this:
 
 ```python
 from staticjinja import make_renderer
@@ -60,12 +62,12 @@ if __name__ == "__main__":
     renderer.run(use_reloader=True)
 ```
 
-Then you can change things by passing keyword arguments to `make_renderer`.
+To change behavior, pass the appropriate keyword arguments to `make_renderer`.
 
-*   To change the templates directory, pass in `template_folder="template_folder_name"` (default is `./templates`).
+*   To change which directory to search for templates, set `searchpath="searchpath_name"` (default is `./templates`).
 *   To change the output directory, pass in `outpath="output_dir"` (default is `.`).
 *   To add Jinja extensions, pass in `extensions=[extension1, extension2, ...]`.
-*   To change which files get rendered, subclass the Renderer object and override `filter_func`.
+*   To change which files get rendered, subclass the Renderer object and override `is_template`.
 
 Finally, just save the script as _build.py_ (or something similar) and run it with your Python interpreter.
 

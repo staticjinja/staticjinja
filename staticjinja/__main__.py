@@ -8,6 +8,6 @@ import os
 import staticjinja
 
 if __name__ == "__main__":
-    template_folder = os.path.join(os.getcwd(), 'templates')
-    renderer = staticjinja.make_renderer(template_folder=template_folder)
+    searchpath = os.path.join(os.getcwd(), 'templates')
+    renderer = staticjinja.make_renderer(searchpath=searchpath)
     renderer.run(use_reloader=True)
