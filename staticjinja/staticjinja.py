@@ -81,6 +81,15 @@ class Renderer(object):
                     return context_generator()
         return {}
 
+    def get_rule(self, template_name):
+        """Find a matching compilation rule for a function.
+        
+        Raises a ValueError if not matching rule can be found."""
+        for regex, render_func in self.rules:
+            if re.match(regex, template.name):
+                return render_func
+        raise ValueError("no matching rule")
+
     def is_partial(self, filename):
         """Check if a file is a Partial.
 
@@ -121,22 +130,22 @@ class Renderer(object):
     def render_template(self, template, context):
         """Render a template.
 
-        If a matching Rule can be found, rendering will be delegated to the
-        rule.
+        If a Rule matching the template is found, the rendering task is
+        delegated to the rule.
 
         :param template: a template to render
         :param context: a context to render the template with
         """
         self.logger.info("Rendering %s..." % template.name)
 
-        for regex, render_func in self.rules:
-            if re.match(regex, template.name):
-                render_func(self, template, **context)
-                break
-        else:
+        try:
+            rule = self.get_rule(template.name)
+        except ValueError:
             self._ensure_dir(template.name)
             fp = os.path.join(self.outpath, template.name)
             template.stream(**context).dump(fp, self.encoding)
+        else:
+            rule(self, template, **context)
 
     def render_templates(self):
         """Render each of the templates."""
