@@ -2,26 +2,25 @@
 
 """
 Simple static page generator.
+
 Uses jinja2 to compile templates.
 """
 
 from __future__ import absolute_import
 
 import inspect
+import logging
 import os
 import re
 
 from jinja2 import Environment, FileSystemLoader
 
-from . import logs as logging
-
 
 class Renderer(object):
     """The renderer object.
 
-    :param template_folder: the directory containing the templates. Defaults to
-                            ``'templates'``
-    :param extensions: list of extensions to add to the Environment
+    :param environment: a jinja2 environment
+    :param searchpath: the directory containing the templates
     :param contexts: list of regex-function pairs. the function should return a
                      context for that template. the regex, if matched against
                      a filename, will cause the context to be used.
@@ -31,48 +30,30 @@ class Renderer(object):
                   renders the template, and `regex` is a regex that if matched
                   against a filename will cause `function` to be used instead
                   of the default.
-    :param encoding: the encoding of templates to use. Defaults to 'utf8'
+    :param encoding: the encoding of templates to use
+    :param logger: a logging.Logger object to log events
     """
-    debug_log_format = None
 
     def __init__(self,
-                 template_folder="templates",
-                 outpath=".",
-                 extensions=None,
+                 environment,
+                 searchpath,
+                 outpath,
+                 encoding,
+                 logger,
                  contexts=None,
                  rules=None,
-                 encoding="utf8"):
-
-        if os.path.isabs(template_folder):
-            template_path = template_folder
-        else:
-            # TODO: Remove this
-            calling_module = inspect.getmodule(inspect.stack()[-1][0])
-            # Absolute path to project
-            project_path = os.path.realpath(os.path.dirname(
-                calling_module.__file__))
-            # Absolute path to templates
-            template_path = os.path.join(project_path, template_folder)
-
-        self.template_folder = template_path
+                 ):
+        self._env = environment
+        self.searchpath = searchpath
         self.outpath = outpath
-        self.extensions = extensions or []
+        self.encoding = encoding
+        self.logger = logger
         self.contexts = contexts or []
         self.rules = rules or []
-        self.encoding = encoding
-
-        loader = FileSystemLoader(searchpath=template_folder,
-                                  encoding=encoding)
-        self._env = Environment(loader=loader, extensions=self.extensions)
-
-        self.logger_name = __name__
-        self.logger = logging.create_logger(self)
-
-        self.debug = False
 
     @property
     def template_names(self):
-        return self._env.list_templates(filter_func=self.filter_func)
+        return self._env.list_templates(filter_func=self.is_template)
 
     def get_template(self, template_name):
         """Get a Template object from the environment.
@@ -99,6 +80,15 @@ class Renderer(object):
                 except TypeError:
                     return context_generator()
         return {}
+
+    def get_rule(self, template_name):
+        """Find a matching compilation rule for a function.
+        
+        Raises a ValueError if not matching rule can be found."""
+        for regex, render_func in self.rules:
+            if re.match(regex, template.name):
+                return render_func
+        raise ValueError("no matching rule")
 
     def is_partial(self, filename):
         """Check if a file is a Partial.
@@ -129,93 +119,116 @@ class Renderer(object):
         """
         return not self.is_partial(filename) and not self.is_ignored(filename)
 
-    def filter_func(self, filename):
-        """Check if the file should be rendered.
-
-        :param filename: the name of the file to check
-        """
-        return self.is_template(filename)
-
     def _ensure_dir(self, template_name):
         """Ensure the output directory for a template exists."""
-        head, tail = os.path.split(template_name)
+        head, _ = os.path.split(template_name)
         if head:
             file_dirpath = os.path.join(self.outpath, head)
             if not os.path.exists(file_dirpath):
                 os.makedirs(file_dirpath)
 
-    def render_template(self, template_name):
+    def render_template(self, template, context):
         """Render a template.
 
-        If a matching Rule can be found, rendering will be delegated to the
-        rule.
+        If a Rule matching the template is found, the rendering task is
+        delegated to the rule.
 
-        :param template_name: the name of the template
+        :param template: a template to render
+        :param context: a context to render the template with
         """
-        self.logger.info("Rendering %s..." % template_name)
+        self.logger.info("Rendering %s..." % template.name)
 
-        template = self.get_template(template_name)
-        context = self.get_context(template_name)
-        for regex, render_func in self.rules:
-            if re.match(regex, template.name):
-                render_func(self, template, **context)
-                break
-        else:
+        try:
+            rule = self.get_rule(template.name)
+        except ValueError:
             self._ensure_dir(template.name)
             fp = os.path.join(self.outpath, template.name)
             template.stream(**context).dump(fp, self.encoding)
+        else:
+            rule(self, template, **context)
 
     def render_templates(self):
         """Render each of the templates."""
         for template_name in self.template_names:
-            self.render_template(template_name)
+            template = self.get_template(template_name)
+            context = self.get_context(template_name)
+            self.render_template(template, context)
 
     def _watch(self):
         """Watch and reload templates."""
         import easywatch
 
         self.logger.info("Watching '%s' for changes..." %
-                          self.template_folder)
+                          self.searchpath)
         self.logger.info("Press Ctrl+C to stop.")
 
         def handler(event_type, src_path):
-            filename = os.path.relpath(src_path, self.template_folder)
+            filename = os.path.relpath(src_path, self.searchpath)
             if event_type == "modified":
-                if src_path.startswith(self.template_folder):
+                if src_path.startswith(self.searchpath):
                     if self.is_partial(filename):
                         self.render_templates()
                     elif self.is_template(filename):
+                        template = self.get_template(filename)
+                        context = self.get_context(filename)
                         self.render_template(filename)
-        easywatch.watch(self.template_folder, handler)
+        easywatch.watch(self.searchpath, handler)
 
-    def run(self, debug=False, use_reloader=False):
+    def run(self, use_reloader=False):
         """Run the renderer.
 
-        :param debug: if given, then display logs
-        :param reload: if given, reload templates on modification
+        :param use_reloader: if given, reload templates on modification
         """
-        if debug:
-            self.debug = True
-
         self.render_templates()
 
         if use_reloader:
             self._watch()
 
 
-def main(*args, **kwargs):
-    if 'autoreload' in kwargs:
-    	autoreload = True
-    	del kwargs['autoreload']
-    else:
-    	autoreload = False
-    if 'filter_func' in kwargs:
-    	filter_func = kwargs['filter_func']
-    	del kwargs['filter_func']
-    else:
-    	filter_func = None
-    renderer = Renderer(*args, **kwargs)
-    if filter_func:
-        renderer.filter_func = filter_func
-    if autoreload:
-        renderer.run(debug=True, use_reloader=True)
+def make_renderer(searchpath="templates",
+                 outpath=".",
+                 contexts=None,
+                 rules=None,
+                 encoding="utf8",
+                 extensions=None,
+                 ):
+    """Get a Renderer object.
+
+    :param searchpath: the directory to search for templates. Defaults to
+                       ``'templates'``
+    :param outpath: the directory to store the rendered files in
+    :param contexts: list of regex-function pairs. the function should return a
+                     context for that template. the regex, if matched against
+                     a filename, will cause the context to be used.
+    :param rules: used to override template compilation. The value of rules
+                  should be a list of `regex, function` pairs where `function`
+                  takes a jinja2 Environment, the filename, and the context and
+                  renders the template, and `regex` is a regex that if matched
+                  against a filename will cause `function` to be used instead
+                  of the default.
+    :param encoding: the encoding of templates to use. Defaults to 'utf8'
+    :param extensions: list of extensions to add to the Environment
+    """
+    # Coerce search to an absolute path if it is not already
+    if not os.path.isabs(searchpath):
+        # TODO: Determine if there is a better way to write do this
+        calling_module = inspect.getmodule(inspect.stack()[-1][0])
+        # Absolute path to project
+        project_path = os.path.realpath(os.path.dirname(
+            calling_module.__file__))
+        searchpath = os.path.join(project_path, searchpath)
+
+    loader = FileSystemLoader(searchpath=searchpath,
+                              encoding=encoding)
+    environment = Environment(loader=loader, extensions=extensions or [])
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.INFO)
+    logger.addHandler(logging.StreamHandler())
+    return Renderer(environment,
+                    searchpath=searchpath,
+                    outpath=outpath,
+                    encoding=encoding,
+                    logger=logger,
+                    rules=rules,
+                    contexts=contexts,
+                    )

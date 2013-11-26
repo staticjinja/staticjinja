@@ -2,4 +2,5 @@ import staticjinja
 
 
 if __name__ == "__main__":
-    staticjinja.main()
+    renderer = staticjinja.make_renderer()
+    renderer.run()
