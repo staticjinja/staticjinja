@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-__version_info__ = ('0', '1', '4')
+__version_info__ = ('0', '1', '5')
 __version__ = '.'.join(__version_info__)
 
 setup(
