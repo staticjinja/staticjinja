@@ -2,10 +2,10 @@
 staticjinja
 ===========
 
-.. image:: https://badge.fury.io/py/requests.png
+.. image:: https://badge.fury.io/py/staticjinja.png
     :target: http://badge.fury.io/py/staticjinja
 
-.. image:: https://pypip.in/d/requests/badge.png
+.. image:: https://pypip.in/d/staticjinja/badge.png
         :target: https://crate.io/packages/staticjinja/
 
 staticjinja is a library for easily deploying static sites using the jinja2_ templating language.
