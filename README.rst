@@ -44,7 +44,7 @@ Optionally, to enable automatic reloading:
 Documentation
 -------------
 
-Documentation is available at https://github.com/Ceasar/staticjinja/tree/master/docs
+Documentation is available at http://staticjinja.readthedocs.org/en/latest/
 
 Contribute
 ----------
