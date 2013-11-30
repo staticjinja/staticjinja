@@ -29,3 +29,5 @@ pip-log.txt
 # Compiled html
 /*.html
 .*
+
+docs/_build
