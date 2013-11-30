@@ -23,9 +23,11 @@ staticjinja is designed to be lightweight, easy-to-use, and highly extensible, e
     Press Ctrl+C to stop.
 
 
-
 User Guide
 ----------
+
+This part of the documentation, which is mostly prose, focuses on step-by-step
+instructions for getting the most of staticjinja.
 
 .. toctree::
    :maxdepth: 2
@@ -34,8 +36,22 @@ User Guide
    user/quickstart
    user/advanced
 
+API Documentation
+-----------------
+
+If you are looking for information on a specific function, class, or method,
+this part of the documentation is for you.
+
+.. toctree::
+   :maxdepth: 2
+
+   api
+
 Contributor Guide
 ------------------
+
+If you want to contribute to the project, this part of the documentation is for
+you.
 
 .. toctree::
    :maxdepth: 1
