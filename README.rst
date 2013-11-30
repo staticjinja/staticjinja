@@ -38,8 +38,7 @@ Optionally, to enable automatic reloading:
 Documentation
 -------------
 
-Documentation is available at `docs/`.
-
+Documentation is available at https://github.com/Ceasar/staticjinja/tree/master/docs
 
 Contribute
 ----------
@@ -50,4 +49,3 @@ Contribute
 
 .. _`the repository`: https://github.com/Ceasar/staticjinja
 .. _AUTHORS: https://github.com/Ceasar/staticjinja/blob/master/AUTHORS.rst
-.. _`docs/`: https://github.com/Ceasar/staticjinja/tree/master/docs

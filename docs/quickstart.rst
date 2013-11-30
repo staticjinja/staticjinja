@@ -12,7 +12,7 @@ If you're just looking to render simple data-less templates, you can get up and 
     Watching 'templates' for changes...
     Press Ctrl+C to stop.
 
-This will recursively search ``./templates`` for templates (any file whose name does not start with `.` or `_`) and build them to ``.``.
+This will recursively search ``./templates`` for templates (any file whose name does not start with ``.`` or ``_``) and build them to ``.``.
 
 If ``easywatch`` is installed, this will also monitor the files in `./templates` and recompile them if they change.
 
