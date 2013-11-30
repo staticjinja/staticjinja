@@ -12,17 +12,15 @@ If you're just looking to render simple data-less templates, you can get up and 
     Watching 'templates' for changes...
     Press Ctrl+C to stop.
 
-This will recursively search `./templates` for template files and build them to `.`, ignoring any files whose names start with `_` or `.`.
+This will recursively search ``./templates`` for templates (any file whose name does not start with `.` or `_`) and build them to ``.``.
 
-If `easywatch` is installed, this will also monitor the files in `./templates` and recompile them if they change.
+If ``easywatch`` is installed, this will also monitor the files in `./templates` and recompile them if they change.
 
 
 Basic configuration
 -------------------
 
-The command line shortcut is convenient, but sometimes your project needs something different than the defaults.
-
-To change behavior, you can use a build script.
+The command line shortcut is convenient, but sometimes your project needs something different than the defaults. To change them, you can use a build script.
 
 A minimal build script looks something like this:
 
@@ -36,12 +34,12 @@ A minimal build script looks something like this:
         # enable automatic reloading
         renderer.run(use_reloader=True)
 
-To change behavior, pass the appropriate keyword arguments to `make_renderer`.
+To change behavior, pass the appropriate keyword arguments to ``make_renderer``.
 
-*   To change which directory to search for templates, set `searchpath="searchpath_name"` (default is `./templates`).
-*   To change the output directory, pass in `outpath="output_dir"` (default is `.`).
-*   To add Jinja extensions, pass in `extensions=[extension1, extension2, ...]`.
-*   To change which files get rendered, subclass the Renderer object and override `is_template`.
+*   To change which directory to search for templates, set ``searchpath="searchpath_name"`` (default is ``./templates``).
+*   To change the output directory, pass in ``outpath="output_dir"`` (default is ``.``).
+*   To add Jinja extensions, pass in ``extensions=[extension1, extension2, ...]``.
+*   To change which files are considered templates, subclass the ``Renderer`` object and override ``is_template``.
 
 Finally, just save the script as _build.py_ (or something similar) and run it with your Python interpreter.
 
@@ -80,7 +78,7 @@ To get data to templates you can set up a mapping between filenames and function
         ])
         renderer.run(use_reloader=True)
 
-You can then use the data in `templates/index.html` as usual.
+You can then use the data in ``templates/index.html`` as usual.
 
 .. code-block:: html
 
@@ -144,9 +142,9 @@ To do this, just write a handler by registering a regex and a compilation functi
         ])
         renderer.run(use_reloader=True)
 
-Note the rule we defined at the bottom. It tells staticjinja to check if the filename matches the `.*.md` regex, and if it does, to compile the file using `render_post`.
+Note the rule we defined at the bottom. It tells staticjinja to check if the filename matches the ``.*.md`` regex, and if it does, to compile the file using ``render_post``.
 
-Now just implement `templates/_post.html`...
+Now just implement ``templates/_post.html``...
 
 .. code-block:: html
 
@@ -160,6 +158,6 @@ Now just implement `templates/_post.html`...
     </div>
     {% endblock %}
 
-...and now you can drop markdown files into your `templates` directory and they'll be compiled into HTML.
+...and now you can drop markdown files into your ``templates`` directory and they'll be compiled into HTML.
 
-**Note:** You can grab the MarkdownExtension from [here](http://silas.sewell.org/blog/2010/05/10/jinja2-markdown-extension/).
+**Note:** You can grab the MarkdownExtension from http://silas.sewell.org/blog/2010/05/10/jinja2-markdown-extension/.
