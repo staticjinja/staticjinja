@@ -144,7 +144,7 @@ class Renderer(object):
             if not os.path.exists(file_dirpath):
                 os.makedirs(file_dirpath)
 
-    def render_template(self, template, context):
+    def render_template(self, template, context=None):
         """Render a template.
 
         If a Rule matching the template is found, the rendering task is
@@ -154,6 +154,9 @@ class Renderer(object):
         :param context: a context to render the template with
         """
         self.logger.info("Rendering %s..." % template.name)
+
+        if context is None:
+            context = self.get_context(template)
 
         try:
             rule = self.get_rule(template.name)
