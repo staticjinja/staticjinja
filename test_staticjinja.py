@@ -22,12 +22,14 @@ def build_path(tmpdir):
 
 @fixture
 def renderer(template_path, build_path):
-    template_path.join('test1.html').write('Test 1')
-    template_path.join('test2.html').write('Test 2')
-    template_path.mkdir('sub').join('test3.html').write('Test 3')
-    contexts = [('test2.html', lambda t: {'a': 1}),
-                ('.*test3.html', lambda: {'b': 1}),]
-    rules = [('test2.html', lambda env, t, a: None),]
+    template_path.join('.ignored1.html').write('Ignored 1')
+    template_path.join('_partial1.html').write('Partial 1')
+    template_path.join('template1.html').write('Test 1')
+    template_path.join('template2.html').write('Test 2')
+    template_path.mkdir('sub').join('template3.html').write('Test 3')
+    contexts = [('template2.html', lambda t: {'a': 1}),
+                ('.*template3.html', lambda: {'b': 1}),]
+    rules = [('template2.html', lambda env, t, a: None),]
     return make_renderer(searchpath=str(template_path),
                          outpath=str(build_path),
                          contexts=contexts,
@@ -40,9 +42,9 @@ def reloader(renderer):
 
 
 def test_template_names(renderer):
-    assert set(renderer.template_names) == {'test1.html',
-                                            'test2.html',
-                                            'sub/test3.html'}
+    assert set(renderer.template_names) == {'template1.html',
+                                            'template2.html',
+                                            'sub/template3.html'}
 
 
 def test_templates(renderer):
@@ -50,15 +52,15 @@ def test_templates(renderer):
 
 
 def test_get_context(renderer):
-    assert renderer.get_context(renderer.get_template("test1.html")) == {}
-    assert renderer.get_context(renderer.get_template("test2.html")) == {'a': 1}
-    assert renderer.get_context(renderer.get_template("sub/test3.html")) == {'b': 1}
+    assert renderer.get_context(renderer.get_template("template1.html")) == {}
+    assert renderer.get_context(renderer.get_template("template2.html")) == {'a': 1}
+    assert renderer.get_context(renderer.get_template("sub/template3.html")) == {'b': 1}
 
 
 def test_get_rule(renderer):
     with raises(ValueError):
-        assert renderer.get_rule('test1.html')
-    assert renderer.get_rule('test2.html')
+        assert renderer.get_rule('template1.html')
+    assert renderer.get_rule('template2.html')
 
 
 def test_get_dependencies(renderer, filename):
@@ -70,16 +72,16 @@ def test_get_dependencies(renderer, filename):
 
 
 def test_render_template(renderer, build_path):
-    template = renderer.get_template('test1.html')
-    out = build_path.join("test1.html")
+    template = renderer.get_template('template1.html')
+    out = build_path.join("template1.html")
     renderer.render_template(template)
     assert out.check()
     assert out.read() == "Test 1"
 
 
 def test_render_nested_template(renderer, build_path):
-    template = renderer.get_template('sub/test3.html')
-    out = build_path.join('sub').join("test3.html")
+    template = renderer.get_template('sub/template3.html')
+    out = build_path.join('sub').join("template3.html")
     renderer.render_template(template)
     assert out.check()
     assert out.read() == "Test 3"
@@ -109,16 +111,16 @@ def test_with_reloader(reloader, renderer):
 
 
 def test_should_handle(reloader, template_path):
-    test1_path = str(template_path.join("test1.html"))
+    template1_path = str(template_path.join("template1.html"))
     test4_path = str(template_path.join("test4.html"))
-    assert reloader.should_handle("modified", test1_path)
+    assert reloader.should_handle("modified", template1_path)
     assert reloader.should_handle("modified", test4_path)
-    assert not reloader.should_handle("created", test1_path)
+    assert not reloader.should_handle("created", template1_path)
 
 
 def test_event_handler(reloader, template_path):
     templates = []
     reloader.renderer.render_template = lambda t: templates.append(t)
-    test1_path = str(template_path.join("test1.html"))
-    reloader.event_handler("modified", test1_path)
-    assert templates == [reloader.renderer.get_template("test1.html")]
+    template1_path = str(template_path.join("template1.html"))
+    reloader.event_handler("modified", template1_path)
+    assert templates == [reloader.renderer.get_template("template1.html")]
