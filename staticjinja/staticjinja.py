@@ -55,6 +55,11 @@ class Renderer(object):
     def template_names(self):
         return self._env.list_templates(filter_func=self.is_template)
 
+    @property
+    def templates(self):
+        for template_name in self.template_names:
+            yield self.get_template(template_name)
+
     def get_template(self, template_name):
         """Get a Template object from the environment.
 
@@ -167,39 +172,32 @@ class Renderer(object):
         else:
             rule(self, template, **context)
 
-    def render_templates(self):
-        """Render each of the templates."""
-        for template_name in self.template_names:
-            template = self.get_template(template_name)
-            context = self.get_context(template)
-            self.render_template(template, context)
+    def render_templates(self, templates):
+        """Render a collection of templates.
+        
+        :param templates: a collection of Templates
+        """
+        for template in templates:
+            self.render_template(template)
 
-    def _watch(self):
-        """Watch and reload templates."""
-        import easywatch
-
-        self.logger.info("Watching '%s' for changes..." %
-                          self.searchpath)
-        self.logger.info("Press Ctrl+C to stop.")
-
-        def handler(event_type, src_path):
-            filename = os.path.relpath(src_path, self.searchpath)
-            if event_type == "modified":
-                if src_path.startswith(self.searchpath):
-                    if self.is_partial(filename):
-                        self.render_templates()
-                    elif self.is_template(filename):
-                        template = self.get_template(filename)
-                        context = self.get_context(template)
-                        self.render_template(filename)
-        easywatch.watch(self.searchpath, handler)
+    def get_dependencies(self, filename):
+        """Get every file that depends on a file.
+        
+        :param filename: the name of the file to find dependencies of
+        """
+        if self.is_partial(filename):
+            return self.templates
+        elif self.is_template(filename):
+            return [self.get_template(filename)]
+        else:
+            return []
 
     def run(self, use_reloader=False):
         """Run the renderer.
 
         :param use_reloader: if given, reload templates on modification
         """
-        self.render_templates()
+        self.render_templates(self.templates)
 
         if use_reloader:
             self._watch()
