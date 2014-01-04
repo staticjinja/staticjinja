@@ -237,7 +237,7 @@ class Reloader(object):
 
         :param event_type: a string, representing the type of event
 
-        :param: filename: the path to the file that triggered the event.
+        :param filename: the path to the file that triggered the event.
         """
         print event_type, filename
         return (event_type == "modified"
@@ -248,7 +248,7 @@ class Reloader(object):
         
         :param event_type: a string, representing the type of event
 
-        :param: src_path: the path to the file that triggered the event.
+        :param src_path: the path to the file that triggered the event.
 
         """
         filename = os.path.relpath(src_path, self.searchpath)
