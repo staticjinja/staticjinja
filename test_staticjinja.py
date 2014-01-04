@@ -26,9 +26,9 @@ def renderer(template_path, build_path):
     template_path.join('_partial1.html').write('Partial 1')
     template_path.join('template1.html').write('Test 1')
     template_path.join('template2.html').write('Test 2')
-    template_path.mkdir('sub').join('template3.html').write('Test 3')
+    template_path.mkdir('sub').join('template3.html').write('Test {{b}}')
     contexts = [('template2.html', lambda t: {'a': 1}),
-                ('.*template3.html', lambda: {'b': 1}),]
+                ('.*template3.html', lambda: {'b': 3}),]
     rules = [('template2.html', lambda env, t, a: None),]
     return make_renderer(searchpath=str(template_path),
                          outpath=str(build_path),
@@ -54,7 +54,7 @@ def test_templates(renderer):
 def test_get_context(renderer):
     assert renderer.get_context(renderer.get_template("template1.html")) == {}
     assert renderer.get_context(renderer.get_template("template2.html")) == {'a': 1}
-    assert renderer.get_context(renderer.get_template("sub/template3.html")) == {'b': 1}
+    assert renderer.get_context(renderer.get_template("sub/template3.html")) == {'b': 3}
 
 
 def test_get_rule(renderer):
@@ -72,26 +72,27 @@ def test_get_dependencies(renderer, filename):
 
 
 def test_render_template(renderer, build_path):
-    template = renderer.get_template('template1.html')
-    out = build_path.join("template1.html")
-    renderer.render_template(template)
-    assert out.check()
-    assert out.read() == "Test 1"
+    renderer.render_template(renderer.get_template('template1.html'))
+    template1 = build_path.join("template1.html")
+    assert template1.check()
+    assert template1.read() == "Test 1"
 
 
 def test_render_nested_template(renderer, build_path):
-    template = renderer.get_template('sub/template3.html')
-    out = build_path.join('sub').join("template3.html")
-    renderer.render_template(template)
-    assert out.check()
-    assert out.read() == "Test 3"
+    renderer.render_template(renderer.get_template('sub/template3.html'))
+    template3 = build_path.join('sub').join("template3.html")
+    assert template3.check()
+    assert template3.read() == "Test 3"
 
 
-def test_render_templates(renderer):
-    templates = []
-    renderer.render_template = lambda t: templates.append(t)
+def test_render_templates(renderer, build_path):
     renderer.render_templates(renderer.templates)
-    assert templates == list(renderer.templates)
+    template1 = build_path.join("template1.html")
+    assert template1.check()
+    assert template1.read() == "Test 1"
+    template3 = build_path.join('sub').join("template3.html")
+    assert template3.check()
+    assert template3.read() == "Test 3"
 
 
 def test_run(renderer):
