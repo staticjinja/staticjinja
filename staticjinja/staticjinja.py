@@ -122,8 +122,7 @@ class Renderer(object):
 
         :param filename: the name of the file to check
         """
-        _, tail = os.path.split(filename)
-        return tail.startswith('_')
+        return os.path.basename(filename).startswith('_')
 
     def is_ignored(self, filename):
         """Check if a file is an ignored file.
@@ -134,8 +133,7 @@ class Renderer(object):
 
         :param filename: the name of the file to check
         """
-        _, tail = os.path.split(filename)
-        return tail.startswith(".")
+        return os.path.basename(filename).startswith('.')
 
     def is_template(self, filename):
         """Check if a file is a template.
@@ -149,7 +147,7 @@ class Renderer(object):
 
     def _ensure_dir(self, template_name):
         """Ensure the output directory for a template exists."""
-        head, _ = os.path.split(template_name)
+        head = os.path.dirname(template_name)
         if head:
             file_dirpath = os.path.join(self.outpath, head)
             if not os.path.exists(file_dirpath):
