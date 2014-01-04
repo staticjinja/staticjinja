@@ -17,7 +17,7 @@ def renderer(tmpdir):
     tmpdir.join('test3.html').write('')
     contexts = [('test2.html', lambda t: {'a': 1}),
                 ('test3.html', lambda: {'b': 1}),]
-    rules = [('test2.html', None),]
+    rules = [('test2.html', lambda env, t, a: None),]
     return make_renderer(searchpath=str(tmpdir), contexts=contexts, rules=rules)
 
 
@@ -45,7 +45,7 @@ def test_get_context(renderer):
 def test_get_rule(renderer):
     with raises(ValueError):
         assert renderer.get_rule('test1.html')
-    assert renderer.get_rule('test2.html') is None
+    assert renderer.get_rule('test2.html')
 
 
 def test_get_dependencies(renderer, filename):
@@ -55,6 +55,10 @@ def test_get_dependencies(renderer, filename):
             == list(renderer.templates))
     assert (list(renderer.get_dependencies("%s" % filename)) == [filename])
 
+
+def test_render_template(renderer):
+    template = renderer.get_template('test2.html')
+    renderer.render_template(template)
 
 def test_render_templates(renderer):
     templates = []
@@ -68,6 +72,15 @@ def test_run(renderer):
     renderer.render_template = lambda t: templates.append(t)
     renderer.run()
     assert templates == list(renderer.templates)
+
+
+def test_with_reloader(reloader, renderer):
+    reloader.watch_called = False
+    def watch(self):
+        reloader.watch_called = True
+    Reloader.watch = watch
+    renderer.run(use_reloader=True)
+    assert reloader.watch_called
 
 
 def test_should_handle(reloader, tmpdir):
