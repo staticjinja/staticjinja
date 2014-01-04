@@ -20,3 +20,6 @@ Classes
 
 .. autoclass:: staticjinja.Renderer
    :inherited-members:
+
+.. autoclass:: staticjinja.Reloader
+   :inherited-members:

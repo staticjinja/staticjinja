@@ -20,7 +20,7 @@ class Renderer(object):
     """The renderer object.
 
     :param environment: a jinja2 environment
-    :param searchpath: the directory containing the templates
+    :param searchpath: the name of the directory to search for templates.
     :param contexts: list of regex-function pairs. the function should return a
                      context for that template. the regex, if matched against
                      a filename, will cause the context to be used.
@@ -57,6 +57,7 @@ class Renderer(object):
 
     @property
     def templates(self):
+        """Generator for templates."""
         for template_name in self.template_names:
             yield self.get_template(template_name)
 
@@ -113,11 +114,11 @@ class Renderer(object):
         raise ValueError("no matching rule")
 
     def is_partial(self, filename):
-        """Check if a file is a Partial.
+        """Check if a file is a partial.
 
-        A Partial is not rendered but may be used by Templates.
+        Partial files are not rendered, but they are used in rendering templates.
 
-        By default, any file prefixed with an `_` is considered a Partial.
+        A file is considered ignored if it is prefixed with an ``'_'``.
 
         :param filename: the name of the file to check
         """
@@ -127,7 +128,9 @@ class Renderer(object):
     def is_ignored(self, filename):
         """Check if a file is an ignored file.
 
-        An ignored file is neither rendered nor affects rendering.
+        Ignored files are neither rendered nor used in rendering templates.
+
+        A file is considered ignored if it is prefixed with an ``'.'``.
 
         :param filename: the name of the file to check
         """
@@ -135,7 +138,10 @@ class Renderer(object):
         return tail.startswith(".")
 
     def is_template(self, filename):
-        """Check if a file is a Template.
+        """Check if a file is a template.
+
+        A file is a considered a template if it is neither a partial nor
+        ignored.
 
         :param filename: the name of the file to check
         """
@@ -156,7 +162,9 @@ class Renderer(object):
         delegated to the rule.
 
         :param template: a template to render
-        :param context: a context to render the template with
+        :param context: optional. A context to render the template with. If no
+                        context is provided, `get_context` is used to provide a
+                        context.
         """
         self.logger.info("Rendering %s..." % template.name)
 
@@ -175,7 +183,7 @@ class Renderer(object):
     def render_templates(self, templates):
         """Render a collection of templates.
         
-        :param templates: a collection of Templates
+        :param templates: a collection of Templates to render
         """
         for template in templates:
             self.render_template(template)
@@ -214,7 +222,8 @@ class Reloader(object):
     Watches ``renderer.searchpath`` for changes and re-renders any changed
     Templates.
 
-    :param renderer: A Renderer object, used to re-render templates.
+    :param renderer: a :class:`Renderer <Renderer>` to re-render templates.
+
     """
     def __init__(self, renderer):
         self.renderer = renderer
@@ -226,20 +235,31 @@ class Reloader(object):
     def should_handle(self, event_type, filename):
         """Check if an event should be handled.
         
-        An event should be handled if a file in the searchpath was modified."""
+        An event should be handled if a file in the searchpath was modified.
+
+        :param event_type: a string, representing the type of event
+
+        :param: filename: the path to the file that triggered the event.
+        """
         print event_type, filename
         return (event_type == "modified"
                 and filename.startswith(self.searchpath))
 
     def event_handler(self, event_type, src_path):
-        """Re-render templates if they are modified."""
+        """Re-render templates if they are modified.
+        
+        :param event_type: a string, representing the type of event
+
+        :param: src_path: the path to the file that triggered the event.
+
+        """
         filename = os.path.relpath(src_path, self.searchpath)
         if self.should_handle(event_type, src_path):
             templates = self.renderer.get_dependencies(filename)
             self.renderer.render_templates(templates)
 
     def watch(self):
-        """Watch and reload templates."""
+        """Watch and reload modified templates."""
         import easywatch
         easywatch.watch(self.searchpath, self.event_handler)
 
@@ -254,27 +274,29 @@ def make_renderer(searchpath="templates",
     """Get a Renderer object.
 
     :param searchpath: the name of the directory to search for templates.
-    
-                       Defaults to 'templates'.
-    :param outpath: the name of the directory to store the rendered files in
+                       Defaults to ``'templates'``.
 
-                    Defaults to `.`.
-    :param contexts: list of `(regex, function)` pairs.
-    
-                     If `regex` matches a template's name, `function` will
-                     be invoked and expected to provide a context.
+    :param outpath: the name of the directory to store the rendered files in.
+                    Defaults to ``'.'``.
 
-                     `function` should optionally take a Template as a
-                     parameter and return a dictionary context when invoked.
-    :param rules: list of `(regex, function)` pairs.
+    :param contexts: list of *(regex, function)* pairs. When rendering, if a
+                     template's name matches *regex*, *function* will be
+                     invoked and expected to provide a context. *function*
+                     should optionally take a Template as a parameter and
+                     return a dictionary context when invoked. Defaults to
+                     ``[]``.
 
-                  If `regex` matches a template's name, rendering will
-                  delegate to `function`.
-    
-                  `function` should take a jinja2 Environment, a filename, and
-                  a context and render the template.
-    :param encoding: the encoding of templates to use. Defaults to 'utf8'
-    :param extensions: list of extensions to add to the Environment
+    :param rules: list of *(regex, function)* pairs. When rendering, if a
+                  template's name matches *regex*, rendering will delegate to
+                  *function*. *function* should take a jinja2 Environment, a
+                  filename, and a context and render the template. Defaults to
+                  ``[]``.
+
+    :param encoding: the encoding of templates to use. Defaults to ``'utf8'``.
+
+    :param extensions: list of extensions to add to the Environment. Defaults to
+                       ``[]``.
+
     """
     # Coerce search to an absolute path if it is not already
     if not os.path.isabs(searchpath):
