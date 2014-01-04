@@ -67,7 +67,7 @@ class Renderer(object):
         """
         return self._env.get_template(template_name)
 
-    def get_context_generator(self, template_name):
+    def _get_context_generator(self, template_name):
         """Get a context generator for a template.
         
         Raises a ValueError if no matching context generator can be found.
@@ -91,7 +91,7 @@ class Renderer(object):
         :param template: the template to get the context for
         """
         try:
-            context_generator = self.get_context_generator(template.name)
+            context_generator = self._get_context_generator(template.name)
         except ValueError:
             return {}
         else:
