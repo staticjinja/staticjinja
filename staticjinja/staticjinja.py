@@ -200,7 +200,48 @@ class Renderer(object):
         self.render_templates(self.templates)
 
         if use_reloader:
-            self._watch()
+            self.logger.info("Watching '%s' for changes..." %
+                              self.searchpath)
+            self.logger.info("Press Ctrl+C to stop.")
+            Reloader(self).watch()
+
+    def __repr__(self):
+        return "Renderer('%s', '%s')" % (self.searchpath, self.outpath)
+
+
+class Reloader(object):
+    """
+    Watches ``renderer.searchpath`` for changes and re-renders any changed
+    Templates.
+
+    :param renderer: A Renderer object, used to re-render templates.
+    """
+    def __init__(self, renderer):
+        self.renderer = renderer
+
+    @property
+    def searchpath(self):
+        return self.renderer.searchpath
+
+    def should_handle(self, event_type, filename):
+        """Check if an event should be handled.
+        
+        An event should be handled if a file in the searchpath was modified."""
+        print event_type, filename
+        return (event_type == "modified"
+                and filename.startswith(self.searchpath))
+
+    def event_handler(self, event_type, src_path):
+        """Re-render templates if they are modified."""
+        filename = os.path.relpath(src_path, self.searchpath)
+        if self.should_handle(event_type, src_path):
+            templates = self.renderer.get_dependencies(filename)
+            self.renderer.render_templates(templates)
+
+    def watch(self):
+        """Watch and reload templates."""
+        import easywatch
+        easywatch.watch(self.searchpath, self.event_handler)
 
 
 def make_renderer(searchpath="templates",
