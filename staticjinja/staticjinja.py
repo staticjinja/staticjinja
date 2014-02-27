@@ -298,11 +298,10 @@ def make_renderer(searchpath="templates",
     """
     # Coerce search to an absolute path if it is not already
     if not os.path.isabs(searchpath):
-        # TODO: Determine if there is a better way to write do this
-        calling_module = inspect.getmodule(inspect.stack()[-1][0])
+        # Location of the source file where the calling function is defined
+        calling_src = inspect.stack()[-1][1]
         # Absolute path to project
-        project_path = os.path.realpath(os.path.dirname(
-            calling_module.__file__))
+        project_path = os.path.realpath(os.path.dirname(calling_src))
         searchpath = os.path.join(project_path, searchpath)
 
     loader = FileSystemLoader(searchpath=searchpath,

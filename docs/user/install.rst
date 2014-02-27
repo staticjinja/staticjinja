@@ -14,6 +14,12 @@ Install staticjinja is simple with `pip <http://www.pip-installer.org/>`_::
 
     $ pip install staticjinja
 
+By default filesystem watcher is not installed.  If you also plan to staticjinja
+to monitor your source changes, you should install with watch extra: 
+
+    $ pip install staticjinja[watch]
+
+
 Get the Code
 ------------
 
