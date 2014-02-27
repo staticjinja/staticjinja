@@ -12,7 +12,10 @@ setup(
     url="https://github.com/Ceasar/staticjinja",
     keywords=["jinja", "static", "website"],
     packages=["staticjinja"],
-    install_requires=["easywatch", "jinja2"],
+    install_requires=["jinja2"],
+    extras_require=dict(
+        watch="easywatch"
+        ),
     classifiers=[
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
