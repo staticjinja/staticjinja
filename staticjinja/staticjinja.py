@@ -153,7 +153,7 @@ class Renderer(object):
             if not os.path.exists(file_dirpath):
                 os.makedirs(file_dirpath)
 
-    def render_template(self, template, context=None):
+    def render_template(self, template, context=None, filepath=None):
         """Render a template.
 
         If a Rule matching the template is found, the rendering task is
@@ -163,6 +163,9 @@ class Renderer(object):
         :param context: optional. A context to render the template with. If no
                         context is provided, `get_context` is used to provide a
                         context.
+        :param filepath: optional. A file or file-like object to dump the
+                         complete template stream into. Defaults to to
+                         ``os.path.join(self.outpath, template.name)``.
         """
         self.logger.info("Rendering %s..." % template.name)
 
@@ -173,18 +176,22 @@ class Renderer(object):
             rule = self.get_rule(template.name)
         except ValueError:
             self._ensure_dir(template.name)
-            fp = os.path.join(self.outpath, template.name)
-            template.stream(**context).dump(fp, self.encoding)
+            if filepath is None:
+                filepath = os.path.join(self.outpath, template.name)
+            template.stream(**context).dump(filepath, self.encoding)
         else:
             rule(self, template, **context)
 
-    def render_templates(self, templates):
+    def render_templates(self, templates, filepath=None):
         """Render a collection of templates.
         
         :param templates: a collection of Templates to render
+        :param filepath: optional. A file or file-like object to dump the
+                         complete template stream into. Defaults to to
+                         ``os.path.join(self.outpath, template.name)``.
         """
         for template in templates:
-            self.render_template(template)
+            self.render_template(template, filepath)
 
     def get_dependencies(self, filename):
         """Get every file that depends on a file.
