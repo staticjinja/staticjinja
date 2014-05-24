@@ -27,6 +27,9 @@ def renderer(template_path, build_path):
     template_path.join('template1.html').write('Test 1')
     template_path.join('template2.html').write('Test 2')
     template_path.mkdir('sub').join('template3.html').write('Test {{b}}')
+    template_path.mkdir('fakestatic').join('hello.css').write(
+        'a { color: blue; }'
+    )
     contexts = [('template2.html', lambda t: {'a': 1}),
                 ('.*template3.html', lambda: {'b': 3}),]
     rules = [('template2.html', lambda env, t, a: None),]
@@ -42,6 +45,7 @@ def reloader(renderer):
 
 
 def test_template_names(renderer):
+    renderer.staticpath = "fakestatic"
     assert set(renderer.template_names) == {'template1.html',
                                             'template2.html',
                                             'sub/template3.html'}
@@ -132,3 +136,16 @@ def test_event_handler(reloader, template_path):
     template1_path = str(template_path.join("template1.html"))
     reloader.event_handler("modified", template1_path)
     assert templates == [reloader.renderer.get_template("template1.html")]
+
+
+def test_event_handler_static(reloader, template_path):
+    found_files = []
+
+    def fake_copy_static(files):
+        found_files.extend(files)
+
+    reloader.renderer.staticpath = "fakestatic"
+    reloader.renderer.copy_static = fake_copy_static
+    template1_path = str(template_path.join("fakestatic").join("hello.css"))
+    reloader.event_handler("modified", template1_path)
+    assert found_files == list(reloader.renderer.static_names)
