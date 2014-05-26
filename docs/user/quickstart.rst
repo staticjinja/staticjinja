@@ -47,8 +47,9 @@ To change behavior, pass the appropriate keyword arguments to ``make_renderer``.
 *   To change the output directory, pass in ``outpath="output_dir"`` (default is ``.``).
 *   To add Jinja extensions, pass in ``extensions=[extension1, extension2, ...]``.
 *   To change which files are considered templates, subclass the ``Renderer`` object and override ``is_template``.
+*   To change where static files (such as CSS or JavaScript) are stored, set ``staticpath="mystaticfiles"`` (default is ``./static``).
 
-Finally, just save the script as _build.py_ (or something similar) and run it with your Python interpreter.
+Finally, just save the script as ``build.py`` (or something similar) and run it with your Python interpreter.
 
 .. code-block:: bash
 

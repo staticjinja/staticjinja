@@ -12,6 +12,7 @@ import inspect
 import logging
 import os
 import re
+import shutil
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -32,6 +33,8 @@ class Renderer(object):
                   of the default.
     :param encoding: the encoding of templates to use
     :param logger: a logging.Logger object to log events
+    :param staticpath: the name of the directory to get static files from
+                       (relative to searchpath).
     """
 
     def __init__(self,
@@ -42,6 +45,7 @@ class Renderer(object):
                  logger,
                  contexts=None,
                  rules=None,
+                 staticpath=None
                  ):
         self._env = environment
         self.searchpath = searchpath
@@ -50,6 +54,7 @@ class Renderer(object):
         self.logger = logger
         self.contexts = contexts or []
         self.rules = rules or []
+        self.staticpath = staticpath
 
     @property
     def template_names(self):
@@ -60,6 +65,10 @@ class Renderer(object):
         """Generator for templates."""
         for template_name in self.template_names:
             yield self.get_template(template_name)
+
+    @property
+    def static_names(self):
+        return self._env.list_templates(filter_func=self.is_static)
 
     def get_template(self, template_name):
         """Get a Template object from the environment.
@@ -113,6 +122,13 @@ class Renderer(object):
                 return render_func
         raise ValueError("no matching rule")
 
+    def is_static(self, filename):
+        if self.staticpath is None:
+            # We're not using static file support
+            return False
+
+        return filename.startswith(self.staticpath + os.path.sep)
+
     def is_partial(self, filename):
         """Check if a file is a partial.
 
@@ -143,7 +159,16 @@ class Renderer(object):
 
         :param filename: the name of the file to check
         """
-        return not self.is_partial(filename) and not self.is_ignored(filename)
+        if self.is_partial(filename):
+            return False
+
+        if self.is_ignored(filename):
+            return False
+
+        if self.is_static(filename):
+            return False
+
+        return True
 
     def _ensure_dir(self, template_name):
         """Ensure the output directory for a template exists."""
@@ -193,6 +218,14 @@ class Renderer(object):
         for template in templates:
             self.render_template(template, filepath)
 
+    def copy_static(self, files):
+        for f in files:
+            input_location = os.path.join(self.searchpath, f)
+            output_location = os.path.join(self.outpath, f)
+            print "Copying %s to %s." % (f, output_location)
+            self._ensure_dir(f)
+            shutil.copyfile(input_location, output_location)
+
     def get_dependencies(self, filename):
         """Get every file that depends on a file.
         
@@ -202,6 +235,8 @@ class Renderer(object):
             return self.templates
         elif self.is_template(filename):
             return [self.get_template(filename)]
+        elif self.is_static(filename):
+            return [filename]
         else:
             return []
 
@@ -211,6 +246,7 @@ class Renderer(object):
         :param use_reloader: if given, reload templates on modification
         """
         self.render_templates(self.templates)
+        self.copy_static(self.static_names)
 
         if use_reloader:
             self.logger.info("Watching '%s' for changes..." %
@@ -260,8 +296,12 @@ class Reloader(object):
         """
         filename = os.path.relpath(src_path, self.searchpath)
         if self.should_handle(event_type, src_path):
-            templates = self.renderer.get_dependencies(filename)
-            self.renderer.render_templates(templates)
+            if self.renderer.is_static(filename):
+                files = self.renderer.get_dependencies(filename)
+                self.renderer.copy_static(files)
+            else:
+                templates = self.renderer.get_dependencies(filename)
+                self.renderer.render_templates(templates)
 
     def watch(self):
         """Watch and reload modified templates."""
@@ -275,6 +315,7 @@ def make_renderer(searchpath="templates",
                  rules=None,
                  encoding="utf8",
                  extensions=None,
+                 staticpath=None,
                  ):
     """Get a Renderer object.
 
@@ -301,6 +342,9 @@ def make_renderer(searchpath="templates",
 
     :param extensions: list of extensions to add to the Environment. Defaults to
                        ``[]``.
+    :param staticpath: the name of the directory to get static files from
+                       (relative to searchpath). Defaults to ``None``.
+
 
     """
     # Coerce search to an absolute path if it is not already
@@ -325,4 +369,5 @@ def make_renderer(searchpath="templates",
                     logger=logger,
                     rules=rules,
                     contexts=contexts,
+                    staticpath=staticpath,
                     )
