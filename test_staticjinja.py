@@ -97,7 +97,10 @@ def test_render_templates(renderer, build_path):
 
 def test_run(renderer):
     templates = []
-    renderer.render_template = lambda t: templates.append(t)
+    def fake_renderer(template, context=None, filepath=None):
+        templates.append(template)
+
+    renderer.render_template = fake_renderer
     renderer.run()
     assert templates == list(renderer.templates)
 
@@ -121,7 +124,11 @@ def test_should_handle(reloader, template_path):
 
 def test_event_handler(reloader, template_path):
     templates = []
-    reloader.renderer.render_template = lambda t: templates.append(t)
+
+    def fake_renderer(template, context=None, filepath=None):
+        templates.append(template)
+
+    reloader.renderer.render_template = fake_renderer
     template1_path = str(template_path.join("template1.html"))
     reloader.event_handler("modified", template1_path)
     assert templates == [reloader.renderer.get_template("template1.html")]
