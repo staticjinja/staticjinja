@@ -1,4 +1,4 @@
-twosheds is written and maintained by Ceasar Bautista and
+staticjinja is written and maintained by Ceasar Bautista and
 various contributors:
 
 Development Lead
