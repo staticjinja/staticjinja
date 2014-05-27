@@ -15,3 +15,4 @@ Patches and Suggestions
 - Jacob Lyles
 - Jakub Zalewski
 - NeuronQ
+- Dominic Rodger
