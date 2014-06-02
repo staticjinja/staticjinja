@@ -7,6 +7,8 @@ get started with staticjinja.
 Installation
 ------------
 
+staticjinja supports Python 2.6, 2.7, 3.3 and 3.4.
+
 Installing staticjinja is simple with `pip
 <http://www.pip-installer.org/>`_::
 
