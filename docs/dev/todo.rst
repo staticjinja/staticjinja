@@ -1,8 +1,7 @@
 Contributing
 ============
 
-
-staticjinja is under active development, and contribution are more
+staticjinja is under active development, and contributions are more
 than welcome!
 
 Get the Code

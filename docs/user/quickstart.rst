@@ -1,4 +1,3 @@
-
 Quickstart
 ==========
 
@@ -108,7 +107,7 @@ and functions which generate dictionaries containing the data:
         ])
         renderer.run(use_reloader=True)
 
-You can then use the data in ``templates/index.html`` as usual.
+You can then use the data in ``templates/index.html`` as you'd expect.
 
 .. code-block:: html
 

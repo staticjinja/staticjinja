@@ -5,8 +5,7 @@ Developer Interface
 
 .. module:: staticjinja
 
-This part of the documentation covers all the interfaces of
-staticjinja.
+This part of the documentation covers staticjinja's API.
 
 Main Interface
 --------------

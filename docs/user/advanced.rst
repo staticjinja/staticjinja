@@ -8,11 +8,12 @@ Compilation rules
 -----------------
 
 Sometimes you'll find yourself needing to change how a template is
-compiled. For instance, you might want to integrate Markdown in a way
-that doesn't require you putting jinja syntax in the source.
+compiled. For instance, you might want to compile files with a ``.md``
+extension as Markdown, without needing to put jinja syntax in your
+Markdown files.
 
-To do this, just write a handler by registering a regex and a
-compilation function (a "rule").
+To do this, just write a handler by registering a regex for the files
+you want to handle, and a compilation function (a "rule").
 
 .. code-block:: python
 
@@ -72,7 +73,10 @@ Now just implement ``templates/_post.html``...
     </div>
     {% endblock %}
 
-...and now you can drop markdown files into your ``templates`` directory and they'll be compiled into HTML.
+This would allow you to drop Markdown files into your ``templates``
+directory and have them compiled into HTML.
 
-**Note:** You can grab the MarkdownExtension from
- http://silas.sewell.org/blog/2010/05/10/jinja2-markdown-extension/.
+.. note::
+
+     You can grab MarkdownExtension from
+     http://silas.sewell.org/blog/2010/05/10/jinja2-markdown-extension/.
