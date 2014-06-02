@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 __version_info__ = ('0', '2', '0')
 __version__ = '.'.join(__version_info__)
@@ -14,16 +14,16 @@ setup(
     packages=["staticjinja"],
     install_requires=["easywatch", "jinja2"],
     classifiers=[
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 2.5",
-    "Programming Language :: Python :: 2.6",
-    "Programming Language :: Python :: 2.7",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "Development Status :: 4 - Beta",
-    "Intended Audience :: Developers",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 2.5",
+        "Programming Language :: Python :: 2.6",
+        "Programming Language :: Python :: 2.7",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+        "Development Status :: 4 - Beta",
+        "Intended Audience :: Developers",
     ],
     use_2to3=True,
 )

@@ -1,5 +1,3 @@
-import os
-
 from pytest import fixture, raises
 
 from staticjinja import make_renderer, Reloader
@@ -31,8 +29,8 @@ def renderer(template_path, build_path):
         'a { color: blue; }'
     )
     contexts = [('template2.html', lambda t: {'a': 1}),
-                ('.*template3.html', lambda: {'b': 3}),]
-    rules = [('template2.html', lambda env, t, a: None),]
+                ('.*template3.html', lambda: {'b': 3}), ]
+    rules = [('template2.html', lambda env, t, a: None), ]
     return make_renderer(searchpath=str(template_path),
                          outpath=str(build_path),
                          contexts=contexts,
@@ -53,13 +51,18 @@ def test_template_names(renderer):
 
 
 def test_templates(renderer):
-    assert [t.name for t in renderer.templates]  == list(renderer.template_names)
+    expected = list(renderer.template_names)
+    assert [t.name for t in renderer.templates] == expected
 
 
 def test_get_context(renderer):
     assert renderer.get_context(renderer.get_template("template1.html")) == {}
-    assert renderer.get_context(renderer.get_template("template2.html")) == {'a': 1}
-    assert renderer.get_context(renderer.get_template("sub/template3.html")) == {'b': 3}
+    assert renderer.get_context(
+        renderer.get_template("template2.html")
+    ) == {'a': 1}
+    assert renderer.get_context(
+        renderer.get_template("sub/template3.html")
+    ) == {'b': 3}
 
 
 def test_get_rule(renderer):
@@ -102,6 +105,7 @@ def test_render_templates(renderer, build_path):
 
 def test_run(renderer):
     templates = []
+
     def fake_renderer(template, context=None, filepath=None):
         templates.append(template)
 
@@ -112,8 +116,10 @@ def test_run(renderer):
 
 def test_with_reloader(reloader, renderer):
     reloader.watch_called = False
+
     def watch(self):
         reloader.watch_called = True
+
     Reloader.watch = watch
     renderer.run(use_reloader=True)
     assert reloader.watch_called
