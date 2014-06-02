@@ -1,15 +1,22 @@
-
 Quickstart
 ==========
 
-Eager to get started? This page gives a good introduction in how to get started
-with staticjinja. This assumes you already have staticjinja installed. If you do not,
-head over to the :ref:`Installation <install>` section.
+Eager to get started? This page gives a good introduction in how to
+get started with staticjinja.
+
+Installation
+------------
+
+Installing staticjinja is simple with `pip
+<http://www.pip-installer.org/>`_::
+
+    $ pip install staticjinja
 
 Rendering templates
 -------------------
 
-If you're just looking to render simple data-less templates, you can get up and running with the following shortcut:
+If you're just looking to render simple data-less templates, you can
+get up and running with the following shortcut:
 
 .. code-block:: bash
 
@@ -19,15 +26,20 @@ If you're just looking to render simple data-less templates, you can get up and 
     Watching 'templates' for changes...
     Press Ctrl+C to stop.
 
-This will recursively search ``./templates`` for templates (any file whose name does not start with ``.`` or ``_``) and build them to ``.``.
+This will recursively search ``./templates`` for templates (any file
+whose name does not start with ``.`` or ``_``) and build them to
+``.``.
 
-If ``easywatch`` is installed, this will also monitor the files in `./templates` and recompile them if they change.
+If ``easywatch`` is installed, this will also monitor the files in
+`./templates` and recompile them if they change.
 
 
 Basic configuration
 -------------------
 
-The command line shortcut is convenient, but sometimes your project needs something different than the defaults. To change them, you can use a build script.
+The command line shortcut is convenient, but sometimes your project
+needs something different than the defaults. To change them, you can
+use a build script.
 
 A minimal build script looks something like this:
 
@@ -41,15 +53,22 @@ A minimal build script looks something like this:
         # enable automatic reloading
         renderer.run(use_reloader=True)
 
-To change behavior, pass the appropriate keyword arguments to ``make_renderer``.
+To change behavior, pass the appropriate keyword arguments to
+``make_renderer``.
 
-*   To change which directory to search for templates, set ``searchpath="searchpath_name"`` (default is ``./templates``).
-*   To change the output directory, pass in ``outpath="output_dir"`` (default is ``.``).
-*   To add Jinja extensions, pass in ``extensions=[extension1, extension2, ...]``.
-*   To change which files are considered templates, subclass the ``Renderer`` object and override ``is_template``.
-*   To change where static files (such as CSS or JavaScript) are stored, set ``staticpath="mystaticfiles"`` (default is ``./static``).
+* To change which directory to search for templates, set
+  ``searchpath="searchpath_name"`` (default is ``./templates``).
+* To change the output directory, pass in ``outpath="output_dir"``
+  (default is ``.``).
+* To add Jinja extensions, pass in ``extensions=[extension1,
+  extension2, ...]``.
+* To change which files are considered templates, subclass the
+  ``Renderer`` object and override ``is_template``.
+* To change where static files (such as CSS or JavaScript) are stored,
+  set ``staticpath="mystaticfiles"`` (default is ``./static``).
 
-Finally, just save the script as ``build.py`` (or something similar) and run it with your Python interpreter.
+Finally, just save the script as ``build.py`` (or something similar)
+and run it with your Python interpreter.
 
 .. code-block:: bash
 
@@ -63,9 +82,11 @@ Finally, just save the script as ``build.py`` (or something similar) and run it 
 Loading data
 ------------
 
-Some applications render templates based on data sources (e.g. CSVs or JSON files).
+Some applications render templates based on data sources (e.g. CSVs or
+JSON files).
 
-To get data to templates you can set up a mapping between filenames and functions which generate dictionaries containing the data:
+To get data to templates you can set up a mapping between filenames
+and functions which generate dictionaries containing the data:
 
 .. code-block:: python
 
@@ -86,7 +107,7 @@ To get data to templates you can set up a mapping between filenames and function
         ])
         renderer.run(use_reloader=True)
 
-You can then use the data in ``templates/index.html`` as usual.
+You can then use the data in ``templates/index.html`` as you'd expect.
 
 .. code-block:: html
 

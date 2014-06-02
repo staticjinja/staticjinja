@@ -1,16 +1,17 @@
-.. staticjinja documentation master file, created by
-   sphinx-quickstart on Sat Nov 30 14:33:03 2013.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 staticjinja
 ===========
 
-staticjinja is a library for easily deploying static sites using the jinja2_ templating language.
+staticjinja is a library for easily deploying static sites using the
+jinja2_ templating language.
 
-Most static site generators are cumbersome to use. Nevertheless, when deploying a static website that could benefit from factored out data or modular html pages (especially convenient when prototyping), a templating engine can be invaluable. (jinja2 is an extremely powerful tool in this regard.)
+Most static site generators are cumbersome to use. Nevertheless, when
+deploying a static website that could benefit from factored out data
+or modular HTML pages (especially convenient when prototyping), a
+templating engine can be invaluable. jinja2 is an extremely powerful
+tool in this regard.
 
-staticjinja is designed to be lightweight, easy-to-use, and highly extensible, enabling you to focus on simply making your site.
+staticjinja is designed to be lightweight, easy-to-use, and highly
+extensible, enabling you to focus on simply making your site.
 
 .. code-block:: bash
 
@@ -26,21 +27,20 @@ staticjinja is designed to be lightweight, easy-to-use, and highly extensible, e
 User Guide
 ----------
 
-This part of the documentation, which is mostly prose, focuses on step-by-step
-instructions for getting the most of staticjinja.
+This part of the documentation focuses on step-by-step instructions
+for getting the most of staticjinja.
 
 .. toctree::
    :maxdepth: 2
 
-   user/install
    user/quickstart
    user/advanced
 
 API Documentation
 -----------------
 
-If you are looking for information on a specific function, class, or method,
-this part of the documentation is for you.
+If you are looking for information on a specific function, class, or
+method, this part of the documentation is for you.
 
 .. toctree::
    :maxdepth: 2
@@ -50,8 +50,8 @@ this part of the documentation is for you.
 Contributor Guide
 ------------------
 
-If you want to contribute to the project, this part of the documentation is for
-you.
+If you want to contribute to the project, this part of the
+documentation is for you.
 
 .. toctree::
    :maxdepth: 1
