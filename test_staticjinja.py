@@ -46,9 +46,10 @@ def reloader(renderer):
 
 def test_template_names(renderer):
     renderer.staticpath = "fakestatic"
-    assert set(renderer.template_names) == {'template1.html',
-                                            'template2.html',
-                                            'sub/template3.html'}
+    expected_templates = set(['template1.html',
+                              'template2.html',
+                              'sub/template3.html'])
+    assert set(renderer.template_names) == expected_templates
 
 
 def test_templates(renderer):
