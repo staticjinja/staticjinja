@@ -7,9 +7,12 @@ This document covers some of staticjinja's more advanced features.
 Compilation rules
 -----------------
 
-Sometimes you'll find yourself needing to change how a template is compiled. For instance, you might want to integrate Markdown in a way that doesn't require you putting jinja syntax in the source.
+Sometimes you'll find yourself needing to change how a template is
+compiled. For instance, you might want to integrate Markdown in a way
+that doesn't require you putting jinja syntax in the source.
 
-To do this, just write a handler by registering a regex and a compilation function (a "rule").
+To do this, just write a handler by registering a regex and a
+compilation function (a "rule").
 
 .. code-block:: python
 
@@ -51,7 +54,9 @@ To do this, just write a handler by registering a regex and a compilation functi
         ])
         renderer.run(use_reloader=True)
 
-Note the rule we defined at the bottom. It tells staticjinja to check if the filename matches the ``.*.md`` regex, and if it does, to compile the file using ``render_post``.
+Note the rule we defined at the bottom. It tells staticjinja to check
+if the filename matches the ``.*.md`` regex, and if it does, to
+compile the file using ``render_post``.
 
 Now just implement ``templates/_post.html``...
 
@@ -69,4 +74,5 @@ Now just implement ``templates/_post.html``...
 
 ...and now you can drop markdown files into your ``templates`` directory and they'll be compiled into HTML.
 
-**Note:** You can grab the MarkdownExtension from http://silas.sewell.org/blog/2010/05/10/jinja2-markdown-extension/.
+**Note:** You can grab the MarkdownExtension from
+ http://silas.sewell.org/blog/2010/05/10/jinja2-markdown-extension/.
