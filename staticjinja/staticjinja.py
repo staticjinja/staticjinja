@@ -7,6 +7,7 @@ Uses jinja2 to compile templates.
 """
 
 from __future__ import absolute_import
+from __future__ import print_function
 
 import inspect
 import logging
@@ -222,7 +223,7 @@ class Renderer(object):
         for f in files:
             input_location = os.path.join(self.searchpath, f)
             output_location = os.path.join(self.outpath, f)
-            print "Copying %s to %s." % (f, output_location)
+            print("Copying %s to %s." % (f, output_location))
             self._ensure_dir(f)
             shutil.copyfile(input_location, output_location)
 
@@ -282,7 +283,7 @@ class Reloader(object):
 
         :param filename: the path to the file that triggered the event.
         """
-        print event_type, filename
+        print("%s %s" % (event_type, filename))
         return (event_type == "modified"
                 and filename.startswith(self.searchpath))
 
