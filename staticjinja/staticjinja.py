@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 
 """
 Simple static page generator.
@@ -80,9 +80,9 @@ class Renderer(object):
 
     def _get_context_generator(self, template_name):
         """Get a context generator for a template.
-        
+
         Raises a ValueError if no matching context generator can be found.
-        
+
         :param template_name: the name of the template
         """
         for regex, context_generator in self.contexts:
@@ -113,9 +113,9 @@ class Renderer(object):
 
     def get_rule(self, template_name):
         """Find a matching compilation rule for a function.
-        
+
         Raises a ValueError if no matching rule can be found.
-        
+
         :param template_name: the name of the template
         """
         for regex, render_func in self.rules:
@@ -133,11 +133,13 @@ class Renderer(object):
     def is_partial(self, filename):
         """Check if a file is a partial.
 
-        Partial files are not rendered, but they are used in rendering templates.
+        Partial files are not rendered, but they are used in rendering
+        templates.
 
         A file is considered ignored if it is prefixed with an ``'_'``.
 
         :param filename: the name of the file to check
+
         """
         return os.path.basename(filename).startswith('_')
 
@@ -210,7 +212,7 @@ class Renderer(object):
 
     def render_templates(self, templates, filepath=None):
         """Render a collection of templates.
-        
+
         :param templates: a collection of Templates to render
         :param filepath: optional. A file or file-like object to dump the
                          complete template stream into. Defaults to to
@@ -229,7 +231,7 @@ class Renderer(object):
 
     def get_dependencies(self, filename):
         """Get every file that depends on a file.
-        
+
         :param filename: the name of the file to find dependencies of
         """
         if self.is_partial(filename):
@@ -251,7 +253,7 @@ class Renderer(object):
 
         if use_reloader:
             self.logger.info("Watching '%s' for changes..." %
-                              self.searchpath)
+                             self.searchpath)
             self.logger.info("Press Ctrl+C to stop.")
             Reloader(self).watch()
 
@@ -276,7 +278,7 @@ class Reloader(object):
 
     def should_handle(self, event_type, filename):
         """Check if an event should be handled.
-        
+
         An event should be handled if a file in the searchpath was modified.
 
         :param event_type: a string, representing the type of event
@@ -289,7 +291,7 @@ class Reloader(object):
 
     def event_handler(self, event_type, src_path):
         """Re-render templates if they are modified.
-        
+
         :param event_type: a string, representing the type of event
 
         :param src_path: the path to the file that triggered the event.
@@ -311,13 +313,12 @@ class Reloader(object):
 
 
 def make_renderer(searchpath="templates",
-                 outpath=".",
-                 contexts=None,
-                 rules=None,
-                 encoding="utf8",
-                 extensions=None,
-                 staticpath=None,
-                 ):
+                  outpath=".",
+                  contexts=None,
+                  rules=None,
+                  encoding="utf8",
+                  extensions=None,
+                  staticpath=None):
     """Get a Renderer object.
 
     :param searchpath: the name of the directory to search for templates.
@@ -341,8 +342,9 @@ def make_renderer(searchpath="templates",
 
     :param encoding: the encoding of templates to use. Defaults to ``'utf8'``.
 
-    :param extensions: list of extensions to add to the Environment. Defaults to
-                       ``[]``.
+    :param extensions: list of extensions to add to the Environment. Defaults
+                       to ``[]``.
+
     :param staticpath: the name of the directory to get static files from
                        (relative to searchpath). Defaults to ``None``.
 
