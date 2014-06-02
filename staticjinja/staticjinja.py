@@ -124,6 +124,15 @@ class Renderer(object):
         raise ValueError("no matching rule")
 
     def is_static(self, filename):
+        """Check if a file is a static file (which should be copied, rather
+        than compiled using Jinja2).
+
+        A file is considered static if it lives in the directory
+        specified in ``staticpath``.
+
+        :param filename: the name of the file to check
+
+        """
         if self.staticpath is None:
             # We're not using static file support
             return False
