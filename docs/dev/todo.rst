@@ -1,9 +1,27 @@
+Contributing
+============
 
-How to Help
-===========
 
 staticjinja is under active development, and contribution are more
 than welcome!
+
+Get the Code
+------------
+
+staticjinja is actively developed on GitHub, where the code is `always
+available <https://github.com/Ceasar/staticjinja>`_.
+
+You can clone the public repository::
+
+    git clone git://github.com/Ceasar/staticjinja.git
+
+Once you have a copy of the source, you can embed it in your Python
+package, or install it into your site-packages easily::
+
+    $ python setup.py install
+
+How to Help
+-----------
 
 #. Check for open issues or open a fresh issue to start a discussion
    around a feature idea or a bug.

@@ -33,7 +33,6 @@ step-by-step instructions for getting the most of staticjinja.
 .. toctree::
    :maxdepth: 2
 
-   user/install
    user/quickstart
    user/advanced
 

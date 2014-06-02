@@ -3,9 +3,15 @@ Quickstart
 ==========
 
 Eager to get started? This page gives a good introduction in how to
-get started with staticjinja. This assumes you already have
-staticjinja installed. If you do not, head over to the
-:ref:`Installation <install>` section.
+get started with staticjinja.
+
+Installation
+------------
+
+Installing staticjinja is simple with `pip
+<http://www.pip-installer.org/>`_::
+
+    $ pip install staticjinja
 
 Rendering templates
 -------------------
