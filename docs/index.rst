@@ -17,7 +17,7 @@ extensible, enabling you to focus on simply making your site.
 
     $ mkdir templates
     $ vim templates/index.html
-    $ python -m staticjinja
+    $ staticjinja watch
     Building index.html...
     Templates built.
     Watching 'templates' for changes...
