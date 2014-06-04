@@ -12,7 +12,16 @@ setup(
     url="https://github.com/Ceasar/staticjinja",
     keywords=["jinja", "static", "website"],
     packages=["staticjinja"],
-    install_requires=["easywatch", "jinja2"],
+    entry_points={
+        'console_scripts': [
+            'staticjinja = staticjinja.cli:main',
+        ],
+    },
+    install_requires=[
+        "docopt",
+        "easywatch",
+        "jinja2",
+    ],
     classifiers=[
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
