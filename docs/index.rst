@@ -58,5 +58,6 @@ documentation is for you.
 
    dev/todo
    dev/authors
+   dev/changelog
 
 .. _jinja2: http://jinja.pocoo.org/
