@@ -22,7 +22,7 @@ import sys
 
 
 def main():
-    arguments = docopt(__doc__, version='staticjinja 0.2.0')
+    arguments = docopt(__doc__, version='staticjinja 0.3.0')
 
     if arguments['--srcpath'] is not None:
         srcpath = arguments['--srcpath']
