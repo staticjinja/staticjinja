@@ -6,8 +6,7 @@ Simple static page generator.
 Uses jinja2 to compile templates.
 """
 
-from __future__ import absolute_import
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 import inspect
 import logging
@@ -21,21 +20,34 @@ from jinja2 import Environment, FileSystemLoader
 class Renderer(object):
     """The renderer object.
 
-    :param environment: a jinja2 environment
-    :param searchpath: the name of the directory to search for templates.
-    :param contexts: list of regex-function pairs. the function should return a
-                     context for that template. the regex, if matched against
-                     a filename, will cause the context to be used.
-    :param rules: used to override template compilation. The value of rules
-                  should be a list of `regex, function` pairs where `function`
-                  takes a jinja2 Environment, the filename, and the context and
-                  renders the template, and `regex` is a regex that if matched
-                  against a filename will cause `function` to be used instead
-                  of the default.
-    :param encoding: the encoding of templates to use
-    :param logger: a logging.Logger object to log events
-    :param staticpath: the name of the directory to get static files from
-                       (relative to searchpath).
+    :param environment:
+        A :class:`jinja2.Environment`.
+
+    :param searchpath:
+        A string representing the name of the directory to search for
+        templates.
+
+    :param contexts:
+        A list of regex-function pairs. The function should return a context
+        for that template. The regex, if matched against a filename, will cause
+        the context to be used.
+
+    :param rules:
+        A list of `regex, function` pairs used to ovverride template
+        compilation. `regex` must be a regex which if matched against a
+        filename will cause `function` to be used instead of the default.
+        `function` must be a function which takes a jinja2 Environment, the
+        filename, and the context and renders a template.
+
+    :param encoding:
+        The encoding of templates to use.
+
+    :param logger:
+        A logging.Logger object used to log events.
+
+    :param staticpath:
+        The name of the directory to get static files from (relative to
+        searchpath).
     """
 
     def __init__(self,
@@ -72,16 +84,17 @@ class Renderer(object):
         return self._env.list_templates(filter_func=self.is_static)
 
     def get_template(self, template_name):
-        """Get a Template object from the environment.
+        """Get a :class:`jinja2.Template` from the environment.
 
-        :param template_name: the name of the template
+        :param template_name: A string representing the name of the template.
         """
         return self._env.get_template(template_name)
 
     def _get_context_generator(self, template_name):
         """Get a context generator for a template.
 
-        Raises a ValueError if no matching context generator can be found.
+        Raises a :exc:`ValueError` if no matching context generator can be
+        found.
 
         :param template_name: the name of the template
         """
@@ -114,7 +127,7 @@ class Renderer(object):
     def get_rule(self, template_name):
         """Find a matching compilation rule for a function.
 
-        Raises a ValueError if no matching rule can be found.
+        Raises a :exc:`ValueError` if no matching rule can be found.
 
         :param template_name: the name of the template
         """
@@ -191,18 +204,24 @@ class Renderer(object):
                 os.makedirs(file_dirpath)
 
     def render_template(self, template, context=None, filepath=None):
-        """Render a template.
+        """Render a single :class:`jinja2.Template` object.
 
         If a Rule matching the template is found, the rendering task is
         delegated to the rule.
 
-        :param template: a template to render
-        :param context: optional. A context to render the template with. If no
-                        context is provided, `get_context` is used to provide a
-                        context.
-        :param filepath: optional. A file or file-like object to dump the
-                         complete template stream into. Defaults to to
-                         ``os.path.join(self.outpath, template.name)``.
+        :param template:
+            A :class:`jinja2.Template` to render.
+
+        :param context:
+            Optional. A dictionary representing the context to render
+            *template* with. If no context is provided, :meth:`get_context` is
+            used to provide a context.
+
+        :param filepath:
+            Optional. A file or file-like object to dump the complete template
+            stream into. Defaults to to ``os.path.join(self.outpath,
+            template.name)``.
+
         """
         self.logger.info("Rendering %s..." % template.name)
 
@@ -220,12 +239,16 @@ class Renderer(object):
             rule(self, template, **context)
 
     def render_templates(self, templates, filepath=None):
-        """Render a collection of templates.
+        """Render a collection of :class:`jinja2.Template` objects.
 
-        :param templates: a collection of Templates to render
-        :param filepath: optional. A file or file-like object to dump the
-                         complete template stream into. Defaults to to
-                         ``os.path.join(self.outpath, template.name)``.
+        :param templates:
+            A collection of Templates to render.
+
+        :param filepath:
+            Optional. A file or file-like object to dump the complete template
+            stream into. Defaults to to ``os.path.join(self.outpath,
+            template.name)``.
+
         """
         for template in templates:
             self.render_template(template, filepath)
@@ -239,7 +262,7 @@ class Renderer(object):
             shutil.copyfile(input_location, output_location)
 
     def get_dependencies(self, filename):
-        """Get every file that depends on a file.
+        """Get a list of files that depends on the file named *filename*.
 
         :param filename: the name of the file to find dependencies of
         """
@@ -275,7 +298,8 @@ class Reloader(object):
     Watches ``renderer.searchpath`` for changes and re-renders any changed
     Templates.
 
-    :param renderer: a :class:`Renderer <Renderer>` to re-render templates.
+    :param renderer:
+        A :class:`Renderer <Renderer>` object.
 
     """
     def __init__(self, renderer):
@@ -328,35 +352,41 @@ def make_renderer(searchpath="templates",
                   encoding="utf8",
                   extensions=None,
                   staticpath=None):
-    """Get a Renderer object.
+    """Create a :class:`Renderer <Renderer>` object.
 
-    :param searchpath: the name of the directory to search for templates.
-                       Defaults to ``'templates'``.
+    :param searchpath:
+        A string representing the name of the directory that the Renderer
+        should search to discover templates. Defaults to ``'templates'``.
 
-    :param outpath: the name of the directory to store the rendered files in.
-                    Defaults to ``'.'``.
+    :param outpath:
+        A string representing the name of the directory that the Renderer
+        should store rendered files in. Defaults to ``'.'``.
 
-    :param contexts: list of *(regex, function)* pairs. When rendering, if a
-                     template's name matches *regex*, *function* will be
-                     invoked and expected to provide a context. *function*
-                     should optionally take a Template as a parameter and
-                     return a dictionary context when invoked. Defaults to
-                     ``[]``.
+    :param contexts:
+        A list of *(regex, function)* pairs. The Renderer will invoke
+        *function* if *regex* matches the name of a template when rendering.
+        *function* must take either no arguments or a single
+        :class:`jinja2.Template` as an argument and return a dictionary
+        representing the context. Defaults to ``[]``.
 
-    :param rules: list of *(regex, function)* pairs. When rendering, if a
-                  template's name matches *regex*, rendering will delegate to
-                  *function*. *function* should take a jinja2 Environment, a
-                  filename, and a context and render the template. Defaults to
-                  ``[]``.
+    :param rules:
+        A list of *(regex, function)* pairs. The Renderer will delegate
+        rendering to *function* if *regex* matches the name of a template
+        during rendering. *function* must take a :class:`jinja2.Environment`
+        object, a filename, and a context as parameters and render the
+        template. Defaults to ``[]``.
 
-    :param encoding: the encoding of templates to use. Defaults to ``'utf8'``.
+    :param encoding:
+        A string representing the encoding that the Renderer should use when
+        rendering templates. Defaults to ``'utf8'``.
 
-    :param extensions: list of extensions to add to the Environment. Defaults
-                       to ``[]``.
+    :param extensions:
+        A list of :ref:`Jinja extensions <jinja-extensions>` that the
+        :class:`jinja2.Environment` should use. Defaults to ``[]``.
 
-    :param staticpath: the name of the directory to get static files from
-                       (relative to searchpath). Defaults to ``None``.
-
+    :param staticpath:
+        A string representing the name of the directory to get static files
+        from (relative to searchpath). Defaults to ``None``.
 
     """
     # Coerce search to an absolute path if it is not already
