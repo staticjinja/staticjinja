@@ -7,6 +7,9 @@ staticjinja
 .. image:: https://pypip.in/d/staticjinja/badge.png
         :target: https://crate.io/packages/staticjinja/
 
+.. image:: https://travis-ci.org/Ceasar/staticjinja.svg
+    :target: https://travis-ci.org/Ceasar/staticjinja
+
 staticjinja is a library for easily deploying static sites using the
 jinja2_ templating language.
 
