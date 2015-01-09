@@ -48,11 +48,13 @@ Configuration
   ``./templates``);
 * ``--outpath`` - the directory to place rendered files in (defaults
   to ``.``);
-* ``--static`` - the directory within ``srcpath`` where static files
-  (such as CSS and JavaScript) are stored. Static files are copied to
-  the output directory without any template compilation, maintaining
-  any directory structure. This defaults to ``None``, meaning no files
-  are considered to be static files.
+* ``--static`` - the directory (or directories) within ``srcpath``
+  where static files   (such as CSS and JavaScript) are stored. Static
+  files are copied to the output directory without any template
+  compilation, maintaining any directory structure. This defaults to
+  ``None``, meaning no files are considered to be static files. You
+  can pass multiple directories separating them by commas:
+  ``staticpath="foo,bar/baz,lorem"``.
 
 More advanced configuration can be done using the staticjinja API, see
 :ref:`custom-build-scripts` for details.

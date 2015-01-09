@@ -25,8 +25,11 @@ def site(template_path, build_path):
     template_path.join('template1.html').write('Test 1')
     template_path.join('template2.html').write('Test 2')
     template_path.mkdir('sub').join('template3.html').write('Test {{b}}')
-    template_path.mkdir('fakestatic').join('hello.css').write(
+    template_path.mkdir('static_css').join('hello.css').write(
         'a { color: blue; }'
+    )
+    template_path.mkdir('static_js').join('hello.js').write(
+        'var a = function () {return true};'
     )
     contexts = [('template2.html', lambda t: {'a': 1}),
                 ('.*template3.html', lambda: {'b': 3}), ]
@@ -43,7 +46,7 @@ def reloader(site):
 
 
 def test_template_names(site):
-    site.staticpath = "fakestatic"
+    site.staticpaths = ["static_css", "static_js"]
     expected_templates = set(['template1.html',
                               'template2.html',
                               'sub/template3.html'])
@@ -151,8 +154,8 @@ def test_event_handler_static(reloader, template_path):
     def fake_copy_static(files):
         found_files.extend(files)
 
-    reloader.site.staticpath = "fakestatic"
+    reloader.site.staticpaths = ["static_css"]
     reloader.site.copy_static = fake_copy_static
-    template1_path = str(template_path.join("fakestatic").join("hello.css"))
+    template1_path = str(template_path.join("static_css").join("hello.css"))
     reloader.event_handler("modified", template1_path)
     assert found_files == list(reloader.site.static_names)

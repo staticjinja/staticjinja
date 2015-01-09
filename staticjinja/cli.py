@@ -4,8 +4,8 @@
 """staticjinja
 
 Usage:
-  staticjinja build [--srcpath=<srcpath> --outpath=<outpath> --static=<static>]
-  staticjinja watch [--srcpath=<srcpath> --outpath=<outpath> --static=<static>]
+  staticjinja build [--srcpath=<srcpath> --outpath=<outpath> --static=<a,b,c>]
+  staticjinja watch [--srcpath=<srcpath> --outpath=<outpath> --static=<a,b,c>]
   staticjinja (-h | --help)
   staticjinja --version
 
@@ -44,21 +44,21 @@ def main():
               % outpath)
         sys.exit(1)
 
-    staticdir = arguments['--static']
-    staticpath = None
+    staticdirs = arguments['--static']
+    staticpaths = None
 
-    if staticdir:
-        staticpath = os.path.join(srcpath, staticdir)
-
-    if staticpath and not os.path.isdir(staticpath):
-        print("The static files directory '%s' is invalid."
-              % staticpath)
-        sys.exit(1)
+    if staticdirs:
+        staticpaths = staticdirs.split(",")
+        for path in staticpaths:
+            path = os.path.join(srcpath, path)
+            if not os.path.isdir(path):
+                print("The static files directory '%s' is invalid." % path)
+                sys.exit(1)
 
     site = staticjinja.make_site(
         searchpath=srcpath,
         outpath=outpath,
-        staticpath=staticdir
+        staticpaths=staticpaths
     )
 
     use_reloader = arguments['watch']
