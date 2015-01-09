@@ -36,8 +36,9 @@ To change behavior, pass the appropriate keyword arguments to
 * To change which files are considered templates, subclass the
   ``Renderer`` object and override ``is_template``.
 * To change where static files (such as CSS or JavaScript) are stored,
-  set ``staticpath="mystaticfiles"`` (the default is ``None``, which
-  means no files are considered to be static files).
+  set ``staticpath=["mystaticfiles"]`` (the default is ``None``, which
+  means no files are considered to be static files). You can pass
+  multiple directories in the list: ``staticpath=["foo", "bar"]``.
 
 Finally, just save the script as ``build.py`` (or something similar)
 and run it with your Python interpreter.
