@@ -16,3 +16,4 @@ Patches and Suggestions
 - Jakub Zalewski
 - NeuronQ
 - Dominic Rodger
+- Eduardo Rivas (jerivas)
