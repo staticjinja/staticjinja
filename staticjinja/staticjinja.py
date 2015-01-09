@@ -3,7 +3,7 @@
 """
 Simple static page generator.
 
-Uses jinja2 to compile templates.
+Uses Jinja2 to compile templates.
 """
 
 from __future__ import absolute_import, print_function
@@ -36,7 +36,7 @@ class Renderer(object):
         A list of `regex, function` pairs used to ovverride template
         compilation. `regex` must be a regex which if matched against a
         filename will cause `function` to be used instead of the default.
-        `function` must be a function which takes a jinja2 Environment, the
+        `function` must be a function which takes a Jinja2 Environment, the
         filename, and the context and renders a template.
 
     :param encoding:

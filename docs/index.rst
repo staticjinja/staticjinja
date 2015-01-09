@@ -2,12 +2,12 @@ staticjinja
 ===========
 
 staticjinja is a library for easily deploying static sites using the
-jinja2_ templating language.
+Jinja2_ template engine. 
 
 Most static site generators are cumbersome to use. Nevertheless, when
 deploying a static website that could benefit from factored out data
 or modular HTML pages (especially convenient when prototyping), a
-templating engine can be invaluable. jinja2 is an extremely powerful
+templating engine can be invaluable. Jinja2 is an extremely powerful
 tool in this regard.
 
 staticjinja is designed to be lightweight, easy-to-use, and highly
@@ -60,4 +60,4 @@ documentation is for you.
    dev/authors
    dev/changelog
 
-.. _jinja2: http://jinja.pocoo.org/
+.. _Jinja2: http://jinja.pocoo.org/
