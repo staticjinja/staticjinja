@@ -46,8 +46,8 @@ class Renderer(object):
         A logging.Logger object used to log events.
 
     :param staticpaths:
-        List of comma separated directories to get static files from (relative
-        to searchpath).
+        List of directory names to get static files from (relative to
+        searchpath).
     """
 
     def __init__(self,
@@ -388,8 +388,8 @@ def make_renderer(searchpath="templates",
         :class:`jinja2.Environment` should use. Defaults to ``[]``.
 
     :param staticpaths:
-        A string of comma separated directories to get static files
-        from (relative to searchpath). Defaults to ``None``.
+        List of directories to get static files from (relative to searchpath).
+        Defaults to ``None``.
 
     """
     # Coerce search to an absolute path if it is not already
