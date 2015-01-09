@@ -3,19 +3,19 @@ import os
 
 class Reloader(object):
     """
-    Watches ``renderer.searchpath`` for changes and re-renders any changed
+    Watches ``site.searchpath`` for changes and re-renders any changed
     Templates.
 
-    :param renderer:
-        A :class:`Renderer <Renderer>` object.
+    :param site:
+        A :class:`Site <Site>` object.
 
     """
-    def __init__(self, renderer):
-        self.renderer = renderer
+    def __init__(self, site):
+        self.site = site
 
     @property
     def searchpath(self):
-        return self.renderer.searchpath
+        return self.site.searchpath
 
     def should_handle(self, event_type, filename):
         """Check if an event should be handled.
@@ -40,12 +40,12 @@ class Reloader(object):
         """
         filename = os.path.relpath(src_path, self.searchpath)
         if self.should_handle(event_type, src_path):
-            if self.renderer.is_static(filename):
-                files = self.renderer.get_dependencies(filename)
-                self.renderer.copy_static(files)
+            if self.site.is_static(filename):
+                files = self.site.get_dependencies(filename)
+                self.site.copy_static(files)
             else:
-                templates = self.renderer.get_dependencies(filename)
-                self.renderer.render_templates(templates)
+                templates = self.site.get_dependencies(filename)
+                self.site.render_templates(templates)
 
     def watch(self):
         """Watch and reload modified templates."""

@@ -13,14 +13,15 @@ import logging
 import os
 import re
 import shutil
+import warnings
 
 from jinja2 import Environment, FileSystemLoader
 
 from .reloader import Reloader
 
 
-class Renderer(object):
-    """The renderer object.
+class Site(object):
+    """The Site object.
 
     :param environment:
         A :class:`jinja2.Environment`.
@@ -277,8 +278,8 @@ class Renderer(object):
         else:
             return []
 
-    def run(self, use_reloader=False):
-        """Run the renderer.
+    def render(self, use_reloader=False):
+        """Generate the site.
 
         :param use_reloader: if given, reload templates on modification
         """
@@ -292,42 +293,51 @@ class Renderer(object):
             Reloader(self).watch()
 
     def __repr__(self):
-        return "Renderer('%s', '%s')" % (self.searchpath, self.outpath)
+        return "Site('%s', '%s')" % (self.searchpath, self.outpath)
 
 
-def make_renderer(searchpath="templates",
-                  outpath=".",
-                  contexts=None,
-                  rules=None,
-                  encoding="utf8",
-                  extensions=None,
-                  staticpath=None):
-    """Create a :class:`Renderer <Renderer>` object.
+class Renderer(Site):
+    def __init__(self, *args, **kwargs):
+        warnings.warn("Renderer was renamed to Site.")
+        super(Renderer, Site).__init__(*args, **kwargs)
+
+    def run(self, use_reloader=False):
+        return self.render(use_reloader)
+
+
+def make_site(searchpath="templates",
+              outpath=".",
+              contexts=None,
+              rules=None,
+              encoding="utf8",
+              extensions=None,
+              staticpath=None):
+    """Create a :class:`Site <Site>` object.
 
     :param searchpath:
-        A string representing the name of the directory that the Renderer
+        A string representing the name of the directory that the Site
         should search to discover templates. Defaults to ``'templates'``.
 
     :param outpath:
-        A string representing the name of the directory that the Renderer
+        A string representing the name of the directory that the Site
         should store rendered files in. Defaults to ``'.'``.
 
     :param contexts:
-        A list of *(regex, function)* pairs. The Renderer will invoke
+        A list of *(regex, function)* pairs. The Site will invoke
         *function* if *regex* matches the name of a template when rendering.
         *function* must take either no arguments or a single
         :class:`jinja2.Template` as an argument and return a dictionary
         representing the context. Defaults to ``[]``.
 
     :param rules:
-        A list of *(regex, function)* pairs. The Renderer will delegate
+        A list of *(regex, function)* pairs. The Site will delegate
         rendering to *function* if *regex* matches the name of a template
         during rendering. *function* must take a :class:`jinja2.Environment`
         object, a filename, and a context as parameters and render the
         template. Defaults to ``[]``.
 
     :param encoding:
-        A string representing the encoding that the Renderer should use when
+        A string representing the encoding that the Site should use when
         rendering templates. Defaults to ``'utf8'``.
 
     :param extensions:
@@ -354,12 +364,17 @@ def make_renderer(searchpath="templates",
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
     logger.addHandler(logging.StreamHandler())
-    return Renderer(environment,
-                    searchpath=searchpath,
-                    outpath=outpath,
-                    encoding=encoding,
-                    logger=logger,
-                    rules=rules,
-                    contexts=contexts,
-                    staticpath=staticpath,
-                    )
+    return Site(environment,
+                searchpath=searchpath,
+                outpath=outpath,
+                encoding=encoding,
+                logger=logger,
+                rules=rules,
+                contexts=contexts,
+                staticpath=staticpath,
+                )
+
+
+def make_renderer(*args, **kwargs):
+    warnings.warn("make_renderer was renamed to make_site.")
+    return make_site(*args, **kwargs)

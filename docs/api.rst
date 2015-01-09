@@ -11,14 +11,14 @@ Main Interface
 --------------
 
 All of staticjinja's functionality can be accessed by this function,
-which returns an instance of the :class:`Renderer <Renderer>` object.
+which returns an instance of the :class:`Site <Site>` object.
 
-.. autofunction:: make_renderer
+.. autofunction:: make_site
 
 Classes
 ~~~~~~~
 
-.. autoclass:: staticjinja.Renderer
+.. autoclass:: staticjinja.Site
    :inherited-members:
 
 .. autoclass:: staticjinja.Reloader

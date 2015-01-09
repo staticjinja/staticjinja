@@ -1,6 +1,6 @@
 from pytest import fixture, raises
 
-from staticjinja import make_renderer, Reloader
+from staticjinja import make_site, Reloader
 
 
 @fixture
@@ -19,7 +19,7 @@ def build_path(tmpdir):
 
 
 @fixture
-def renderer(template_path, build_path):
+def site(template_path, build_path):
     template_path.join('.ignored1.html').write('Ignored 1')
     template_path.join('_partial1.html').write('Partial 1')
     template_path.join('template1.html').write('Test 1')
@@ -31,70 +31,70 @@ def renderer(template_path, build_path):
     contexts = [('template2.html', lambda t: {'a': 1}),
                 ('.*template3.html', lambda: {'b': 3}), ]
     rules = [('template2.html', lambda env, t, a: None), ]
-    return make_renderer(searchpath=str(template_path),
-                         outpath=str(build_path),
-                         contexts=contexts,
-                         rules=rules)
+    return make_site(searchpath=str(template_path),
+                     outpath=str(build_path),
+                     contexts=contexts,
+                     rules=rules)
 
 
 @fixture
-def reloader(renderer):
-    return Reloader(renderer)
+def reloader(site):
+    return Reloader(site)
 
 
-def test_template_names(renderer):
-    renderer.staticpath = "fakestatic"
+def test_template_names(site):
+    site.staticpath = "fakestatic"
     expected_templates = set(['template1.html',
                               'template2.html',
                               'sub/template3.html'])
-    assert set(renderer.template_names) == expected_templates
+    assert set(site.template_names) == expected_templates
 
 
-def test_templates(renderer):
-    expected = list(renderer.template_names)
-    assert [t.name for t in renderer.templates] == expected
+def test_templates(site):
+    expected = list(site.template_names)
+    assert [t.name for t in site.templates] == expected
 
 
-def test_get_context(renderer):
-    assert renderer.get_context(renderer.get_template("template1.html")) == {}
-    assert renderer.get_context(
-        renderer.get_template("template2.html")
+def test_get_context(site):
+    assert site.get_context(site.get_template("template1.html")) == {}
+    assert site.get_context(
+        site.get_template("template2.html")
     ) == {'a': 1}
-    assert renderer.get_context(
-        renderer.get_template("sub/template3.html")
+    assert site.get_context(
+        site.get_template("sub/template3.html")
     ) == {'b': 3}
 
 
-def test_get_rule(renderer):
+def test_get_rule(site):
     with raises(ValueError):
-        assert renderer.get_rule('template1.html')
-    assert renderer.get_rule('template2.html')
+        assert site.get_rule('template1.html')
+    assert site.get_rule('template2.html')
 
 
-def test_get_dependencies(renderer, filename):
-    renderer.get_template = lambda x: filename
-    assert renderer.get_dependencies(".%s" % filename) == []
-    assert (list(renderer.get_dependencies("_%s" % filename))
-            == list(renderer.templates))
-    assert (list(renderer.get_dependencies("%s" % filename)) == [filename])
+def test_get_dependencies(site, filename):
+    site.get_template = lambda x: filename
+    assert site.get_dependencies(".%s" % filename) == []
+    assert (list(site.get_dependencies("_%s" % filename))
+            == list(site.templates))
+    assert (list(site.get_dependencies("%s" % filename)) == [filename])
 
 
-def test_render_template(renderer, build_path):
-    renderer.render_template(renderer.get_template('template1.html'))
+def test_render_template(site, build_path):
+    site.render_template(site.get_template('template1.html'))
     template1 = build_path.join("template1.html")
     assert template1.check()
     assert template1.read() == "Test 1"
 
 
-def test_render_nested_template(renderer, build_path):
-    renderer.render_template(renderer.get_template('sub/template3.html'))
+def test_render_nested_template(site, build_path):
+    site.render_template(site.get_template('sub/template3.html'))
     template3 = build_path.join('sub').join("template3.html")
     assert template3.check()
     assert template3.read() == "Test 3"
 
 
-def test_render_templates(renderer, build_path):
-    renderer.render_templates(renderer.templates)
+def test_render_templates(site, build_path):
+    site.render_templates(site.templates)
     template1 = build_path.join("template1.html")
     assert template1.check()
     assert template1.read() == "Test 1"
@@ -103,25 +103,25 @@ def test_render_templates(renderer, build_path):
     assert template3.read() == "Test 3"
 
 
-def test_run(renderer):
+def test_build(site):
     templates = []
 
-    def fake_renderer(template, context=None, filepath=None):
+    def fake_site(template, context=None, filepath=None):
         templates.append(template)
 
-    renderer.render_template = fake_renderer
-    renderer.run()
-    assert templates == list(renderer.templates)
+    site.render_template = fake_site
+    site.render()
+    assert templates == list(site.templates)
 
 
-def test_with_reloader(reloader, renderer):
+def test_with_reloader(reloader, site):
     reloader.watch_called = False
 
     def watch(self):
         reloader.watch_called = True
 
     Reloader.watch = watch
-    renderer.run(use_reloader=True)
+    site.render(use_reloader=True)
     assert reloader.watch_called
 
 
@@ -136,13 +136,13 @@ def test_should_handle(reloader, template_path):
 def test_event_handler(reloader, template_path):
     templates = []
 
-    def fake_renderer(template, context=None, filepath=None):
+    def fake_site(template, context=None, filepath=None):
         templates.append(template)
 
-    reloader.renderer.render_template = fake_renderer
+    reloader.site.render_template = fake_site
     template1_path = str(template_path.join("template1.html"))
     reloader.event_handler("modified", template1_path)
-    assert templates == [reloader.renderer.get_template("template1.html")]
+    assert templates == [reloader.site.get_template("template1.html")]
 
 
 def test_event_handler_static(reloader, template_path):
@@ -151,8 +151,8 @@ def test_event_handler_static(reloader, template_path):
     def fake_copy_static(files):
         found_files.extend(files)
 
-    reloader.renderer.staticpath = "fakestatic"
-    reloader.renderer.copy_static = fake_copy_static
+    reloader.site.staticpath = "fakestatic"
+    reloader.site.copy_static = fake_copy_static
     template1_path = str(template_path.join("fakestatic").join("hello.css"))
     reloader.event_handler("modified", template1_path)
-    assert found_files == list(reloader.renderer.static_names)
+    assert found_files == list(reloader.site.static_names)

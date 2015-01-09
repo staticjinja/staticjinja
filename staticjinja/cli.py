@@ -55,7 +55,7 @@ def main():
               % staticpath)
         sys.exit(1)
 
-    renderer = staticjinja.make_renderer(
+    site = staticjinja.make_site(
         searchpath=srcpath,
         outpath=outpath,
         staticpath=staticdir
@@ -63,7 +63,7 @@ def main():
 
     use_reloader = arguments['watch']
 
-    renderer.run(use_reloader=use_reloader)
+    site.render(use_reloader=use_reloader)
 
 
 if __name__ == '__main__':

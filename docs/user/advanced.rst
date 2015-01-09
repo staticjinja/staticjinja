@@ -16,16 +16,16 @@ A minimal build script looks something like this:
 
 .. code-block:: python
 
-    from staticjinja import make_renderer
+    from staticjinja import make_site
 
 
     if __name__ == "__main__":
-        renderer = make_renderer()
+        site = make_site()
         # enable automatic reloading
-        renderer.run(use_reloader=True)
+        site.render(use_reloader=True)
 
 To change behavior, pass the appropriate keyword arguments to
-``make_renderer``.
+``make_site``.
 
 * To change which directory to search for templates, set
   ``searchpath="searchpath_name"`` (default is ``./templates``).
@@ -34,7 +34,7 @@ To change behavior, pass the appropriate keyword arguments to
 * To add Jinja extensions, pass in ``extensions=[extension1,
   extension2, ...]``.
 * To change which files are considered templates, subclass the
-  ``Renderer`` object and override ``is_template``.
+  ``Site`` object and override ``is_template``.
 * To change where static files (such as CSS or JavaScript) are stored,
   set ``staticpath="mystaticfiles"`` (the default is ``None``, which
   means no files are considered to be static files).
@@ -62,7 +62,7 @@ and functions which generate dictionaries containing the data:
 
 .. code-block:: python
 
-    from staticjinja import make_renderer
+    from staticjinja import make_site
 
     def get_knights():
         """Generate knights of the round table."""
@@ -74,10 +74,10 @@ and functions which generate dictionaries containing the data:
         return {'knights': knights}
 
     if __name__ == "__main__":
-        renderer = make_renderer(contexts=[
+        site = make_site(contexts=[
             ('index.html', get_knights),
         ])
-        renderer.run(use_reloader=True)
+        site.render(use_reloader=True)
 
 You can then use the data in ``templates/index.html`` as you'd expect.
 
@@ -111,7 +111,7 @@ you want to handle, and a compilation function (a "rule").
 
     import os
 
-    from staticjinja import make_renderer
+    from staticjinja import make_site
 
     # Custom MarkdownExtension
     from extensions import MarkdownExtension
@@ -138,14 +138,14 @@ you want to handle, and a compilation function (a "rule").
 
 
     if __name__ == "__main__":
-        renderer = make_renderer(extensions=[
+        site = make_site(extensions=[
             MarkdownExtension,
         ], contexts=[
             ('.*.md', get_post_contents),
         ], rules=[
             ('.*.md', render_post),
         ])
-        renderer.run(use_reloader=True)
+        site.render(use_reloader=True)
 
 Note the rule we defined at the bottom. It tells staticjinja to check
 if the filename matches the ``.*.md`` regex, and if it does, to

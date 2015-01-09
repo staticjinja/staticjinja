@@ -2,5 +2,5 @@ import staticjinja
 
 
 if __name__ == "__main__":
-    renderer = staticjinja.make_renderer()
-    renderer.run()
+    site = staticjinja.make_site()
+    site.render()
