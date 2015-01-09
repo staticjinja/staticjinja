@@ -3,4 +3,5 @@
 
 from __future__ import absolute_import
 
-from .staticjinja import make_renderer, Reloader, Renderer
+from .reloader import Reloader
+from .staticjinja import make_renderer, Renderer
