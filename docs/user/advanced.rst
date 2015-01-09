@@ -37,7 +37,9 @@ To change behavior, pass the appropriate keyword arguments to
   ``Renderer`` object and override ``is_template``.
 * To change where static files (such as CSS or JavaScript) are stored,
   set ``staticpath="mystaticfiles"`` (the default is ``None``, which
-  means no files are considered to be static files).
+  means no files are considered to be static files). You can pass
+  multiple directories separating them by commas: ``staticpath="foo,
+  bar/baz,lorem"``.
 
 Finally, just save the script as ``build.py`` (or something similar)
 and run it with your Python interpreter.
