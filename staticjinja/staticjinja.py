@@ -45,9 +45,9 @@ class Renderer(object):
     :param logger:
         A logging.Logger object used to log events.
 
-    :param staticpath:
-        The name of the directory to get static files from (relative to
-        searchpath).
+    :param staticpaths:
+        List of comma separated directories to get static files from (relative
+        to searchpath).
     """
 
     def __init__(self,
@@ -58,7 +58,7 @@ class Renderer(object):
                  logger,
                  contexts=None,
                  rules=None,
-                 staticpath=None
+                 staticpaths=None
                  ):
         self._env = environment
         self.searchpath = searchpath
@@ -67,7 +67,7 @@ class Renderer(object):
         self.logger = logger
         self.contexts = contexts or []
         self.rules = rules or []
-        self.staticpath = staticpath
+        self.staticpaths = staticpaths
 
     @property
     def template_names(self):
@@ -140,17 +140,20 @@ class Renderer(object):
         """Check if a file is a static file (which should be copied, rather
         than compiled using Jinja2).
 
-        A file is considered static if it lives in the directory
-        specified in ``staticpath``.
+        A file is considered static if it lives in any of the directories
+        specified in ``staticpaths``.
 
         :param filename: the name of the file to check
 
         """
-        if self.staticpath is None:
+        if self.staticpaths is None:
             # We're not using static file support
             return False
 
-        return filename.startswith(self.staticpath + os.path.sep)
+        for path in self.staticpaths:
+            if filename.startswith(path + os.path.sep):
+                return True
+        return False
 
     def is_partial(self, filename):
         """Check if a file is a partial.
@@ -351,7 +354,7 @@ def make_renderer(searchpath="templates",
                   rules=None,
                   encoding="utf8",
                   extensions=None,
-                  staticpath=None):
+                  staticpaths=None):
     """Create a :class:`Renderer <Renderer>` object.
 
     :param searchpath:
@@ -384,8 +387,8 @@ def make_renderer(searchpath="templates",
         A list of :ref:`Jinja extensions <jinja-extensions>` that the
         :class:`jinja2.Environment` should use. Defaults to ``[]``.
 
-    :param staticpath:
-        A string representing the name of the directory to get static files
+    :param staticpaths:
+        A string of comma separated directories to get static files
         from (relative to searchpath). Defaults to ``None``.
 
     """
@@ -411,5 +414,5 @@ def make_renderer(searchpath="templates",
                     logger=logger,
                     rules=rules,
                     contexts=contexts,
-                    staticpath=staticpath,
+                    staticpaths=staticpaths,
                     )
