@@ -369,7 +369,7 @@ def make_site(searchpath="templates",
     loader = FileSystemLoader(searchpath=searchpath,
                               encoding=encoding)
     environment = Environment(loader=loader, extensions=extensions or [])
-    for k,v in filters.items():
+    for k, v in filters.items():
         environment.filters[k] = v
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
