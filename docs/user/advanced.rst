@@ -1,3 +1,6 @@
+
+.. _standard Jinja2 filters: http://jinja.pocoo.org/docs/dev/templates/#builtin-filters
+
 Advanced Usage
 ==============
 
@@ -95,6 +98,35 @@ You can then use the data in ``templates/index.html`` as you'd expect.
         <li>{{ knight }}</li>
     {% endfor %}
     </ul>
+    {% endblock %}
+
+Filters
+-------
+
+Filters modify variables. staticjinja uses Jinja2 to process templates, so all
+the `standard Jinja2 filters`_ are supported. To add your own filters, simply
+pass ``filters`` as an argument to ``make_site()``.
+
+.. code-block:: python
+
+    filters = {
+        'hello_world': lambda x: 'Hello world!',
+        'my_lower': lambda x: x.lower(),
+    }
+
+    if __name__ == "__main__":
+        site = staticjinja.make_site(filters=filters)
+        site.render()
+
+Then you can use them in your templates as you would expect:
+
+.. code-block:: html
+
+    <!-- templates/index.html -->
+    {% extends "_base.html" %}
+    {% block body %}
+    <h1>{{'' | hello_world}}</h1>
+    <p>{{'THIS IS AN EXAMPLE WEB PAGE.' | my_lower}}</p>
     {% endblock %}
 
 Compilation rules

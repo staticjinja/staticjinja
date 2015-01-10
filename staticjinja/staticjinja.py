@@ -314,7 +314,8 @@ def make_site(searchpath="templates",
               rules=None,
               encoding="utf8",
               extensions=None,
-              staticpaths=None):
+              staticpaths=None,
+              filters=None):
     """Create a :class:`Site <Site>` object.
 
     :param searchpath:
@@ -351,6 +352,10 @@ def make_site(searchpath="templates",
         List of directories to get static files from (relative to searchpath).
         Defaults to ``None``.
 
+    :param filters:
+        A dictionary of Jinja2 filters to add to the Environment.
+        Defaults to ``{}``.
+
     """
     # Coerce search to an absolute path if it is not already
     if not os.path.isabs(searchpath):
@@ -364,6 +369,9 @@ def make_site(searchpath="templates",
     loader = FileSystemLoader(searchpath=searchpath,
                               encoding=encoding)
     environment = Environment(loader=loader, extensions=extensions or [])
+    if filters:
+        for k, v in filters.items():
+            environment.filters[k] = v
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
     logger.addHandler(logging.StreamHandler())
