@@ -21,21 +21,36 @@ import staticjinja
 import sys
 
 
-def main():
-    arguments = docopt(__doc__, version='staticjinja 0.3.0')
+def render(args):
+    """
+    Render a site.
 
-    if arguments['--srcpath'] is not None:
-        srcpath = arguments['--srcpath']
-    else:
-        srcpath = os.path.join(os.getcwd(), 'templates')
+    :param args:
+        A map from command-line options to their values. For example:
+
+            {
+                '--help': False,
+                '--outpath': None,
+                '--srcpath': None,
+                '--static': None,
+                '--version': False,
+                'build': True,
+                'watch': False
+            }
+    """
+    srcpath = (
+        os.path.join(os.getcwd(), 'templates') if args['--srcpath'] is None
+        else args['--srcpath'] if os.path.isabs(args['--srcpath'])
+        else os.path.join(os.getcwd(), args['--srcpath'])
+    )
 
     if not os.path.isdir(srcpath):
         print("The templates directory '%s' is invalid."
               % srcpath)
         sys.exit(1)
 
-    if arguments['--outpath'] is not None:
-        outpath = arguments['--outpath']
+    if args['--outpath'] is not None:
+        outpath = args['--outpath']
     else:
         outpath = os.getcwd()
 
@@ -44,7 +59,7 @@ def main():
               % outpath)
         sys.exit(1)
 
-    staticdirs = arguments['--static']
+    staticdirs = args['--static']
     staticpaths = None
 
     if staticdirs:
@@ -61,9 +76,13 @@ def main():
         staticpaths=staticpaths
     )
 
-    use_reloader = arguments['watch']
+    use_reloader = args['watch']
 
     site.render(use_reloader=use_reloader)
+
+
+def main():
+    render(docopt(__doc__, version='staticjinja 0.3.0'))
 
 
 if __name__ == '__main__':

@@ -320,8 +320,13 @@ def make_site(searchpath="templates",
     """Create a :class:`Site <Site>` object.
 
     :param searchpath:
-        A string representing the name of the directory that the Site
+        A string representing the absolute path to the directory that the Site
         should search to discover templates. Defaults to ``'templates'``.
+
+        If a relative path is provided, it will be coerced to an absolute path
+        by prepending the directory name of the calling module. For example, if
+        you invoke staticjinja using ``python build.py`` in directory ``/foo``,
+        then *searchpath* will be ``/foo/templates``.
 
     :param outpath:
         A string representing the name of the directory that the Site
