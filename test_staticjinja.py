@@ -31,6 +31,7 @@ def site(template_path, build_path):
     template_path.mkdir('static_js').join('hello.js').write(
         'var a = function () {return true};'
     )
+    template_path.join('favicon.ico').write('Fake favicon')
     contexts = [('template2.html', lambda t: {'a': 1}),
                 ('.*template3.html', lambda: {'b': 3}), ]
     rules = [('template2.html', lambda env, t, a: None), ]
@@ -46,7 +47,7 @@ def reloader(site):
 
 
 def test_template_names(site):
-    site.staticpaths = ["static_css", "static_js"]
+    site.staticpaths = ["static_css", "static_js", "favicon.ico"]
     expected_templates = set(['template1.html',
                               'template2.html',
                               'sub/template3.html'])
