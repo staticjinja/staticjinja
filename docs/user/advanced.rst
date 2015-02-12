@@ -94,7 +94,7 @@ You can then use the data in ``templates/index.html`` as you'd expect.
     <p>This is an example web page.</p>
     <h3>Knights of the Round Table</h3>
     <ul>
-    {% for knight in knights }}
+    {% for knight in knights %}
         <li>{{ knight }}</li>
     {% endfor %}
     </ul>
