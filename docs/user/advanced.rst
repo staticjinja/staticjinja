@@ -39,11 +39,11 @@ To change behavior, pass the appropriate keyword arguments to
 * To change which files are considered templates, subclass the
   ``Site`` object and override ``is_template``.
 * To change where static files (such as CSS or JavaScript) are stored,
-  set ``staticpath=["mystaticfiles/"]`` (the default is ``None``, which
+  set ``staticpaths=["mystaticfiles/"]`` (the default is ``None``, which
   means no files are considered to be static files). You can pass
-  multiple directories in the list: ``staticpath=["foo/", "bar/"]``.
+  multiple directories in the list: ``staticpaths=["foo/", "bar/"]``.
   You can also specify singly files to be considered as static:
-  ``staticpath=["favicon.ico"]``.
+  ``staticpaths=["favicon.ico"]``.
 
 Finally, just save the script as ``build.py`` (or something similar)
 and run it with your Python interpreter.
