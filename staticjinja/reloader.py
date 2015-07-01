@@ -26,9 +26,13 @@ class Reloader(object):
 
         :param filename: the path to the file that triggered the event.
         """
-        print("%s %s" % (event_type, filename))
-        return (event_type == "modified"
-                and filename.startswith(self.searchpath))
+
+        if (event_type == "modified" and
+                filename.startswith(self.searchpath) and
+                os.path.isfile(filename)):
+            print("%s %s" % (event_type, filename))
+            return True
+        return False
 
     def event_handler(self, event_type, src_path):
         """Re-render templates if they are modified.
