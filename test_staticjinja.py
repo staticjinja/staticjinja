@@ -77,8 +77,7 @@ def test_get_rule(site):
 def test_get_dependencies(site, filename):
     site.get_template = lambda x: filename
     assert site.get_dependencies(".%s" % filename) == []
-    assert (list(site.get_dependencies("_%s" % filename))
-            == list(site.templates))
+    assert (list(site.get_dependencies("_%s" % filename)) == list(site.templates))
     assert (list(site.get_dependencies("%s" % filename)) == [filename])
 
 
@@ -129,11 +128,13 @@ def test_with_reloader(reloader, site):
 
 
 def test_should_handle(reloader, template_path):
-    template1_path = str(template_path.join("template1.html"))
-    test4_path = str(template_path.join("test4.html"))
-    assert reloader.should_handle("modified", template1_path)
-    assert reloader.should_handle("modified", test4_path)
-    assert not reloader.should_handle("created", template1_path)
+    template1_path = template_path.join("template1.html")
+    test4_path = template_path.join("test4.html")
+
+    test4_path.write('')
+    assert reloader.should_handle("modified", str(template1_path))
+    assert reloader.should_handle("modified", str(test4_path))
+    assert not reloader.should_handle("created", str(template1_path))
 
 
 def test_event_handler(reloader, template_path):
