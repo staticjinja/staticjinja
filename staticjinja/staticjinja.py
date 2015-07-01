@@ -164,23 +164,24 @@ class Site(object):
         Partial files are not rendered, but they are used in rendering
         templates.
 
-        A file is considered ignored if it is prefixed with an ``'_'``.
+        A file is considered a partial if it or any of its parent directories
+        are prefixed with an ``'_'``.
 
         :param filename: the name of the file to check
-
         """
-        return os.path.basename(filename).startswith('_')
+        return any((x.startswith("_") for x in filename.split(os.path.sep)))
 
     def is_ignored(self, filename):
         """Check if a file is an ignored file.
 
         Ignored files are neither rendered nor used in rendering templates.
 
-        A file is considered ignored if it is prefixed with an ``'.'``.
+        A file is considered ignored if it or any of its parent directories
+        are prefixed with an ``'.'``.
 
         :param filename: the name of the file to check
         """
-        return os.path.basename(filename).startswith('.')
+        return any((x.startswith(".") for x in filename.split(os.path.sep)))
 
     def is_template(self, filename):
         """Check if a file is a template.

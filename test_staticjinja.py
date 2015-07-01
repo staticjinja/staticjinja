@@ -159,3 +159,35 @@ def test_event_handler_static(reloader, template_path):
     template1_path = str(template_path.join("static_css").join("hello.css"))
     reloader.event_handler("modified", template1_path)
     assert found_files == list(reloader.site.static_names)
+
+
+def test_ignored_file_is_ignored(site):
+    assert site.is_ignored('.index.html')
+
+
+def test_regular_file_is_not_ignored(site):
+    assert not site.is_ignored('index.html')
+
+
+def test_ignored_file_in_directory_is_ignored(site):
+    assert site.is_ignored('.bar/index.html')
+
+
+def test_ignored_file_in_nested_directory_is_ignored(site):
+    assert site.is_ignored('foo/.bar/index.html')
+
+
+def test_partial_file_is_partial(site):
+    assert site.is_partial('_index.html')
+
+
+def test_regular_file_is_not_partial(site):
+    assert not site.is_partial('index.html')
+
+
+def test_partial_file_in_directory_is_partial(site):
+    assert site.is_partial('_bar/index.html')
+
+
+def test_partial_file_in_nested_directory_is_partial(site):
+    assert site.is_partial('foo/_bar/index.html')
