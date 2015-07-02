@@ -77,7 +77,8 @@ def test_get_rule(site):
 def test_get_dependencies(site, filename):
     site.get_template = lambda x: filename
     assert site.get_dependencies(".%s" % filename) == []
-    assert (list(site.get_dependencies("_%s" % filename)) == list(site.templates))
+    assert (list(site.get_dependencies("_%s" % filename))
+            == list(site.templates))
     assert (list(site.get_dependencies("%s" % filename)) == [filename])
 
 
