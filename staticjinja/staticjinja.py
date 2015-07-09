@@ -154,7 +154,7 @@ class Site(object):
             return False
 
         for path in self.staticpaths:
-            if filename.startswith(path + os.path.sep):
+            if filename.startswith(path):
                 return True
         return False
 
