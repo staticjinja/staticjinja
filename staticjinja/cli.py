@@ -26,6 +26,7 @@ def main():
 
     if arguments['--srcpath'] is not None:
         srcpath = arguments['--srcpath']
+        srcpath = os.path.join(os.getcwd(), srcpath)
     else:
         srcpath = os.path.join(os.getcwd(), 'templates')
 
