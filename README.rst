@@ -4,9 +4,6 @@ staticjinja
 .. image:: https://badge.fury.io/py/staticjinja.png
     :target: http://badge.fury.io/py/staticjinja
 
-.. image:: https://pypip.in/d/staticjinja/badge.png
-        :target: https://crate.io/packages/staticjinja/
-
 .. image:: https://travis-ci.org/Ceasar/staticjinja.svg
     :target: https://travis-ci.org/Ceasar/staticjinja
 
