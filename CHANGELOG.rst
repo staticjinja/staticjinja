@@ -26,3 +26,19 @@
   the output directory.
 * Add support for testing, linting and checking the documentation
   using ``tox``.
+
+0.2.0
+-----
+
+* Add a ``Reloader`` class.
+
+* Add ``Renderer.templates``, which refers to the lists of templates available
+  to the ``Renderer``.
+
+* Make ``Renderer.get_context_generator()`` private.
+
+* Add ``Renderer.get_dependencies(filename)``, which gets every file that
+  depends on the given file.
+
+* Make ``Renderer.render_templates()`` require a list of templates to render,
+  *templates*.
