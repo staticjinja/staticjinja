@@ -11,7 +11,7 @@
     }
     site = staticjinja.make_site(filters=filters)
 
-* Adds support for multiple static directories. They can be passed as a string
+* Add support for multiple static directories. They can be passed as a string
   of comma-separated names to the CLI or as a list to the Renderer.
 
 * "Renderer" was renamed to "Site" and the Reloader was moved
