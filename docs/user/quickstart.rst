@@ -54,7 +54,7 @@ Configuration
   compilation, maintaining any directory structure. This defaults to
   ``None``, meaning no files are considered to be static files. You
   can pass multiple directories separating them by commas:
-  ``staticpath="foo,bar/baz,lorem"``.
+  ``--static="foo,bar/baz,lorem"``.
 
 More advanced configuration can be done using the staticjinja API, see
 :ref:`custom-build-scripts` for details.
