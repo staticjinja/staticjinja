@@ -316,7 +316,8 @@ def make_site(searchpath="templates",
               encoding="utf8",
               extensions=None,
               staticpaths=None,
-              filters=None):
+              filters=None,
+              env_kwargs=None):
     """Create a :class:`Site <Site>` object.
 
     :param searchpath:
@@ -362,6 +363,10 @@ def make_site(searchpath="templates",
         A dictionary of Jinja2 filters to add to the Environment.
         Defaults to ``{}``.
 
+    :param env_kwargs:
+        A dictionary that will be passed as keyword arguments to the
+        jinja2 Environment. Defaults to ``{}``.
+
     """
     # Coerce search to an absolute path if it is not already
     if not os.path.isabs(searchpath):
@@ -372,12 +377,16 @@ def make_site(searchpath="templates",
             calling_module.__file__))
         searchpath = os.path.join(project_path, searchpath)
 
-    loader = FileSystemLoader(searchpath=searchpath,
-                              encoding=encoding)
-    environment = Environment(loader=loader, extensions=extensions or [])
+    if env_kwargs is None:
+        env_kwargs = {}
+    env_kwargs['loader'] = FileSystemLoader(searchpath=searchpath,
+                                            encoding=encoding)
+    env_kwargs.setdefault('extensions', extensions or [])
+    environment = Environment(**env_kwargs)
     if filters:
         for k, v in filters.items():
             environment.filters[k] = v
+
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
     logger.addHandler(logging.StreamHandler())
