@@ -266,7 +266,7 @@ class Site(object):
             output_location = os.path.join(self.outpath, f)
             print("Copying %s to %s." % (f, output_location))
             self._ensure_dir(f)
-            shutil.copyfile(input_location, output_location)
+            shutil.copy2(input_location, output_location)
 
     def get_dependencies(self, filename):
         """Get a list of files that depends on the file named *filename*.
