@@ -1,4 +1,26 @@
 
+0.3.2
+-----
+
+* Allow passing keyword arguments to jinja2 Environment.
+
+* Use ``shutil.copy2`` instead of ``shutil.copyfile`` when copying static
+  resources to preserve the modified time of files which haven't been modified.
+
+* Make the Reloader handle "created" events to support editors like Pycharm
+  which save by first deleting then creating, rather than modifying.
+
+* Update easywatch dependency to 0.0.3 to fix an issue that occurs when
+  installing easywatch 0.0.2.
+
+* Make ``--srcpath`` accept both absolute paths and relative paths.
+
+* Allow directories to be marked partial or ignored, so that all files inside
+  them can be considered partial or ignored. Without this, developers would need
+  to rename the contents of these directories manually.
+
+* Allow users to mark a single file as static, instead of just directories.
+
 0.3.1
 -----
 

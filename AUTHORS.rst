@@ -10,10 +10,13 @@ Development Lead
 Patches and Suggestions
 ```````````````````````
 
+- Dominic Rodger (dominicrodger)
 - Filippo Valsorda
 - Alexey (rudyrk)
 - Jacob Lyles
 - Jakub Zalewski
 - NeuronQ
-- Dominic Rodger
 - Eduardo Rivas (jerivas)
+- Bryan Bennett (bbenne10)
+- Anuraag Agrawal (anuraaga)
+- saschalalala
