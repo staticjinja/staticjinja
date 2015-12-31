@@ -64,26 +64,21 @@ Some applications render templates based on data sources (e.g. CSVs or
 JSON files).
 
 To get data to templates you can set up a mapping between filenames
-and functions which generate dictionaries containing the data:
+and dictionaries or functions which generate dictionaries containing 
+the data:
 
 .. code-block:: python
 
     from staticjinja import make_site
 
-    def get_knights():
-        """Generate knights of the round table."""
-        knights = [
-            'sir arthur',
-            'sir lancelot',
-            'sir galahad',
-        ]
-        return {'knights': knights}
-
     if __name__ == "__main__":
         site = make_site(contexts=[
-            ('index.html', get_knights),
+            (
+             'index.html', 
+             { 'knights': ['sir arthur', 'sir lancelot', 'sir galahad'] }
+            ),
         ])
-        site.render(use_reloader=True)
+        site.render()
 
 You can then use the data in ``templates/index.html`` as you'd expect.
 
@@ -101,6 +96,39 @@ You can then use the data in ``templates/index.html`` as you'd expect.
     {% endfor %}
     </ul>
     {% endblock %}
+
+If data needs some work to produce then one can replace the dictionary
+by a function returning a dictionary. This function must either take no
+argument or one argument which will then be the current template.
+For instance the following gets the modification time of the template
+file into the context.
+
+.. code-block:: python
+
+    import datetime
+    import os
+    from staticjinja import make_site
+
+    
+    def date(template):
+        template_mtime = os.path.getmtime(template.filename)
+        date = datetime.datetime.fromtimestamp(template_mtime)
+        date_str = date.strftime('%d %B %Y')
+        return  {'template_date': date_str}
+
+    if __name__ == "__main__":
+        site = make_site(
+            contexts=[('.*.html', date)]
+            )
+        site.render()
+
+Inside any template with extension html, ``{{ template_date }}`` will
+then be replaced by the day when the template file last changed. 
+
+By default, only the first matching regex will be used for each template. 
+This can be changed by passing ``mergecontexts=True`` as an argument to 
+``make_site()``. Note the order is still important if several
+matching regex define the same key, in which case the last regex wins.
 
 Filters
 -------
