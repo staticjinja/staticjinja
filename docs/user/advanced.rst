@@ -63,29 +63,21 @@ Loading data
 Some applications render templates based on data sources (e.g. CSVs or
 JSON files).
 
-To get data to templates you can set up a mapping between filenames
-and functions which generate dictionaries containing the data:
+The simplest way to get data to templates is to set up a mapping from
+filenames to dictionaries representing the data ("contexts"). For example, the
+following code block passes some data to a template named "index.html":
 
 .. code-block:: python
 
     from staticjinja import make_site
 
-    def get_knights():
-        """Generate knights of the round table."""
-        knights = [
-            'sir arthur',
-            'sir lancelot',
-            'sir galahad',
-        ]
-        return {'knights': knights}
-
     if __name__ == "__main__":
-        site = make_site(contexts=[
-            ('index.html', get_knights),
-        ])
-        site.render(use_reloader=True)
+        site = make_site(contexts=[('index.html', {
+            'knights': ['sir arthur', 'sir lancelot', 'sir galahad']
+        })])
+        site.render()
 
-You can then use the data in ``templates/index.html`` as you'd expect.
+You can then use the data in ``templates/index.html`` as you'd expect:
 
 .. code-block:: html
 
@@ -101,6 +93,67 @@ You can then use the data in ``templates/index.html`` as you'd expect.
     {% endfor %}
     </ul>
     {% endblock %}
+
+For more complex situations, you can map filenames to functions that return a
+dictionary ("context generators"). Context generators may either take no
+arguments or the current template as its sole argument. For example, the
+following code adds the modification time of the template file to the context of
+any templates with an HTML extension:
+
+.. code-block:: python
+
+    import datetime
+    import os
+
+    from staticjinja import make_site
+
+
+    def date(template):
+        template_mtime = os.path.getmtime(template.filename)
+        date = datetime.datetime.fromtimestamp(template_mtime)
+        return {'template_date': date.strftime('%d %B %Y')}
+
+    if __name__ == "__main__":
+        site = make_site(
+            contexts=[('.*.html', date)],
+        )
+        site.render()
+
+By default, staticjinja uses the context of the first matching regex if multiple
+regexes match the name of a template. You can change this so that staticjinja
+combines the contexts by passing ``mergecontexts=True`` as an argument to
+``make_site()``. Note the order is still important if several matching regex
+define the same key, in which case the last regex wins. For example, given a
+build script that looks like the following code block, the context of the
+``index.html`` template will be ``{'title': 'MySite - Index', 'date': '05
+January 2016'}``.
+
+.. code-block:: python
+
+    import datetime
+    import os
+
+    from staticjinja import make_site
+
+
+    def base(template):
+        template_mtime = os.path.getmtime(template.filename)
+        date = datetime.datetime.fromtimestamp(template_mtime)
+        return {
+            'template_date': date.strftime('%d %B %Y'),
+            'title': 'MySite',
+        }
+
+
+    def index(template):
+        return {'title': 'MySite - Index'}
+
+    if __name__ == "__main__":
+        site = make_site(
+            contexts=[('.*.html', base), ('index.html', index)],
+            mergecontexts=True,
+        )
+        site.render()
 
 Filters
 -------

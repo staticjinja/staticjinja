@@ -20,6 +20,21 @@ from jinja2 import Environment, FileSystemLoader
 from .reloader import Reloader
 
 
+def _has_argument(func):
+    """Test whether a function expects an argument.
+
+    :param func:
+        The function to be tested for existence of an argument.
+    """
+    if hasattr(inspect, 'signature'):
+        # New way in python 3.3
+        sig = inspect.signature(func)
+        return bool(sig.parameters)
+    else:
+        # Old way
+        return bool(inspect.getargspec(func).args)
+
+
 class Site(object):
     """The Site object.
 
@@ -31,12 +46,13 @@ class Site(object):
         templates.
 
     :param contexts:
-        A list of regex-function pairs. The function should return a context
-        for that template. The regex, if matched against a filename, will cause
-        the context to be used.
+        A list of `regex, context` pairs. Each context is either a dictionary
+        or a function that takes either no argument or or the current template
+        as its sole argument and returns a dictionary. The regex, if matched
+        against a filename, will cause the context to be used.
 
     :param rules:
-        A list of `regex, function` pairs used to ovverride template
+        A list of `regex, function` pairs used to override template
         compilation. `regex` must be a regex which if matched against a
         filename will cause `function` to be used instead of the default.
         `function` must be a function which takes a Jinja2 Environment, the
@@ -51,6 +67,12 @@ class Site(object):
     :param staticpaths:
         List of directory names to get static files from (relative to
         searchpath).
+
+    :param mergecontexts:
+        A boolean value. If set to ``True``, then all matching regex from the
+        contexts list will be merged (in order) to get the final context.
+        Otherwise, only the first matching regex is used. Defaults to
+        ``False``.
     """
 
     def __init__(self,
@@ -61,7 +83,8 @@ class Site(object):
                  logger,
                  contexts=None,
                  rules=None,
-                 staticpaths=None
+                 staticpaths=None,
+                 mergecontexts=False,
                  ):
         self._env = environment
         self.searchpath = searchpath
@@ -71,6 +94,7 @@ class Site(object):
         self.contexts = contexts or []
         self.rules = rules or []
         self.staticpaths = staticpaths
+        self.mergecontexts = mergecontexts
 
     @property
     def template_names(self):
@@ -93,39 +117,34 @@ class Site(object):
         """
         return self._env.get_template(template_name)
 
-    def _get_context_generator(self, template_name):
-        """Get a context generator for a template.
-
-        Raises a :exc:`ValueError` if no matching context generator can be
-        found.
-
-        :param template_name: the name of the template
-        """
-        for regex, context_generator in self.contexts:
-            if re.match(regex, template_name):
-                return context_generator
-        raise ValueError("no matching context generator")
-
     def get_context(self, template):
         """Get the context for a template.
 
-        By default, this function will return an empty context.
+        If no matching value is found, an empty context is returned.
+        Otherwise, this returns either the matching value if the value is
+        dictionary-like or the dictionary returned by calling it with
+        *template* if the value is a function.
 
-        If a matching context_generator can be found, it will be passed the
-        template and executed. The context generator should return a dictionary
-        representing the context.
+        If several matching values are found, the resulting dictionaries will
+        be merged before being returned if mergecontexts is True. Otherwise,
+        only the first matching value is returned.
 
         :param template: the template to get the context for
         """
-        try:
-            context_generator = self._get_context_generator(template.name)
-        except ValueError:
-            return {}
-        else:
-            try:
-                return context_generator(template)
-            except TypeError:
-                return context_generator()
+        context = {}
+        for regex, context_generator in self.contexts:
+            if re.match(regex, template.name):
+                if inspect.isfunction(context_generator):
+                    if _has_argument(context_generator):
+                        context.update(context_generator(template))
+                    else:
+                        context.update(context_generator())
+                else:
+                    context.update(context_generator)
+
+                if not self.mergecontexts:
+                    break
+        return context
 
     def get_rule(self, template_name):
         """Find a matching compilation rule for a function.
@@ -234,7 +253,6 @@ class Site(object):
 
         if context is None:
             context = self.get_context(template)
-
         try:
             rule = self.get_rule(template.name)
         except ValueError:
@@ -317,7 +335,8 @@ def make_site(searchpath="templates",
               extensions=None,
               staticpaths=None,
               filters=None,
-              env_kwargs=None):
+              env_kwargs=None,
+              mergecontexts=False):
     """Create a :class:`Site <Site>` object.
 
     :param searchpath:
@@ -334,11 +353,11 @@ def make_site(searchpath="templates",
         should store rendered files in. Defaults to ``'.'``.
 
     :param contexts:
-        A list of *(regex, function)* pairs. The Site will invoke
-        *function* if *regex* matches the name of a template when rendering.
-        *function* must take either no arguments or a single
-        :class:`jinja2.Template` as an argument and return a dictionary
-        representing the context. Defaults to ``[]``.
+        A list of *(regex, context)* pairs. The Site will render templates
+        whose name match *regex* using *context*. *context* must be either a
+        dictionary-like object or a function that takes either no arguments or
+        a single :class:`jinja2.Template` as an argument and returns a
+        dictionary representing the context. Defaults to ``[]``.
 
     :param rules:
         A list of *(regex, function)* pairs. The Site will delegate
@@ -367,6 +386,11 @@ def make_site(searchpath="templates",
         A dictionary that will be passed as keyword arguments to the
         jinja2 Environment. Defaults to ``{}``.
 
+    :param mergecontexts:
+        A boolean value. If set to ``True``, then all matching regex from the
+        contexts list will be merged (in order) to get the final context.
+        Otherwise, only the first matching regex is used. Defaults to
+        ``False``.
     """
     # Coerce search to an absolute path if it is not already
     if not os.path.isabs(searchpath):
@@ -398,6 +422,7 @@ def make_site(searchpath="templates",
                 rules=rules,
                 contexts=contexts,
                 staticpaths=staticpaths,
+                mergecontexts=mergecontexts,
                 )
 
 
