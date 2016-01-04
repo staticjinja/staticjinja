@@ -29,6 +29,7 @@ def site(template_path, build_path):
     template_path.join('template1.html').write('Test 1')
     template_path.join('template2.html').write('Test 2')
     template_path.mkdir('sub').join('template3.html').write('Test {{b}}')
+    template_path.join('template4.html').write('Test {{b}} and {{c}}')
     template_path.mkdir('static_css').join('hello.css').write(
         'a { color: blue; }'
     )
@@ -37,7 +38,9 @@ def site(template_path, build_path):
     )
     template_path.join('favicon.ico').write('Fake favicon')
     contexts = [('template2.html', lambda t: {'a': 1}),
-                ('.*template3.html', lambda: {'b': 3}), ]
+                ('.*template3.html', lambda: {'b': 3}),
+                ('template4.html', {'b': 4, 'c': 5}),
+                ('.*[4-9].html', {'c': 6})]
     rules = [('template2.html', lambda env, t, a: None), ]
     return make_site(searchpath=str(template_path),
                      outpath=str(build_path),
@@ -54,7 +57,8 @@ def test_template_names(site):
     site.staticpaths = ["static_css", "static_js", "favicon.ico"]
     expected_templates = set(['template1.html',
                               'template2.html',
-                              'sub/template3.html'])
+                              'sub/template3.html',
+                              'template4.html'])
     assert set(site.template_names) == expected_templates
 
 
@@ -71,6 +75,13 @@ def test_get_context(site):
     assert site.get_context(
         site.get_template("sub/template3.html")
     ) == {'b': 3}
+    assert site.get_context(
+        site.get_template("template4.html")
+    ) == {'b': 4, 'c': 5}
+    site.mergecontexts = True
+    assert site.get_context(
+        site.get_template("template4.html")
+    ) == {'b': 4, 'c': 6}
 
 
 def test_get_rule(site):
