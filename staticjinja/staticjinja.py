@@ -15,7 +15,10 @@ import re
 import shutil
 import warnings
 
+from itertools import chain
+
 from jinja2 import Environment, FileSystemLoader
+from jinja2.meta import find_referenced_templates
 
 from .reloader import Reloader
 
@@ -67,6 +70,18 @@ class Site(object):
     :param staticpaths:
         List of directory names to get static files from (relative to
         searchpath).
+        Defaults to ``None``.
+
+    :param datapaths:
+        List of directories to get data files from (relative to searchpath).
+        Defaults to ``None``.
+
+    :param extra_deps:
+        List of dependencies on data files. Each dependency is a pair
+        (f, d) where f is a (maybe partial) template file path
+        and d is a list of data file paths which are used to generate f.
+        All path are relative to searchpath.
+        Defaults to ``None``.
 
     :param mergecontexts:
         A boolean value. If set to ``True``, then all matching regex from the
@@ -84,6 +99,8 @@ class Site(object):
                  contexts=None,
                  rules=None,
                  staticpaths=None,
+                 datapaths=None,
+                 extra_deps=None,
                  mergecontexts=False,
                  ):
         self._env = environment
@@ -94,11 +111,19 @@ class Site(object):
         self.contexts = contexts or []
         self.rules = rules or []
         self.staticpaths = staticpaths
+        self.datapaths = datapaths
+        self.extra_deps = extra_deps or {}
+        # We don't generate the dep graph until we are sure it will be used
+        self.dep_graph = None
         self.mergecontexts = mergecontexts
 
     @property
     def template_names(self):
         return self._env.list_templates(filter_func=self.is_template)
+
+    @property
+    def jinja_names(self):
+        return self._env.list_templates(filter_func=self.is_jinja)
 
     @property
     def templates(self):
@@ -109,6 +134,10 @@ class Site(object):
     @property
     def static_names(self):
         return self._env.list_templates(filter_func=self.is_static)
+
+    @property
+    def data_names(self):
+        return self._env.list_templates(filter_func=self.is_data)
 
     def get_template(self, template_name):
         """Get a :class:`jinja2.Template` from the environment.
@@ -177,6 +206,25 @@ class Site(object):
                 return True
         return False
 
+    def is_data(self, filename):
+        """Check if a file is a data file (which should be used by a context
+        generator rather than compiled using Jinja2).
+
+        A file is considered data if it lives in any of the directories
+        specified in ``datapaths`` or is itself listed in ``datapaths``.
+
+        :param filename: the name of the file to check
+
+        """
+        if self.datapaths is None:
+            # We're not using data file support
+            return False
+
+        for path in self.datapaths:
+            if filename.startswith(path):
+                return True
+        return False
+
     def is_partial(self, filename):
         """Check if a file is a partial.
 
@@ -217,6 +265,9 @@ class Site(object):
             return False
 
         if self.is_static(filename):
+            return False
+
+        if self.is_data(filename):
             return False
 
         return True
@@ -263,20 +314,20 @@ class Site(object):
         else:
             rule(self, template, **context)
 
-    def render_templates(self, templates, filepath=None):
-        """Render a collection of :class:`jinja2.Template` objects.
+    def render_templates(self, filenames, outpath=None):
+        """Render a collection of templates names.
 
-        :param templates:
-            A collection of Templates to render.
+        :param filenames:
+            A collection of path to templates to render.
 
-        :param filepath:
+        :param outpath:
             Optional. A file or file-like object to dump the complete template
             stream into. Defaults to to ``os.path.join(self.outpath,
             template.name)``.
 
         """
-        for template in templates:
-            self.render_template(template, filepath)
+        for filename in filenames:
+            self.render_template(self._env.get_template(filename), outpath)
 
     def copy_static(self, files):
         for f in files:
@@ -287,14 +338,15 @@ class Site(object):
             shutil.copy2(input_location, output_location)
 
     def get_dependencies(self, filename):
-        """Get a list of files that depends on the file named *filename*.
+        """Get a list of file paths that depends on the file named *filename*
+        (relative to searchpath).
 
         :param filename: the name of the file to find dependencies of
         """
-        if self.is_partial(filename):
-            return self.templates
-        elif self.is_template(filename):
-            return [self.get_template(filename)]
+        if self.is_template(filename):
+            return [filename]
+        elif self.is_partial(filename) or self.is_data(filename):
+            return self.dep_graph.get_descendants(filename)
         elif self.is_static(filename):
             return [filename]
         else:
@@ -305,7 +357,7 @@ class Site(object):
 
         :param use_reloader: if given, reload templates on modification
         """
-        self.render_templates(self.templates)
+        self.render_templates(list(self.template_names))
         self.copy_static(self.static_names)
 
         if use_reloader:
@@ -313,6 +365,39 @@ class Site(object):
                              self.searchpath)
             self.logger.info("Press Ctrl+C to stop.")
             Reloader(self).watch()
+
+    def is_jinja(self, filename):
+        """Check if a file is a data file (which will not be compiled using
+        Jinja2 but is presumably used by some context generator).
+
+        A file is considered data if it lives in any of the directories
+        specified in ``datapaths`` or is directly mentionned in ``datapaths``.
+
+        :param filename: the name of the file to check
+
+        """
+        return self.is_partial(filename) or self.is_template(filename)
+
+    def find_jinja_deps(self, filename):
+        """Return all (maybe partial) templates extended, imported or included
+        by filename.
+        """
+        # TODO Check whether this function is called only at one place (hence
+        # could be integrated)
+
+        source = self._env.loader.get_source(self._env, filename)[0]
+        ast = self._env.parse(source)
+        return find_referenced_templates(ast)
+
+    def get_file_dep(self, filename):
+        """Return a list of path of files which filename depends on."""
+        jinja_deps = self.find_jinja_deps(filename)
+        if self.extra_deps:
+            extra_deps = self.extra_deps.get(filename, [])
+        else:
+            extra_deps = []
+
+        return set(chain(jinja_deps, extra_deps))
 
     def __repr__(self):
         return "Site('%s', '%s')" % (self.searchpath, self.outpath)
@@ -334,6 +419,8 @@ def make_site(searchpath="templates",
               encoding="utf8",
               extensions=None,
               staticpaths=None,
+              datapaths=None,
+              extra_deps=None,
               filters=None,
               env_kwargs=None,
               mergecontexts=False):
@@ -376,6 +463,17 @@ def make_site(searchpath="templates",
 
     :param staticpaths:
         List of directories to get static files from (relative to searchpath).
+        Defaults to ``None``.
+
+    :param datapaths:
+        List of directories to get data files from (relative to searchpath).
+        Defaults to ``None``.
+
+    :param extra_deps:
+        List of dependencies on data files. Each dependency is a pair
+        (f, d) where f is a (maybe partial) template file path
+        and d is a list of data file paths which are used to generate f.
+        All path are relative to searchpath.
         Defaults to ``None``.
 
     :param filters:
@@ -422,6 +520,8 @@ def make_site(searchpath="templates",
                 rules=rules,
                 contexts=contexts,
                 staticpaths=staticpaths,
+                datapaths=datapaths,
+                extra_deps=extra_deps,
                 mergecontexts=mergecontexts,
                 )
 
