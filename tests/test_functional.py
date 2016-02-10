@@ -176,7 +176,9 @@ def date(template):
 
 # Computed using Python3 :
 # JANUARY_FIRST_2016 = datetime.datetime(2016, 1, 1, 0, 0).timestamp()
-JANUARY_FIRST_2016 = 1451602800.0
+# which gives  1451602800.0
+# and then add some more because Travis sees this as December 31th 2015 ?!
+JANUARY_FIRST_2016 = 1451602860.0
 
 
 def test_render(tmp_source_dir, tmpdir, expected_build_dir, get_knights):
@@ -211,14 +213,6 @@ def test_render(tmp_source_dir, tmpdir, expected_build_dir, get_knights):
                   mergecontexts=True)
 
     site.render()
-    print('\nBuild index.html')
-    with open(os.path.join(outpath, 'index.html'), 'r') as f:
-        for line in f:
-            print(line)
-    print('\nExpected index.html')
-    with open(os.path.join(expected_build_dir, 'index.html'), 'r') as f:
-        for line in f:
-            print(line)
     assert not diff(expected_build_dir, outpath)
 
 
