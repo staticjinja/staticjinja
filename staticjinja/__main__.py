@@ -7,7 +7,12 @@ import os
 
 import staticjinja
 
-if __name__ == "__main__":
+
+def main():
     searchpath = os.path.join(os.getcwd(), 'templates')
     site = staticjinja.make_site(searchpath=searchpath)
     site.render(use_reloader=True)
+
+
+if __name__ == "__main__":
+    main()

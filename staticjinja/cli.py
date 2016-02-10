@@ -63,7 +63,7 @@ def render(args):
     staticpaths = None
 
     if staticdirs:
-        staticpaths = staticdirs.split(",")
+        staticpaths = [path.strip() for path in staticdirs.split(",")]
         for path in staticpaths:
             path = os.path.join(srcpath, path)
             if not os.path.isdir(path):
