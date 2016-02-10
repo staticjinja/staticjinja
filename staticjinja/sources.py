@@ -294,9 +294,9 @@ class SourceManager(object):
         if source.flavor in [TEMPLATE_FLAVOR, STATIC_FLAVOR]:
             return [source]
         elif source.flavor in [PARTIAL_FLAVOR, DATA_FLAVOR]:
-            return [source
-                    for source in self.dep_graph.get_descendants(source)
-                    if source.flavor in [TEMPLATE_FLAVOR, STATIC_FLAVOR]
+            return [src
+                    for src in self.dep_graph.get_descendants(source)
+                    if src.flavor in [TEMPLATE_FLAVOR, STATIC_FLAVOR]
                     ]
         elif source.flavor == IGNORED_FLAVOR:
             return []

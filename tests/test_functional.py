@@ -211,6 +211,14 @@ def test_render(tmp_source_dir, tmpdir, expected_build_dir, get_knights):
                   mergecontexts=True)
 
     site.render()
+    print('\nBuild index.html')
+    with open(os.path.join(outpath, 'index.html'), 'r') as f:
+        for line in f:
+            print(line)
+    print('\nExpected index.html')
+    with open(os.path.join(expected_build_dir, 'index.html'), 'r') as f:
+        for line in f:
+            print(line)
     assert not diff(expected_build_dir, outpath)
 
 
