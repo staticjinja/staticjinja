@@ -1,0 +1,11 @@
+{% extends "_base.html" %}
+{% block content %}
+<p>
+Our knights are:
+</p>
+<ul>
+  {%- for knight in knights %}
+  <li>{{ knight }}</li>
+  {%- endfor %}
+</ul>
+{% endblock %}
