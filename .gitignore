@@ -1,7 +1,7 @@
 *.py[co]
 
 # Packages
-*.egg
+*.egg*
 *.egg-info
 dist
 build
@@ -16,8 +16,13 @@ develop-eggs
 # Installer logs
 pip-log.txt
 
-# Unit test / coverage reports
+# Vim temp files
+.*.sw*
+
+# Unit test / coverage reports / py.test cache
 .coverage
+htmlcov/
+.cache
 .tox
 
 #Translations
@@ -28,5 +33,6 @@ pip-log.txt
 
 # Compiled html
 /*.html
+/example/posts/
 
 docs/_build
