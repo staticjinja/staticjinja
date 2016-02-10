@@ -177,8 +177,9 @@ def date(template):
 # Computed using Python3 :
 # JANUARY_FIRST_2016 = datetime.datetime(2016, 1, 1, 0, 0).timestamp()
 # which gives  1451602800.0
-# and then add some more because Travis sees this as December 31th 2015 ?!
-JANUARY_FIRST_2016 = 1451602860.0
+# and then add some more because Travis sees this as December 31th 2015
+# (probably a timezone issue)
+JANUARY_FIRST_2016 = 1451606800.0
 
 
 def test_render(tmp_source_dir, tmpdir, expected_build_dir, get_knights):
