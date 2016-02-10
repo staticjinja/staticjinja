@@ -1,0 +1,11 @@
+# .coveragerc to control coverage.py
+[run]
+branch = True
+
+[report]
+# Regexes for lines to exclude from consideration
+exclude_lines =
+	# Re-enable the standard pragma
+	pragma: no cover
+	# Exclude code that can't be executed.
+	if __name__ == .__main__.:
