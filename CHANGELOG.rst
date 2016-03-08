@@ -1,4 +1,14 @@
 
+0.3.3
+-----
+
+* Enable users to direct pass dictionaries instead of context generator in Site
+  and make_site() for contexts that don't require any logic.
+
+* Introduces a ``mergecontexts`` parameter to Site and make_site() to direct
+  staticjinja to either use all matching context generator or only the first
+  one when rendering templates.
+
 0.3.2
 -----
 
