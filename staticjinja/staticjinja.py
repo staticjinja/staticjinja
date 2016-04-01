@@ -404,7 +404,8 @@ def make_site(searchpath="templates",
     if env_kwargs is None:
         env_kwargs = {}
     env_kwargs['loader'] = FileSystemLoader(searchpath=searchpath,
-                                            encoding=encoding)
+                                            encoding=encoding,
+                                            followlinks=True)
     env_kwargs.setdefault('extensions', extensions or [])
     environment = Environment(**env_kwargs)
     if filters:
