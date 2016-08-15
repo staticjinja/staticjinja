@@ -20,3 +20,4 @@ Patches and Suggestions
 - Bryan Bennett (bbenne10)
 - Anuraag Agrawal (anuraaga)
 - saschalalala
+- Tim Best (timbest)
