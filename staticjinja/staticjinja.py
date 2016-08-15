@@ -335,6 +335,7 @@ def make_site(searchpath="templates",
               extensions=None,
               staticpaths=None,
               filters=None,
+              env_globals=None,
               env_kwargs=None,
               mergecontexts=False):
     """Create a :class:`Site <Site>` object.
@@ -382,6 +383,11 @@ def make_site(searchpath="templates",
         A dictionary of Jinja2 filters to add to the Environment.
         Defaults to ``{}``.
 
+    :param globals:
+        A dictionary of variables and functions to be added to the
+        Environment's global namspace.
+        Defaults to ``{}``.
+
     :param env_kwargs:
         A dictionary that will be passed as keyword arguments to the
         jinja2 Environment. Defaults to ``{}``.
@@ -411,6 +417,10 @@ def make_site(searchpath="templates",
     if filters:
         for k, v in filters.items():
             environment.filters[k] = v
+
+    if env_globals:
+        for k, v in env_globals.items():
+            environment.globals[k] = v
 
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
