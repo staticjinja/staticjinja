@@ -415,12 +415,11 @@ def make_site(searchpath="templates",
     env_kwargs.setdefault('extensions', extensions or [])
     environment = Environment(**env_kwargs)
     if filters:
-        for k, v in filters.items():
-            environment.filters[k] = v
+        environment.globals.update(filters)
 
     if env_globals:
-        for k, v in env_globals.items():
-            environment.globals[k] = v
+        environment.globals.update(env_globals)
+
 
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
