@@ -184,6 +184,33 @@ Then you can use them in your templates as you would expect:
     <p>{{'THIS IS AN EXAMPLE WEB PAGE.' | my_lower}}</p>
     {% endblock %}
 
+Globals
+-------
+
+Globals is a dictionary of variables and functions that gets added to Jinja2's
+global namespace. Anything added to this dictionary will be available in all
+templates. Even those rendered without a context dictionary.
+
+.. code-block:: python
+
+    env_globals = {
+        'hello_world':'Hello world!',
+    }
+
+    if __name__ == "__main__":
+        site = staticjinja.make_site(env_globals=env_globals)
+        site.render()
+
+Then you can use them in your templates as you would expect:
+
+.. code-block:: html
+
+    <!-- templates/index.html -->
+    {% extends "_base.html" %}
+    {% block body %}
+    <h1>{{ hello_world} }</h1>
+    {% endblock %}
+
 Compilation rules
 -----------------
 
