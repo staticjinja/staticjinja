@@ -112,6 +112,17 @@ def test_render_nested_template(site, build_path):
     assert template3.read() == "Test 3"
 
 
+def test_render_template_with_env_globals(template_path, build_path):
+    """Ensure variables defined in env_globals can be accessed globally."""
+    template_name = 'template.html'
+    template_path.join(template_name).write('<h1>{{greeting}}</h1>')
+    site = make_site(searchpath=str(template_path),
+                     outpath=str(build_path),
+                     env_globals={'greeting': 'Hello world!'})
+    site.render_template(site.get_template(template_name))
+    assert build_path.join(template_name).read() == '<h1>Hello world!</h1>'
+
+
 def test_render_templates(site, build_path):
     site.render_templates(site.templates)
     template1 = build_path.join("template1.html")

@@ -63,42 +63,56 @@ Loading data
 Some applications render templates based on data sources (e.g. CSVs or
 JSON files).
 
-The simplest way to get data to templates is to set up a mapping from
-filenames to dictionaries representing the data ("contexts"). For example, the
-following code block passes some data to a template named "index.html":
+The simplest way to supply data to templates is to pass ``make_site()`` a
+mapping from variable names to their values (a "context") as the ``env_globals``
+keyword argument.
+
+.. code-block:: python
+
+    if __name__ == "__main__":
+        site = staticjinja.make_site(env_globals={
+            'greeting':'Hello world!',
+        })
+        site.render()
+
+Anything added to this dictionary will be available in all templates:
+
+.. code-block:: html
+
+    <!-- templates/index.html -->
+    <h1>{{greeting}}</h1>
+
+If the context needs to be different for each template, you can restrict
+contexts to certain templates by supplying ``make_site()`` a sequence of
+regex-context pairs as the ``contexts`` keyword argument. When rendering a
+template, staticjinja will search this sequence for the first regex that matches
+the template's name, and use that context to interpolate variables. For example,
+the following code block supplies a context to the template named "index.html":
 
 .. code-block:: python
 
     from staticjinja import make_site
 
     if __name__ == "__main__":
-        site = make_site(contexts=[('index.html', {
-            'knights': ['sir arthur', 'sir lancelot', 'sir galahad']
-        })])
+        context = {'knights': ['sir arthur', 'sir lancelot', 'sir galahad']}
+        site = make_site(contexts=[('index.html', context)])
         site.render()
-
-You can then use the data in ``templates/index.html`` as you'd expect:
 
 .. code-block:: html
 
     <!-- templates/index.html -->
-    {% extends "_base.html" %}
-    {% block body %}
-    <h1>Hello world!</h1>
-    <p>This is an example web page.</p>
-    <h3>Knights of the Round Table</h3>
+    <h1>Knights of the Round Table</h1>
     <ul>
     {% for knight in knights %}
         <li>{{ knight }}</li>
     {% endfor %}
     </ul>
-    {% endblock %}
 
-For more complex situations, you can map filenames to functions that return a
-dictionary ("context generators"). Context generators may either take no
-arguments or the current template as its sole argument. For example, the
-following code adds the modification time of the template file to the context of
-any templates with an HTML extension:
+If contexts needs to be generated dynamically, you can associate filenames with
+functions that return a context ("context generators"). Context generators may
+either take no arguments or the current template as its sole argument. For
+example, the following code creates a context with the last modification time of
+the template file for any templates with an HTML extension:
 
 .. code-block:: python
 
