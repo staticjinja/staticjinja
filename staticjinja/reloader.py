@@ -1,5 +1,7 @@
 import os
 
+from .dep_graph import DepGraph
+
 
 class Reloader(object):
     """
@@ -12,6 +14,9 @@ class Reloader(object):
     """
     def __init__(self, site):
         self.site = site
+        # The following could be part of the Site.__init__ but it would waste
+        # time if the reloader is not used
+        self.site.dep_graph = DepGraph(site)
 
     @property
     def searchpath(self):
@@ -42,11 +47,22 @@ class Reloader(object):
         if self.should_handle(event_type, src_path):
             print("%s %s" % (event_type, filename))
             if self.site.is_static(filename):
-                files = self.site.get_dependencies(filename)
-                self.site.copy_static(files)
+                self.site.copy_static([filename])
+            elif self.site.is_ignored(filename):
+                return
             else:
-                templates = self.site.get_dependencies(filename)
-                self.site.render_templates(templates)
+                # Here the changed file is a (maybe partial) template or a data
+                # file
+                self.site.dep_graph.update(filename)
+
+                if self.site.is_template(filename):
+                    needs_rendering = [filename]
+                else:
+                    needs_rendering = filter(
+                        self.site.is_template,
+                        self.site.get_dependencies(filename)
+                        )
+                self.site.render_templates(needs_rendering)
 
     def watch(self):
         """Watch and reload modified templates."""

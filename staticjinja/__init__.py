@@ -5,3 +5,4 @@ from __future__ import absolute_import
 
 from .reloader import Reloader
 from .staticjinja import make_site, Site
+from .dep_graph import DepGraph
