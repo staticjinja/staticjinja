@@ -26,8 +26,7 @@ class Reloader(object):
 
         :param filename: the path to the file that triggered the event.
         """
-        return (event_type in ("modified", "created") and
-                filename.startswith(self.searchpath) and
+        return (filename.startswith(self.searchpath) and
                 os.path.isfile(filename))
 
     def event_handler(self, event_type, src_path):
