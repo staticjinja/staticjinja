@@ -419,7 +419,7 @@ def make_site(searchpath="templates",
     env_kwargs.setdefault('extensions', extensions or [])
     environment = Environment(**env_kwargs)
     if filters:
-        environment.globals.update(filters)
+        environment.filters.update(filters)
 
     if env_globals:
         environment.globals.update(env_globals)
