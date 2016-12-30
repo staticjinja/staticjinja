@@ -332,6 +332,7 @@ def make_site(searchpath="templates",
               contexts=None,
               rules=None,
               encoding="utf8",
+              followlinks=True,
               extensions=None,
               staticpaths=None,
               filters=None,
@@ -370,6 +371,10 @@ def make_site(searchpath="templates",
     :param encoding:
         A string representing the encoding that the Site should use when
         rendering templates. Defaults to ``'utf8'``.
+
+    :param followlinks:
+        A boolean describing whether symlinks in searchpath should be followed
+        or not. Defaults to ``True``.
 
     :param extensions:
         A list of :ref:`Jinja extensions <jinja-extensions>` that the
@@ -410,7 +415,7 @@ def make_site(searchpath="templates",
         env_kwargs = {}
     env_kwargs['loader'] = FileSystemLoader(searchpath=searchpath,
                                             encoding=encoding,
-                                            followlinks=True)
+                                            followlinks=followlinks)
     env_kwargs.setdefault('extensions', extensions or [])
     environment = Environment(**env_kwargs)
     if filters:
