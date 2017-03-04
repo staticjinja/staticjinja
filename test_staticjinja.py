@@ -234,10 +234,12 @@ def test_cli_srcpath(mock_make_site, mock_getcwd, mock_isdir):
         '--srcpath': 'templates',
         '--outpath': None,
         '--static': None,
+        '--globals': None,
         'watch': False,
     })
 
     mock_make_site.assert_called_once_with(
+        env_globals=None,
         searchpath='/templates',
         outpath='/',
         staticpaths=None
@@ -255,10 +257,12 @@ def test_cli_srcpath_default(mock_make_site, mock_getcwd, mock_isdir):
         '--srcpath': None,
         '--outpath': None,
         '--static': None,
+        '--globals': None,
         'watch': False,
     })
 
     mock_make_site.assert_called_once_with(
+        env_globals=None,
         searchpath='/templates',
         outpath='/',
         staticpaths=None
@@ -275,10 +279,12 @@ def test_cli_srcpath_absolute(mock_make_site, mock_getcwd, mock_isdir):
         '--srcpath': '/foo/templates',
         '--outpath': None,
         '--static': None,
+        '--globals': None,
         'watch': False,
     })
 
     mock_make_site.assert_called_once_with(
+        env_globals=None,
         searchpath='/foo/templates',
         outpath='/',
         staticpaths=None
