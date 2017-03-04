@@ -75,9 +75,9 @@ def render(args):
                 sys.exit(1)
 
     envglobalspath = (
-        os.path.join(os.getcwd(), 'globals.yaml') if args['--globals'] is None
+        os.path.join(srcpath, 'globals.yaml') if args['--globals'] is None
         else args['--globals'] if os.path.isabs(args['--globals'])
-        else os.path.join(os.getcwd(), args['--globals'])
+        else os.path.join(srcpath, args['--globals'])
     )
 
     try:

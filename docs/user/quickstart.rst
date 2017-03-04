@@ -46,6 +46,8 @@ Configuration
 
 * ``--srcpath`` - the directory to look in for templates (defaults to
   ``./templates``);
+* ``--globals`` - the file to define global variables (defaults to
+  ``<srcpath>/globals.yaml``);
 * ``--outpath`` - the directory to place rendered files in (defaults
   to ``.``);
 * ``--static`` - the directory (or directories) within ``srcpath``
