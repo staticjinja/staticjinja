@@ -160,10 +160,12 @@ def test_should_handle(reloader, template_path):
     test4_path = template_path.join("test4.html")
 
     test4_path.write('')
-    assert reloader.should_handle("modified", str(template1_path))
     assert reloader.should_handle("modified", str(test4_path))
+
+    assert reloader.should_handle("modified", str(template1_path))
     assert reloader.should_handle("created", str(template1_path))
-    assert not reloader.should_handle("deleted", str(template1_path))
+    assert reloader.should_handle("deleted", str(template1_path))
+    assert reloader.should_handle("moved", str(template1_path))
 
 
 def test_event_handler(reloader, template_path):
