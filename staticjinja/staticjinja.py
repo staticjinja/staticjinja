@@ -416,7 +416,8 @@ def make_site(searchpath="templates",
     env_kwargs.setdefault('extensions', extensions or [])
     environment = Environment(**env_kwargs)
     if filters:
-        environment.globals.update(filters)
+        for k, v in filters.items():
+            environment.filters[k] = v
 
     if env_globals:
         environment.globals.update(env_globals)
