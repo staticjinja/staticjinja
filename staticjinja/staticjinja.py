@@ -253,10 +253,12 @@ class Site(object):
 
         if context is None:
             context = self.get_context(template)
+
+        self._ensure_dir(template.name)
+
         try:
             rule = self.get_rule(template.name)
         except ValueError:
-            self._ensure_dir(template.name)
             if filepath is None:
                 filepath = os.path.join(self.outpath, template.name)
             template.stream(**context).dump(filepath, self.encoding)
