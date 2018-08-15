@@ -96,6 +96,119 @@ class Site(object):
         self.staticpaths = staticpaths
         self.mergecontexts = mergecontexts
 
+    @classmethod
+    def make_site(cls,
+                  searchpath="templates",
+                  outpath=".",
+                  contexts=None,
+                  rules=None,
+                  encoding="utf8",
+                  followlinks=True,
+                  extensions=None,
+                  staticpaths=None,
+                  filters=None,
+                  env_globals=None,
+                  env_kwargs=None,
+                  mergecontexts=False):
+        """Create a :class:`Site <Site>` object.
+
+        :param searchpath:
+            A string representing the absolute path to the directory that the Site
+            should search to discover templates. Defaults to ``'templates'``.
+
+            If a relative path is provided, it will be coerced to an absolute path
+            by prepending the directory name of the calling module. For example, if
+            you invoke staticjinja using ``python build.py`` in directory ``/foo``,
+            then *searchpath* will be ``/foo/templates``.
+
+        :param outpath:
+            A string representing the name of the directory that the Site
+            should store rendered files in. Defaults to ``'.'``.
+
+        :param contexts:
+            A list of *(regex, context)* pairs. The Site will render templates
+            whose name match *regex* using *context*. *context* must be either a
+            dictionary-like object or a function that takes either no arguments or
+            a single :class:`jinja2.Template` as an argument and returns a
+            dictionary representing the context. Defaults to ``[]``.
+
+        :param rules:
+            A list of *(regex, function)* pairs. The Site will delegate
+            rendering to *function* if *regex* matches the name of a template
+            during rendering. *function* must take a :class:`jinja2.Environment`
+            object, a filename, and a context as parameters and render the
+            template. Defaults to ``[]``.
+
+        :param encoding:
+            A string representing the encoding that the Site should use when
+            rendering templates. Defaults to ``'utf8'``.
+
+        :param followlinks:
+            A boolean describing whether symlinks in searchpath should be followed
+            or not. Defaults to ``True``.
+
+        :param extensions:
+            A list of :ref:`Jinja extensions <jinja-extensions>` that the
+            :class:`jinja2.Environment` should use. Defaults to ``[]``.
+
+        :param staticpaths:
+            List of directories to get static files from (relative to searchpath).
+            Defaults to ``None``.
+
+        :param filters:
+            A dictionary of Jinja2 filters to add to the Environment.
+            Defaults to ``{}``.
+
+        :param env_globals:
+            A mapping from variable names that should be available all the time to
+            their values. Defaults to ``{}``.
+
+        :param env_kwargs:
+            A dictionary that will be passed as keyword arguments to the
+            jinja2 Environment. Defaults to ``{}``.
+
+        :param mergecontexts:
+            A boolean value. If set to ``True``, then all matching regex from the
+            contexts list will be merged (in order) to get the final context.
+            Otherwise, only the first matching regex is used. Defaults to
+            ``False``.
+        """
+        # Coerce search to an absolute path if it is not already
+        if not os.path.isabs(searchpath):
+            # TODO: Determine if there is a better way to write do this
+            calling_module = inspect.getmodule(inspect.stack()[-1][0])
+            # Absolute path to project
+            project_path = os.path.realpath(os.path.dirname(
+                calling_module.__file__))
+            searchpath = os.path.join(project_path, searchpath)
+
+        if env_kwargs is None:
+            env_kwargs = {}
+        env_kwargs['loader'] = FileSystemLoader(searchpath=searchpath,
+                                                encoding=encoding,
+                                                followlinks=followlinks)
+        env_kwargs.setdefault('extensions', extensions or [])
+        environment = Environment(**env_kwargs)
+        if filters:
+            environment.filters.update(filters)
+
+        if env_globals:
+            environment.globals.update(env_globals)
+
+        logger = logging.getLogger(__name__)
+        logger.setLevel(logging.INFO)
+        logger.addHandler(logging.StreamHandler())
+        return cls(environment,
+                   searchpath=searchpath,
+                   outpath=outpath,
+                   encoding=encoding,
+                   logger=logger,
+                   rules=rules,
+                   contexts=contexts,
+                   staticpaths=staticpaths,
+                   mergecontexts=mergecontexts,
+                   )
+
     @property
     def template_names(self):
         return self._env.list_templates(filter_func=self.is_template)
@@ -317,7 +430,8 @@ class Site(object):
             Reloader(self).watch()
 
     def __repr__(self):
-        return "Site('%s', '%s')" % (self.searchpath, self.outpath)
+        return "%s('%s', '%s')" % (type(self).__name__,
+                                   self.searchpath, self.outpath)
 
 
 class Renderer(Site):
@@ -341,106 +455,21 @@ def make_site(searchpath="templates",
               env_globals=None,
               env_kwargs=None,
               mergecontexts=False):
-    """Create a :class:`Site <Site>` object.
-
-    :param searchpath:
-        A string representing the absolute path to the directory that the Site
-        should search to discover templates. Defaults to ``'templates'``.
-
-        If a relative path is provided, it will be coerced to an absolute path
-        by prepending the directory name of the calling module. For example, if
-        you invoke staticjinja using ``python build.py`` in directory ``/foo``,
-        then *searchpath* will be ``/foo/templates``.
-
-    :param outpath:
-        A string representing the name of the directory that the Site
-        should store rendered files in. Defaults to ``'.'``.
-
-    :param contexts:
-        A list of *(regex, context)* pairs. The Site will render templates
-        whose name match *regex* using *context*. *context* must be either a
-        dictionary-like object or a function that takes either no arguments or
-        a single :class:`jinja2.Template` as an argument and returns a
-        dictionary representing the context. Defaults to ``[]``.
-
-    :param rules:
-        A list of *(regex, function)* pairs. The Site will delegate
-        rendering to *function* if *regex* matches the name of a template
-        during rendering. *function* must take a :class:`jinja2.Environment`
-        object, a filename, and a context as parameters and render the
-        template. Defaults to ``[]``.
-
-    :param encoding:
-        A string representing the encoding that the Site should use when
-        rendering templates. Defaults to ``'utf8'``.
-
-    :param followlinks:
-        A boolean describing whether symlinks in searchpath should be followed
-        or not. Defaults to ``True``.
-
-    :param extensions:
-        A list of :ref:`Jinja extensions <jinja-extensions>` that the
-        :class:`jinja2.Environment` should use. Defaults to ``[]``.
-
-    :param staticpaths:
-        List of directories to get static files from (relative to searchpath).
-        Defaults to ``None``.
-
-    :param filters:
-        A dictionary of Jinja2 filters to add to the Environment.
-        Defaults to ``{}``.
-
-    :param env_globals:
-        A mapping from variable names that should be available all the time to
-        their values. Defaults to ``{}``.
-
-    :param env_kwargs:
-        A dictionary that will be passed as keyword arguments to the
-        jinja2 Environment. Defaults to ``{}``.
-
-    :param mergecontexts:
-        A boolean value. If set to ``True``, then all matching regex from the
-        contexts list will be merged (in order) to get the final context.
-        Otherwise, only the first matching regex is used. Defaults to
-        ``False``.
-    """
-    # Coerce search to an absolute path if it is not already
-    if not os.path.isabs(searchpath):
-        # TODO: Determine if there is a better way to write do this
-        calling_module = inspect.getmodule(inspect.stack()[-1][0])
-        # Absolute path to project
-        project_path = os.path.realpath(os.path.dirname(
-            calling_module.__file__))
-        searchpath = os.path.join(project_path, searchpath)
-
-    if env_kwargs is None:
-        env_kwargs = {}
-    env_kwargs['loader'] = FileSystemLoader(searchpath=searchpath,
-                                            encoding=encoding,
-                                            followlinks=followlinks)
-    env_kwargs.setdefault('extensions', extensions or [])
-    environment = Environment(**env_kwargs)
-    if filters:
-        environment.filters.update(filters)
-
-    if env_globals:
-        environment.globals.update(env_globals)
-
-    logger = logging.getLogger(__name__)
-    logger.setLevel(logging.INFO)
-    logger.addHandler(logging.StreamHandler())
-    return Site(environment,
-                searchpath=searchpath,
-                outpath=outpath,
-                encoding=encoding,
-                logger=logger,
-                rules=rules,
-                contexts=contexts,
-                staticpaths=staticpaths,
-                mergecontexts=mergecontexts,
-                )
+    warnings.warn("make_site was renamed to Site.make_site.")
+    return Site.make_site(searchpath=searchpath,
+                          outpath=outpath,
+                          contexts=contexts,
+                          rules=rules,
+                          encoding=encoding,
+                          followlinks=followlinks,
+                          extensions=extensions,
+                          staticpaths=staticpaths,
+                          filters=filters,
+                          env_globals=env_globals,
+                          env_kwargs=env_kwargs,
+                          mergecontexts=mergecontexts)
 
 
 def make_renderer(*args, **kwargs):
-    warnings.warn("make_renderer was renamed to make_site.")
+    warnings.warn("make_renderer was renamed to Site.make_site.")
     return make_site(*args, **kwargs)

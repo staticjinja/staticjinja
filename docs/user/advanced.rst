@@ -34,16 +34,16 @@ A minimal build script looks something like this:
 
 .. code-block:: python
 
-    from staticjinja import make_site
+    from staticjinja import Site
 
 
     if __name__ == "__main__":
-        site = make_site()
+        site = Site.make_site()
         # enable automatic reloading
         site.render(use_reloader=True)
 
 To change behavior, pass the appropriate keyword arguments to
-``make_site``.
+``Site.make_site``.
 
 * To change which directory to search for templates, set
   ``searchpath="searchpath_name"`` (default is ``./templates``).
@@ -78,14 +78,14 @@ Loading data
 Some applications render templates based on data sources (e.g. CSVs or
 JSON files).
 
-The simplest way to supply data to templates is to pass ``make_site()`` a
+The simplest way to supply data to templates is to pass ``Site.make_site()`` a
 mapping from variable names to their values (a "context") as the ``env_globals``
 keyword argument.
 
 .. code-block:: python
 
     if __name__ == "__main__":
-        site = staticjinja.make_site(env_globals={
+        site = Site.make_site(env_globals={
             'greeting':'Hello world!',
         })
         site.render()
@@ -98,7 +98,7 @@ Anything added to this dictionary will be available in all templates:
     <h1>{{greeting}}</h1>
 
 If the context needs to be different for each template, you can restrict
-contexts to certain templates by supplying ``make_site()`` a sequence of
+contexts to certain templates by supplying ``Site.make_site()`` a sequence of
 regex-context pairs as the ``contexts`` keyword argument. When rendering a
 template, staticjinja will search this sequence for the first regex that matches
 the template's name, and use that context to interpolate variables. For example,
@@ -106,11 +106,11 @@ the following code block supplies a context to the template named "index.html":
 
 .. code-block:: python
 
-    from staticjinja import make_site
+    from staticjinja import Site
 
     if __name__ == "__main__":
         context = {'knights': ['sir arthur', 'sir lancelot', 'sir galahad']}
-        site = make_site(contexts=[('index.html', context)])
+        site = Site.make_site(contexts=[('index.html', context)])
         site.render()
 
 .. code-block:: html
@@ -134,7 +134,7 @@ the template file for any templates with an HTML extension:
     import datetime
     import os
 
-    from staticjinja import make_site
+    from staticjinja import Site
 
 
     def date(template):
@@ -143,7 +143,7 @@ the template file for any templates with an HTML extension:
         return {'template_date': date.strftime('%d %B %Y')}
 
     if __name__ == "__main__":
-        site = make_site(
+        site = Site.make_site(
             contexts=[('.*.html', date)],
         )
         site.render()
@@ -151,10 +151,10 @@ the template file for any templates with an HTML extension:
 By default, staticjinja uses the context of the first matching regex if multiple
 regexes match the name of a template. You can change this so that staticjinja
 combines the contexts by passing ``mergecontexts=True`` as an argument to
-``make_site()``. Note the order is still important if several matching regex
-define the same key, in which case the last regex wins. For example, given a
-build script that looks like the following code block, the context of the
-``index.html`` template will be ``{'title': 'MySite - Index', 'date': '05
+``Site.make_site()``. Note the order is still important if several matching
+regex define the same key, in which case the last regex wins. For example,
+given a build script that looks like the following code block, the context of
+the ``index.html`` template will be ``{'title': 'MySite - Index', 'date': '05
 January 2016'}``.
 
 .. code-block:: python
@@ -162,7 +162,7 @@ January 2016'}``.
     import datetime
     import os
 
-    from staticjinja import make_site
+    from staticjinja import Site
 
 
     def base(template):
@@ -178,7 +178,7 @@ January 2016'}``.
         return {'title': 'MySite - Index'}
 
     if __name__ == "__main__":
-        site = make_site(
+        site = Site.make_site(
             contexts=[('.*.html', base), ('index.html', index)],
             mergecontexts=True,
         )
@@ -189,7 +189,7 @@ Filters
 
 Filters modify variables. staticjinja uses Jinja2 to process templates, so all
 the `standard Jinja2 filters`_ are supported. To add your own filters, simply
-pass ``filters`` as an argument to ``make_site()``.
+pass ``filters`` as an argument to ``Site.make_site()``.
 
 .. code-block:: python
 
@@ -199,7 +199,7 @@ pass ``filters`` as an argument to ``make_site()``.
     }
 
     if __name__ == "__main__":
-        site = staticjinja.make_site(filters=filters)
+        site = Site.make_site(filters=filters)
         site.render()
 
 Then you can use them in your templates as you would expect:
@@ -228,7 +228,7 @@ you want to handle, and a compilation function (a "rule").
 
     import os
 
-    from staticjinja import make_site
+    from staticjinja import Site
 
     # Custom MarkdownExtension
     from extensions import MarkdownExtension
@@ -255,7 +255,7 @@ you want to handle, and a compilation function (a "rule").
 
 
     if __name__ == "__main__":
-        site = make_site(extensions=[
+        site = Site.make_site(extensions=[
             MarkdownExtension,
         ], contexts=[
             ('.*.md', get_post_contents),
