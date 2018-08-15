@@ -6,6 +6,21 @@ Advanced Usage
 
 This document covers some of staticjinja's more advanced features.
 
+.. _partials-and-ignored-files:
+
+Partials and ignored files
+--------------------------
+
+A **partial file** is a file whose name begins with a ``_``. Partial files are
+intended to be included in other files and are not rendered. If a partial file
+changes, it will trigger a rebuild if you are running ``staticjinja watch``.
+
+An **ignored file** is a file whose name begins with a ``.``. Ignored files are
+neither rendered nor used in rendering templates.
+
+If you want to configure what is considered a partial or ignored file, subclass
+``Site`` and override ``is_partial`` or ``is_ignored``.
+
 .. _custom-build-scripts:
 
 Using Custom Build Scripts
