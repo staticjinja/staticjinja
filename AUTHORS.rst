@@ -21,3 +21,4 @@ Patches and Suggestions
 - Anuraag Agrawal (anuraaga)
 - saschalalala
 - Tim Best (timbest)
+- Dimitris Zervas (dzervas)

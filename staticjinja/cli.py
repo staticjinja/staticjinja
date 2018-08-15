@@ -4,8 +4,10 @@
 """staticjinja
 
 Usage:
-  staticjinja build [--srcpath=<srcpath> --outpath=<outpath> --static=<a,b,c>]
-  staticjinja watch [--srcpath=<srcpath> --outpath=<outpath> --static=<a,b,c>]
+  staticjinja build [--srcpath=<srcpath> --outpath=<outpath> --static=<a,b,c> \
+--globals=<globals.yml>]
+  staticjinja watch [--srcpath=<srcpath> --outpath=<outpath> --static=<a,b,c> \
+--globals=<globals.yml>]
   staticjinja (-h | --help)
   staticjinja --version
 
@@ -19,6 +21,7 @@ from docopt import docopt
 import os
 import staticjinja
 import sys
+import yaml
 
 
 def render(args):
@@ -33,6 +36,7 @@ def render(args):
                 '--outpath': None,
                 '--srcpath': None,
                 '--static': None,
+                '--globals': None,
                 '--version': False,
                 'build': True,
                 'watch': False
@@ -70,10 +74,26 @@ def render(args):
                 print("The static files directory '%s' is invalid." % path)
                 sys.exit(1)
 
+    envglobalspath = (
+        os.path.join(srcpath, 'globals.yaml') if args['--globals'] is None
+        else args['--globals'] if os.path.isabs(args['--globals'])
+        else os.path.join(srcpath, args['--globals'])
+    )
+
+    try:
+        with open(envglobalspath, "r") as stream:
+            try:
+                envglobals = yaml.load(stream)
+            except yaml.YAMLError as err:
+                print("Failed to parse %s: %s" % (envglobalspath, err))
+    except IOError as err:
+        envglobals = None
+
     site = staticjinja.make_site(
         searchpath=srcpath,
         outpath=outpath,
-        staticpaths=staticpaths
+        staticpaths=staticpaths,
+        env_globals=envglobals
     )
 
     use_reloader = args['watch']
@@ -82,7 +102,7 @@ def render(args):
 
 
 def main():
-    render(docopt(__doc__, version='staticjinja 0.3.0'))
+    render(docopt(__doc__, version='staticjinja 0.3.3'))
 
 
 if __name__ == '__main__':
