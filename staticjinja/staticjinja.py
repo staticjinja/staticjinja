@@ -114,13 +114,14 @@ class Site(object):
         """Create a :class:`Site <Site>` object.
 
         :param searchpath:
-            A string representing the absolute path to the directory that the Site
-            should search to discover templates. Defaults to ``'templates'``.
+            A string representing the absolute path to the directory that the
+            Site should search to discover templates. Defaults to
+            ``'templates'``.
 
-            If a relative path is provided, it will be coerced to an absolute path
-            by prepending the directory name of the calling module. For example, if
-            you invoke staticjinja using ``python build.py`` in directory ``/foo``,
-            then *searchpath* will be ``/foo/templates``.
+            If a relative path is provided, it will be coerced to an absolute
+            path by prepending the directory name of the calling module. For
+            example, if you invoke staticjinja using ``python build.py`` in
+            directory ``/foo``, then *searchpath* will be ``/foo/templates``.
 
         :param outpath:
             A string representing the name of the directory that the Site
@@ -128,51 +129,51 @@ class Site(object):
 
         :param contexts:
             A list of *(regex, context)* pairs. The Site will render templates
-            whose name match *regex* using *context*. *context* must be either a
-            dictionary-like object or a function that takes either no arguments or
-            a single :class:`jinja2.Template` as an argument and returns a
-            dictionary representing the context. Defaults to ``[]``.
+            whose name match *regex* using *context*. *context* must be either
+            a dictionary-like object or a function that takes either no
+            arguments or a single :class:`jinja2.Template` as an argument and
+            returns a dictionary representing the context. Defaults to ``[]``.
 
         :param rules:
             A list of *(regex, function)* pairs. The Site will delegate
             rendering to *function* if *regex* matches the name of a template
-            during rendering. *function* must take a :class:`jinja2.Environment`
-            object, a filename, and a context as parameters and render the
-            template. Defaults to ``[]``.
+            during rendering. *function* must take a
+            :class:`jinja2.Environment` object, a filename, and a context as
+            parameters and render the template. Defaults to ``[]``.
 
         :param encoding:
             A string representing the encoding that the Site should use when
             rendering templates. Defaults to ``'utf8'``.
 
         :param followlinks:
-            A boolean describing whether symlinks in searchpath should be followed
-            or not. Defaults to ``True``.
+            A boolean describing whether symlinks in searchpath should be
+            followed or not. Defaults to ``True``.
 
         :param extensions:
             A list of :ref:`Jinja extensions <jinja-extensions>` that the
             :class:`jinja2.Environment` should use. Defaults to ``[]``.
 
         :param staticpaths:
-            List of directories to get static files from (relative to searchpath).
-            Defaults to ``None``.
+            List of directories to get static files from (relative to
+            searchpath).  Defaults to ``None``.
 
         :param filters:
-            A dictionary of Jinja2 filters to add to the Environment.
-            Defaults to ``{}``.
+            A dictionary of Jinja2 filters to add to the Environment.  Defaults
+            to ``{}``.
 
         :param env_globals:
-            A mapping from variable names that should be available all the time to
-            their values. Defaults to ``{}``.
+            A mapping from variable names that should be available all the time
+            to their values. Defaults to ``{}``.
 
         :param env_kwargs:
             A dictionary that will be passed as keyword arguments to the
             jinja2 Environment. Defaults to ``{}``.
 
         :param mergecontexts:
-            A boolean value. If set to ``True``, then all matching regex from the
-            contexts list will be merged (in order) to get the final context.
-            Otherwise, only the first matching regex is used. Defaults to
-            ``False``.
+            A boolean value. If set to ``True``, then all matching regex from
+            the contexts list will be merged (in order) to get the final
+            context.  Otherwise, only the first matching regex is used.
+            Defaults to ``False``.
         """
         # Coerce search to an absolute path if it is not already
         if not os.path.isabs(searchpath):
