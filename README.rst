@@ -7,17 +7,15 @@ staticjinja
 .. image:: https://travis-ci.org/Ceasar/staticjinja.svg
     :target: https://travis-ci.org/Ceasar/staticjinja
 
-staticjinja is a library for easily deploying static sites using the
-Jinja2_ template engine.
+**staticjinja** is a library that makes it easy to build static sites using
+Jinja2_.
 
-Most static site generators are cumbersome to use. Nevertheless, when
-deploying a static website that could benefit from factored out data
-or modular html pages (especially convenient when prototyping), a
-templating engine can be invaluable. Jinja2 is an extremely powerful
-tool in this regard.
+Many static site generators are complex, with long manuals and unnecessary
+features. But using template engines to build static websites is really useful.
 
-staticjinja is designed to be lightweight, easy-to-use, and highly
-extensible, enabling you to focus on simply making your site.
+staticjinja is designed to be lightweight (under 500 lines of source code),
+and to be easy to use, learn, and extend, enabling you to focus on making your
+site.
 
 .. code-block:: bash
 
