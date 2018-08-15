@@ -367,6 +367,8 @@ class Site(object):
         if context is None:
             context = self.get_context(template)
 
+        if not os.path.exists(self.outpath):
+            os.makedirs(self.outpath)
         self._ensure_dir(template.name)
 
         try:
