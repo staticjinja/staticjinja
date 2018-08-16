@@ -93,7 +93,8 @@ class Site(object):
         self.logger = logger
         self.contexts = contexts or []
         self.rules = rules or []
-        warnings.warn("staticpaths are deprecated. Use Make instead.")
+        if staticpaths:
+            warnings.warn("staticpaths are deprecated. Use Make instead.")
         self.staticpaths = staticpaths
         self.mergecontexts = mergecontexts
 
