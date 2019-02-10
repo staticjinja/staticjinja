@@ -1,12 +1,6 @@
 staticjinja
 ===========
 
-.. image:: https://badge.fury.io/py/staticjinja.png
-    :target: http://badge.fury.io/py/staticjinja
-
-.. image:: https://travis-ci.org/Ceasar/staticjinja.svg
-    :target: https://travis-ci.org/Ceasar/staticjinja
-
 **staticjinja** is a library that makes it easy to build static sites using
 Jinja2_.
 
