@@ -4,8 +4,10 @@
 """staticjinja
 
 Usage:
-  staticjinja build [--srcpath=<srcpath> --outpath=<outpath> --static=<a,b,c> --srcmask='*.html']
-  staticjinja watch [--srcpath=<srcpath> --outpath=<outpath> --static=<a,b,c> --srcmask='*.html']
+  staticjinja build [--srcpath=<srcpath> --outpath=<outpath> --static=<a,b,c> \
+      --srcmask='*.html']
+  staticjinja watch [--srcpath=<srcpath> --outpath=<outpath> --static=<a,b,c> \
+      --srcmask='*.html']
   staticjinja (-h | --help)
   staticjinja --version
 
