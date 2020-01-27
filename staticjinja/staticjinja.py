@@ -14,7 +14,7 @@ import os
 import re
 import shutil
 import warnings
-
+from fnmatch import fnmatch
 from jinja2 import Environment, FileSystemLoader
 
 from .reloader import Reloader
@@ -85,6 +85,7 @@ class Site(object):
                  rules=None,
                  staticpaths=None,
                  mergecontexts=False,
+                 searchmask=None,
                  ):
         self._env = environment
         self.searchpath = searchpath
@@ -97,6 +98,7 @@ class Site(object):
             warnings.warn("staticpaths are deprecated. Use Make instead.")
         self.staticpaths = staticpaths
         self.mergecontexts = mergecontexts
+        self.searchmask = searchmask
 
     @classmethod
     def make_site(cls,
@@ -111,7 +113,9 @@ class Site(object):
                   filters=None,
                   env_globals=None,
                   env_kwargs=None,
-                  mergecontexts=False):
+                  mergecontexts=False,
+                  searchmask=None,
+                  ):
         """Create a :class:`Site <Site>` object.
 
         :param searchpath:
@@ -210,6 +214,7 @@ class Site(object):
                    contexts=contexts,
                    staticpaths=staticpaths,
                    mergecontexts=mergecontexts,
+                   searchmask=searchmask,
                    )
 
     @property
@@ -284,13 +289,16 @@ class Site(object):
         :param filename: the name of the file to check
 
         """
-        if self.staticpaths is None:
-            # We're not using static file support
-            return False
 
-        for path in self.staticpaths:
-            if filename.startswith(path):
+        if self.staticpaths:
+            for path in self.staticpaths:
+                if filename.startswith(path):
+                    return True
+
+        if self.searchmask:
+            if not fnmatch(filename, self.searchmask):
                 return True
+
         return False
 
     def is_partial(self, filename):
@@ -459,7 +467,9 @@ def make_site(searchpath="templates",
               filters=None,
               env_globals=None,
               env_kwargs=None,
-              mergecontexts=False):
+              mergecontexts=False,
+              searchmask=None,
+              ):
     warnings.warn("make_site was renamed to Site.make_site.")
     return Site.make_site(searchpath=searchpath,
                           outpath=outpath,
@@ -472,7 +482,9 @@ def make_site(searchpath="templates",
                           filters=filters,
                           env_globals=env_globals,
                           env_kwargs=env_kwargs,
-                          mergecontexts=mergecontexts)
+                          mergecontexts=mergecontexts,
+                          searchmask=searchmask,
+                          )
 
 
 def make_renderer(*args, **kwargs):

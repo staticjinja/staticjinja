@@ -4,8 +4,8 @@
 """staticjinja
 
 Usage:
-  staticjinja build [--srcpath=<srcpath> --outpath=<outpath> --static=<a,b,c>]
-  staticjinja watch [--srcpath=<srcpath> --outpath=<outpath> --static=<a,b,c>]
+  staticjinja build [--srcpath=<srcpath> --outpath=<outpath> --static=<a,b,c> --srcmask='*.html']
+  staticjinja watch [--srcpath=<srcpath> --outpath=<outpath> --static=<a,b,c> --srcmask='*.html']
   staticjinja (-h | --help)
   staticjinja --version
 
@@ -70,10 +70,13 @@ def render(args):
                 print("The static files directory '%s' is invalid." % path)
                 sys.exit(1)
 
+    srcmask = args.get('--srcmask', None)
+
     site = staticjinja.make_site(
         searchpath=srcpath,
         outpath=outpath,
-        staticpaths=staticpaths
+        staticpaths=staticpaths,
+        searchmask=srcmask
     )
 
     use_reloader = args['watch']
