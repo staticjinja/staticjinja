@@ -33,6 +33,7 @@ def render(args):
                 '--outpath': None,
                 '--srcpath': None,
                 '--static': None,
+                '--srcmask': None,
                 '--version': False,
                 'build': True,
                 'watch': False

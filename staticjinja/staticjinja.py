@@ -73,6 +73,13 @@ class Site(object):
         contexts list will be merged (in order) to get the final context.
         Otherwise, only the first matching regex is used. Defaults to
         ``False``.
+
+    :param searchmask:
+        Unix wildcard such as ``*.html`` that specifies the filemask for
+        templates. If present, only files in searchpath that match this
+        filemask will be loaded as templates, other files will be
+        considered statics.
+
     """
 
     def __init__(self,
