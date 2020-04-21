@@ -95,7 +95,7 @@ class Site(object):
         self.rules = rules or []
         if staticpaths:
             warnings.warn("staticpaths are deprecated. Use Make instead.")
-        self.staticpaths = staticpaths
+        self.staticpaths = staticpaths or []
         self.mergecontexts = mergecontexts
 
     @classmethod
@@ -287,14 +287,7 @@ class Site(object):
         :param filename: the name of the file to check
 
         """
-        if self.staticpaths is None:
-            # We're not using static file support
-            return False
-
-        for path in self.staticpaths:
-            if filename.startswith(path):
-                return True
-        return False
+        return any(filename.startswith(path) for path in self.staticpaths)
 
     def is_partial(self, filename):
         """Check if a file is a partial.
