@@ -6,7 +6,7 @@ Simple static page generator.
 Uses Jinja2 to compile templates.
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 import inspect
 import logging
@@ -402,7 +402,7 @@ class Site(object):
         for f in files:
             input_location = os.path.join(self.searchpath, f)
             output_location = os.path.join(self.outpath, f)
-            print("Copying %s to %s." % (f, output_location))
+            self.logger.info("Copying %s to %s." % (f, output_location))
             self._ensure_dir(f)
             shutil.copy2(input_location, output_location)
 
