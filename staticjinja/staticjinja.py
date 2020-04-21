@@ -176,11 +176,15 @@ class Site(object):
         """
         # Coerce search to an absolute path if it is not already
         if not os.path.isabs(searchpath):
-            # TODO: Determine if there is a better way to write do this
+            # TODO: Determine if there is a better way to do this
             calling_module = inspect.getmodule(inspect.stack()[-1][0])
-            # Absolute path to project
-            project_path = os.path.realpath(os.path.dirname(
-                calling_module.__file__))
+            if calling_module is None:
+                # Called from the interpreter or similar
+                project_path = os.getcwd()
+            else:
+                # Called from a .py file
+                project_path = os.path.realpath(os.path.dirname(
+                    calling_module.__file__))
             searchpath = os.path.join(project_path, searchpath)
 
         if env_kwargs is None:
