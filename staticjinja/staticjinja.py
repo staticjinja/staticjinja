@@ -321,8 +321,8 @@ class Site(object):
     def is_template(self, filename):
         """Check if a file is a template.
 
-        A file is a considered a template if it is neither a partial nor
-        ignored.
+        A file is a considered a template if it is not partial, ignored, or
+        static.
 
         :param filename: the name of the file to check
         """
