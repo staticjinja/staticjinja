@@ -56,7 +56,8 @@ class Site(object):
         The encoding of templates to use.
 
     :param logger:
-        A logging.Logger object used to log events.
+        A logging.Logger object used to log events. Defaults to
+        ``logging.getLogger(__name__)``
 
     :param staticpaths:
         .. deprecated:: 0.3.4
@@ -76,7 +77,7 @@ class Site(object):
                  searchpath,
                  outpath,
                  encoding,
-                 logger,
+                 logger=None,
                  contexts=None,
                  rules=None,
                  staticpaths=None,
@@ -86,6 +87,10 @@ class Site(object):
         self.searchpath = searchpath
         self.outpath = outpath
         self.encoding = encoding
+        if logger is None:
+            logger = logging.getLogger(__name__)
+            logger.setLevel(logging.INFO)
+            logger.addHandler(logging.StreamHandler())
         self.logger = logger
         self.contexts = contexts or []
         self.rules = rules or []
@@ -197,14 +202,10 @@ class Site(object):
         environment.filters.update(filters)
         environment.globals.update(env_globals)
 
-        logger = logging.getLogger(__name__)
-        logger.setLevel(logging.INFO)
-        logger.addHandler(logging.StreamHandler())
         return cls(environment,
                    searchpath=searchpath,
                    outpath=outpath,
                    encoding=encoding,
-                   logger=logger,
                    rules=rules,
                    contexts=contexts,
                    staticpaths=staticpaths,
