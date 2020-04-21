@@ -275,8 +275,8 @@ class Site(object):
         raise ValueError("no matching rule")
 
     def is_static(self, filename):
-        """Check if a file is a static file (which should be copied, rather
-        than compiled using Jinja2).
+        """Check if a file is a static file. Static files are copied, rather
+        than compiled using Jinja2.
 
         A file is considered static if it lives in any of the directories
         specified in ``staticpaths``.
@@ -287,10 +287,8 @@ class Site(object):
         return any(filename.startswith(path) for path in self.staticpaths)
 
     def is_partial(self, filename):
-        """Check if a file is a partial.
-
-        Partial files are not rendered, but they are used in rendering
-        templates.
+        """Check if a file is a partial. Partial files are not rendered,
+        but they are used in rendering templates.
 
         A file is considered a partial if it or any of its parent directories
         are prefixed with an ``'_'``.
@@ -300,9 +298,8 @@ class Site(object):
         return any((x.startswith("_") for x in filename.split(os.path.sep)))
 
     def is_ignored(self, filename):
-        """Check if a file is an ignored file.
-
-        Ignored files are neither rendered nor used in rendering templates.
+        """Check if a file is an ignored file. Ignored files are neither
+        rendered nor used in rendering templates.
 
         A file is considered ignored if it or any of its parent directories
         are prefixed with an ``'.'``.
@@ -321,13 +318,10 @@ class Site(object):
         """
         if self.is_partial(filename):
             return False
-
         if self.is_ignored(filename):
             return False
-
         if self.is_static(filename):
             return False
-
         return True
 
     def _ensure_dir(self, template_name):
