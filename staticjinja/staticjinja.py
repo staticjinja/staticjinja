@@ -231,7 +231,10 @@ class Site(object):
 
         :param template_name: A string representing the name of the template.
         """
-        return self._env.get_template(template_name)
+        try:
+            return self._env.get_template(template_name)
+        except UnicodeDecodeError as e:
+            raise UnicodeError('Unable to decode %s: %s' % (template_name, e))
 
     def get_context(self, template):
         """Get the context for a template.
