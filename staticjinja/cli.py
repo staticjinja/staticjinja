@@ -17,7 +17,7 @@ Options:
 from __future__ import print_function
 from docopt import docopt
 import os
-import staticjinja
+from staticjinja import Site
 import sys
 
 
@@ -70,7 +70,7 @@ def render(args):
                 print("The static files directory '%s' is invalid." % path)
                 sys.exit(1)
 
-    site = staticjinja.make_site(
+    site = Site.make_site(
         searchpath=srcpath,
         outpath=outpath,
         staticpaths=staticpaths

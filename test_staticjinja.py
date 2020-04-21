@@ -227,7 +227,7 @@ def test_partial_file_in_nested_directory_is_partial(site):
 
 @mock.patch('os.path.isdir')
 @mock.patch('os.getcwd')
-@mock.patch('staticjinja.cli.staticjinja.make_site')
+@mock.patch('staticjinja.cli.Site.make_site')
 def test_cli_srcpath(mock_make_site, mock_getcwd, mock_isdir):
     mock_isdir.return_value = True
     mock_getcwd.return_value = '/'
@@ -248,7 +248,7 @@ def test_cli_srcpath(mock_make_site, mock_getcwd, mock_isdir):
 
 @mock.patch('os.path.isdir')
 @mock.patch('os.getcwd')
-@mock.patch('staticjinja.cli.staticjinja.make_site')
+@mock.patch('staticjinja.cli.Site.make_site')
 def test_cli_srcpath_default(mock_make_site, mock_getcwd, mock_isdir):
     mock_isdir.return_value = True
     mock_getcwd.return_value = '/'
@@ -269,7 +269,7 @@ def test_cli_srcpath_default(mock_make_site, mock_getcwd, mock_isdir):
 
 @mock.patch('os.path.isdir')
 @mock.patch('os.getcwd')
-@mock.patch('staticjinja.cli.staticjinja.make_site')
+@mock.patch('staticjinja.cli.Site.make_site')
 def test_cli_srcpath_absolute(mock_make_site, mock_getcwd, mock_isdir):
     mock_isdir.return_value = True
     mock_getcwd.return_value = '/'
