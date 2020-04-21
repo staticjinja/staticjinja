@@ -108,8 +108,8 @@ class Site(object):
                   followlinks=True,
                   extensions=None,
                   staticpaths=None,
-                  filters=None,
-                  env_globals=None,
+                  filters={},
+                  env_globals={},
                   env_kwargs=None,
                   mergecontexts=False):
         """Create a :class:`Site <Site>` object.
@@ -192,11 +192,8 @@ class Site(object):
                                                 followlinks=followlinks)
         env_kwargs.setdefault('extensions', extensions or [])
         environment = Environment(**env_kwargs)
-        if filters:
-            environment.filters.update(filters)
-
-        if env_globals:
-            environment.globals.update(env_globals)
+        environment.filters.update(filters)
+        environment.globals.update(env_globals)
 
         logger = logging.getLogger(__name__)
         logger.setLevel(logging.INFO)
