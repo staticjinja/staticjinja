@@ -444,31 +444,9 @@ class Renderer(Site):
         return self.render(use_reloader)
 
 
-def make_site(searchpath="templates",
-              outpath=".",
-              contexts=None,
-              rules=None,
-              encoding="utf8",
-              followlinks=True,
-              extensions=None,
-              staticpaths=None,
-              filters=None,
-              env_globals=None,
-              env_kwargs=None,
-              mergecontexts=False):
+def make_site(*args, **kwargs):
     warnings.warn("make_site was renamed to Site.make_site.")
-    return Site.make_site(searchpath=searchpath,
-                          outpath=outpath,
-                          contexts=contexts,
-                          rules=rules,
-                          encoding=encoding,
-                          followlinks=followlinks,
-                          extensions=extensions,
-                          staticpaths=staticpaths,
-                          filters=filters,
-                          env_globals=env_globals,
-                          env_kwargs=env_kwargs,
-                          mergecontexts=mergecontexts)
+    return Site.make_site(*args, **kwargs)
 
 
 def make_renderer(*args, **kwargs):
