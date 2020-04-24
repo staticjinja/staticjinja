@@ -67,4 +67,4 @@ matrix:
 install:
   - pip3 install tox
 script:
-  - tox
+  - tox --skip-missing-interpreters=false
