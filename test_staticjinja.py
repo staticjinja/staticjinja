@@ -1,3 +1,5 @@
+import os
+
 try:
     import unittest.mock as mock
 except ImportError:
@@ -182,7 +184,7 @@ def test_event_handler_static(reloader, template_path):
     found_files = []
 
     def fake_copy_static(files):
-        found_files.extend(files)
+        found_files.extend(f.replace(os.sep, '/') for f in files)
 
     reloader.site.staticpaths = ["static_css"]
     reloader.site.copy_static = fake_copy_static
@@ -200,11 +202,11 @@ def test_regular_file_is_not_ignored(site):
 
 
 def test_ignored_file_in_directory_is_ignored(site):
-    assert site.is_ignored('.bar/index.html')
+    assert site.is_ignored(os.sep.join(['.bar', 'index.html']))
 
 
 def test_ignored_file_in_nested_directory_is_ignored(site):
-    assert site.is_ignored('foo/.bar/index.html')
+    assert site.is_ignored(os.sep.join(['foo', '.bar', 'index.html']))
 
 
 def test_partial_file_is_partial(site):
@@ -216,16 +218,16 @@ def test_regular_file_is_not_partial(site):
 
 
 def test_partial_file_in_directory_is_partial(site):
-    assert site.is_partial('_bar/index.html')
+    assert site.is_partial(os.sep.join(['_bar', 'index.html']))
 
 
 def test_partial_file_in_nested_directory_is_partial(site):
-    assert site.is_partial('foo/_bar/index.html')
+    assert site.is_partial(os.sep.join(['foo', '_bar', 'index.html']))
 
 
 @mock.patch('os.path.isdir')
 @mock.patch('os.getcwd')
-@mock.patch('staticjinja.cli.staticjinja.make_site')
+@mock.patch('staticjinja.cli.Site.make_site')
 def test_cli_srcpath(mock_make_site, mock_getcwd, mock_isdir):
     mock_isdir.return_value = True
     mock_getcwd.return_value = '/'
@@ -246,7 +248,7 @@ def test_cli_srcpath(mock_make_site, mock_getcwd, mock_isdir):
 
 @mock.patch('os.path.isdir')
 @mock.patch('os.getcwd')
-@mock.patch('staticjinja.cli.staticjinja.make_site')
+@mock.patch('staticjinja.cli.Site.make_site')
 def test_cli_srcpath_default(mock_make_site, mock_getcwd, mock_isdir):
     mock_isdir.return_value = True
     mock_getcwd.return_value = '/'
@@ -267,7 +269,7 @@ def test_cli_srcpath_default(mock_make_site, mock_getcwd, mock_isdir):
 
 @mock.patch('os.path.isdir')
 @mock.patch('os.getcwd')
-@mock.patch('staticjinja.cli.staticjinja.make_site')
+@mock.patch('staticjinja.cli.Site.make_site')
 def test_cli_srcpath_absolute(mock_make_site, mock_getcwd, mock_isdir):
     mock_isdir.return_value = True
     mock_getcwd.return_value = '/'

@@ -242,15 +242,16 @@ you want to handle, and a compilation function (a "rule").
     # compilation rule
     def render_post(env, template, **kwargs):
         """Render a template as a post."""
+        directory, fname = os.path.split(template.name)
+        post_title, _ = fname.split(".")
+        post_fname = "%s.html" % post_title
+
+        out_dir = os.path.join(env.outpath, directory)
+        if not os.path.exists(out_dir):
+            os.makedirs(out_dir)
+        out = os.path.join(out_dir, post_fname)
+
         post_template = env.get_template("_post.html")
-        head, tail = os.path.split(post_template.name)
-        post_title, _ = tail.split('.')
-        if head:
-            out = "%s/%s.html" % (head, post_title)
-            if not os.path.exists(head):
-                os.makedirs(head)
-        else:
-            out = "%s.html" % (post_title, )
         post_template.stream(**kwargs).dump(out)
 
 

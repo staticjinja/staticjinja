@@ -6,7 +6,7 @@ Simple static page generator.
 Uses Jinja2 to compile templates.
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 import inspect
 import logging
@@ -95,7 +95,7 @@ class Site(object):
         self.rules = rules or []
         if staticpaths:
             warnings.warn("staticpaths are deprecated. Use Make instead.")
-        self.staticpaths = staticpaths
+        self.staticpaths = staticpaths or []
         self.mergecontexts = mergecontexts
 
     @classmethod
@@ -108,8 +108,8 @@ class Site(object):
                   followlinks=True,
                   extensions=None,
                   staticpaths=None,
-                  filters=None,
-                  env_globals=None,
+                  filters={},
+                  env_globals={},
                   env_kwargs=None,
                   mergecontexts=False):
         """Create a :class:`Site <Site>` object.
@@ -192,11 +192,8 @@ class Site(object):
                                                 followlinks=followlinks)
         env_kwargs.setdefault('extensions', extensions or [])
         environment = Environment(**env_kwargs)
-        if filters:
-            environment.filters.update(filters)
-
-        if env_globals:
-            environment.globals.update(env_globals)
+        environment.filters.update(filters)
+        environment.globals.update(env_globals)
 
         logger = logging.getLogger(__name__)
         logger.setLevel(logging.INFO)
@@ -231,7 +228,10 @@ class Site(object):
 
         :param template_name: A string representing the name of the template.
         """
-        return self._env.get_template(template_name)
+        try:
+            return self._env.get_template(template_name)
+        except UnicodeDecodeError as e:
+            raise UnicodeError('Unable to decode %s: %s' % (template_name, e))
 
     def get_context(self, template):
         """Get the context for a template.
@@ -275,8 +275,8 @@ class Site(object):
         raise ValueError("no matching rule")
 
     def is_static(self, filename):
-        """Check if a file is a static file (which should be copied, rather
-        than compiled using Jinja2).
+        """Check if a file is a static file. Static files are copied, rather
+        than compiled using Jinja2.
 
         A file is considered static if it lives in any of the directories
         specified in ``staticpaths``.
@@ -284,20 +284,11 @@ class Site(object):
         :param filename: the name of the file to check
 
         """
-        if self.staticpaths is None:
-            # We're not using static file support
-            return False
-
-        for path in self.staticpaths:
-            if filename.startswith(path):
-                return True
-        return False
+        return any(filename.startswith(path) for path in self.staticpaths)
 
     def is_partial(self, filename):
-        """Check if a file is a partial.
-
-        Partial files are not rendered, but they are used in rendering
-        templates.
+        """Check if a file is a partial. Partial files are not rendered,
+        but they are used in rendering templates.
 
         A file is considered a partial if it or any of its parent directories
         are prefixed with an ``'_'``.
@@ -307,9 +298,8 @@ class Site(object):
         return any((x.startswith("_") for x in filename.split(os.path.sep)))
 
     def is_ignored(self, filename):
-        """Check if a file is an ignored file.
-
-        Ignored files are neither rendered nor used in rendering templates.
+        """Check if a file is an ignored file. Ignored files are neither
+        rendered nor used in rendering templates.
 
         A file is considered ignored if it or any of its parent directories
         are prefixed with an ``'.'``.
@@ -321,20 +311,17 @@ class Site(object):
     def is_template(self, filename):
         """Check if a file is a template.
 
-        A file is a considered a template if it is neither a partial nor
-        ignored.
+        A file is a considered a template if it is not partial, ignored, or
+        static.
 
         :param filename: the name of the file to check
         """
         if self.is_partial(filename):
             return False
-
         if self.is_ignored(filename):
             return False
-
         if self.is_static(filename):
             return False
-
         return True
 
     def _ensure_dir(self, template_name):
@@ -402,7 +389,7 @@ class Site(object):
         for f in files:
             input_location = os.path.join(self.searchpath, f)
             output_location = os.path.join(self.outpath, f)
-            print("Copying %s to %s." % (f, output_location))
+            self.logger.info("Copying %s to %s." % (f, output_location))
             self._ensure_dir(f)
             shutil.copy2(input_location, output_location)
 
@@ -448,31 +435,9 @@ class Renderer(Site):
         return self.render(use_reloader)
 
 
-def make_site(searchpath="templates",
-              outpath=".",
-              contexts=None,
-              rules=None,
-              encoding="utf8",
-              followlinks=True,
-              extensions=None,
-              staticpaths=None,
-              filters=None,
-              env_globals=None,
-              env_kwargs=None,
-              mergecontexts=False):
+def make_site(*args, **kwargs):
     warnings.warn("make_site was renamed to Site.make_site.")
-    return Site.make_site(searchpath=searchpath,
-                          outpath=outpath,
-                          contexts=contexts,
-                          rules=rules,
-                          encoding=encoding,
-                          followlinks=followlinks,
-                          extensions=extensions,
-                          staticpaths=staticpaths,
-                          filters=filters,
-                          env_globals=env_globals,
-                          env_kwargs=env_kwargs,
-                          mergecontexts=mergecontexts)
+    return Site.make_site(*args, **kwargs)
 
 
 def make_renderer(*args, **kwargs):
