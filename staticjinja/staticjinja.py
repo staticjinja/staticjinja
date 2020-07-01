@@ -55,7 +55,7 @@ class Site(object):
         A list of `regex, function` pairs used to override template
         compilation. `regex` must be a regex which if matched against a
         filename will cause `function` to be used instead of the default.
-        `function` must be a function which takes a Jinja2 Environment, the
+        `function` must be a function which takes a staticjinja Site, the
         filename, and the context and renders a template.
 
     :param encoding:
@@ -86,7 +86,7 @@ class Site(object):
                  staticpaths=None,
                  mergecontexts=False,
                  ):
-        self._env = environment
+        self.env = environment
         self.searchpath = searchpath
         self.outpath = outpath
         self.encoding = encoding
@@ -139,7 +139,7 @@ class Site(object):
             A list of *(regex, function)* pairs. The Site will delegate
             rendering to *function* if *regex* matches the name of a template
             during rendering. *function* must take a
-            :class:`jinja2.Environment` object, a filename, and a context as
+            :class:`staticjinja.Site` object, a filename, and a context as
             parameters and render the template. Defaults to ``[]``.
 
         :param encoding:
@@ -211,7 +211,7 @@ class Site(object):
 
     @property
     def template_names(self):
-        return self._env.list_templates(filter_func=self.is_template)
+        return self.env.list_templates(filter_func=self.is_template)
 
     @property
     def templates(self):
@@ -221,7 +221,7 @@ class Site(object):
 
     @property
     def static_names(self):
-        return self._env.list_templates(filter_func=self.is_static)
+        return self.env.list_templates(filter_func=self.is_static)
 
     def get_template(self, template_name):
         """Get a :class:`jinja2.Template` from the environment.
@@ -229,7 +229,7 @@ class Site(object):
         :param template_name: A string representing the name of the template.
         """
         try:
-            return self._env.get_template(template_name)
+            return self.env.get_template(template_name)
         except UnicodeDecodeError as e:
             raise UnicodeError('Unable to decode %s: %s' % (template_name, e))
 
