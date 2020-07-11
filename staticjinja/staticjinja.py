@@ -52,11 +52,11 @@ class Site(object):
         against a filename, will cause the context to be used.
 
     :param rules:
-        A list of `regex, function` pairs used to override template
-        compilation. `regex` must be a regex which if matched against a
-        filename will cause `function` to be used instead of the default.
-        `function` must be a function which takes a staticjinja Site, the
-        filename, and the context and renders a template.
+        A list of *(regex, function)* pairs. The Site will delegate
+        rendering to *function* if *regex* matches the name of a template
+        during rendering. *function* must take a :class:`staticjinja.Site`
+        object, a :class:`jinja2.Template`, and a context dictionary as
+        parameters and render the template. Defaults to ``[]``.
 
     :param encoding:
         The encoding of templates to use.
@@ -138,8 +138,8 @@ class Site(object):
         :param rules:
             A list of *(regex, function)* pairs. The Site will delegate
             rendering to *function* if *regex* matches the name of a template
-            during rendering. *function* must take a
-            :class:`staticjinja.Site` object, a filename, and a context as
+            during rendering. *function* must take a :class:`staticjinja.Site`
+            object, a :class:`jinja2.Template`, and a context dictionary as
             parameters and render the template. Defaults to ``[]``.
 
         :param encoding:
