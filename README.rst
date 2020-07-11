@@ -4,8 +4,8 @@ staticjinja
 .. image:: https://badge.fury.io/py/staticjinja.png
     :target: http://badge.fury.io/py/staticjinja
 
-.. image:: https://travis-ci.org/Ceasar/staticjinja.svg
-    :target: https://travis-ci.org/Ceasar/staticjinja
+.. image:: https://travis-ci.org/staticjinja/staticjinja.svg
+    :target: https://travis-ci.org/staticjinja/staticjinja
 
 **staticjinja** is a library that makes it easy to build static sites using
 Jinja2_.
@@ -53,6 +53,6 @@ Contribute
 #. Send a pull request and bug the maintainer until it gets merged and
    published. :) Make sure to add yourself to AUTHORS_.
 
-.. _`the repository`: https://github.com/Ceasar/staticjinja
-.. _AUTHORS: https://github.com/Ceasar/staticjinja/blob/master/AUTHORS.rst
+.. _`the repository`: https://github.com/staticjinja/staticjinja
+.. _AUTHORS: https://github.com/staticjinja/staticjinja/blob/master/AUTHORS.rst
 .. _Jinja2: http://jinja.pocoo.org/
