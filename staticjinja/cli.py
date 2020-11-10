@@ -17,7 +17,7 @@ Options:
 from __future__ import print_function
 from docopt import docopt
 import os
-from staticjinja import Site
+from staticjinja import Site, __version__
 import sys
 
 
@@ -82,7 +82,7 @@ def render(args):
 
 
 def main():
-    render(docopt(__doc__, version='staticjinja 0.3.0'))
+    render(docopt(__doc__, version=__version__))
 
 
 if __name__ == '__main__':

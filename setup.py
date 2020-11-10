@@ -1,11 +1,13 @@
 from setuptools import setup
 
-__version_info__ = ('0', '3', '5')
-__version__ = '.'.join(__version_info__)
+# Read in version info
+with open('staticjinja/version.py') as f:
+    versions = {}
+    exec(f.read(), versions)
 
 setup(
     name="staticjinja",
-    version=__version__,
+    version=versions["__version__"],
     description="jinja based static site generator",
     author="Ceasar Bautista",
     author_email="cbautista2010@gmail.com",
