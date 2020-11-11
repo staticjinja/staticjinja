@@ -9,8 +9,8 @@ staticjinja
     :target: https://travis-ci.com/staticjinja/staticjinja
     :alt: Travis CI status
 
-.. image:: https://readthedocs.org/projects/staticjinja/badge/?version=stable
-    :target: https://staticjinja.readthedocs.io/en/stable/?badge=stable&style=plastic
+.. image:: https://readthedocs.org/projects/staticjinja/badge/?version=latest
+    :target: https://staticjinja.readthedocs.io/en/latest/?badge=latest&style=plastic
     :alt: Documentation Status
 
 **staticjinja** is a library that makes it easy to build static sites using
