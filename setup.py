@@ -18,9 +18,17 @@ setup(
     description="jinja based static site generator",
     long_description=long_description,
     long_description_content_type='text/x-rst',
-    author="Ceasar Bautista, Nick Crews",
-    author_email="cbautista2010@gmail.com, nicholas.b.crews@gmail.com",
+    author="Ceasar Bautista",
+    author_email="cbautista2010@gmail.com",
+    maintainer="Nick Crews",
+    maintainer_email="nicholas.b.crews@gmail.com",
     url="https://github.com/staticjinja/staticjinja",
+    project_urls={
+        "Documentation": "https://staticjinja.readthedocs.io",
+        "GitHub Project": "https://github.com/staticjinja/staticjinja",
+        "Issue Tracker": "https://github.com/staticjinja/staticjinja/issues"
+    },
+    python_requires=">=3",
     keywords=["jinja", "static", "website"],
     packages=["staticjinja"],
     entry_points={
