@@ -1,10 +1,13 @@
-staticjinja is written and maintained by Ceasar Bautista and
-various contributors:
+staticjinja was written and maintained by Ceasar Bautista and
+various contributors. Now Caesar has passed maintaining responsibilities to
+Nick Crews. If you would like to share the responsibilities of maintaining,
+let Nick know, he often does not get to issues as soon as he would like :)
 
 Development Lead
 ````````````````
 
-- Ceasar Bautista <cbautista2010@gmail.com>
+- (Current lead) Nick Crews, @NickCrews, <nicholas.b.crews@gmail.com>
+- (Former lead) Ceasar Bautista, @Caesar, <cbautista2010@gmail.com>
 
 
 Patches and Suggestions
