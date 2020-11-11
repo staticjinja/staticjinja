@@ -1,14 +1,23 @@
 from setuptools import setup
+from os import path
+
+cwd = path.abspath(path.dirname(__file__))
 
 # Read in version info
-with open('staticjinja/version.py') as f:
+with open(path.join(cwd, 'staticjinja', 'version.py')) as f:
     versions = {}
     exec(f.read(), versions)
+
+# Read the contents of our README file
+with open(path.join(cwd, 'README.rst')) as f:
+    long_description = f.read()
 
 setup(
     name="staticjinja",
     version=versions["__version__"],
     description="jinja based static site generator",
+    long_description=long_description,
+    long_description_content_type='text/x-rst',
     author="Ceasar Bautista, Nick Crews",
     author_email="cbautista2010@gmail.com, nicholas.b.crews@gmail.com",
     url="https://github.com/staticjinja/staticjinja",
