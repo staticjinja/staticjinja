@@ -5,11 +5,12 @@ improvement. If you'd like to contribute, here's a quick guide:
 2. Fork the repo.
 3. Make your changes, and test them with `tox`.
 4. Push to your fork and submit a pull request.
+5. Check that the Travis CI tests pass.
 
-## Testing your changes with tox
+## Testing your changes
 
-You can test your changes with tox
-(http://tox.readthedocs.org/en/latest/), which you can install with:
+You can test your changes with [tox](http://tox.readthedocs.org/en/latest/),
+which you can install with:
 
     $ pip install tox
 
@@ -19,14 +20,18 @@ successfully by just running:
 
     $ tox
 
-Once you're happy, push code to your fork, and submit a pull request.
+Once you're happy, push code to your fork, and submit a pull request. Travis CI
+should pick up your PR and automatically run its tests, linter, etc on your
+change as well. It uses multiple OSs and python versions so it may catch
+some errors that your `tox` run didn't.
 
 ## Getting your pull request accepted
 
-At this point you're waiting on me. I like to at least comment on, if
-not accept, pull requests within three business days (and, typically,
-one business day). I may suggest some changes or improvements or
-alternatives.
+At this point you're waiting on me. I may suggest some changes or improvements
+or alternatives. I am slow, I'm sorry. It may be weeks or months before I get
+to it. I know, that's pretty terrible, but this is just a hobby project for me.
+If you want to help speed things up by taking on co-maintainership, let me
+know.
 
 Some things that will increase the chance that your pull request is
 accepted:
@@ -35,8 +40,8 @@ accepted:
   with it.
 - Update all documentation that would be affected by your
   contribution.
-- Make sure your code passes all the checks that `tox` runs.
-- Ideally, make sure your commit messages are in the proper format.
+- Make sure your code passes all `tox` and Travis checks.
+- Ideally, make sure your commit messages are in the proper format:
 
 ```
 
