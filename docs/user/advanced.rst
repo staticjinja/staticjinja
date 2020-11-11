@@ -213,80 +213,65 @@ Then you can use them in your templates as you would expect:
     <p>{{'THIS IS AN EXAMPLE WEB PAGE.' | my_lower}}</p>
     {% endblock %}
 
-Compilation rules
+Rendering rules
 -----------------
 
+Rendering is the step in the build process where templates are evaluated to
+their final values using contexts, and the output files are written to disk.
+
 Sometimes you'll find yourself needing to change how a template is
-compiled. For instance, you might want to compile files with a ``.md``
-extension as Markdown, without needing to put jinja syntax in your
-Markdown files.
-
-To do this, just write a handler by registering a regex for the files
-you want to handle, and a compilation function (a "rule").
-
-.. code-block:: python
-
-    import os
-
-    from staticjinja import Site
-
-    # Custom MarkdownExtension
-    from extensions import MarkdownExtension
-
-
-    def get_post_contents(template):
-        with open(template.filename) as f:
-            return {'post': f.read()}
-
-
-    # compilation rule
-    def render_post(env, template, **kwargs):
-        """Render a template as a post."""
-        directory, fname = os.path.split(template.name)
-        post_title, _ = fname.split(".")
-        post_fname = "%s.html" % post_title
-
-        out_dir = os.path.join(env.outpath, directory)
-        if not os.path.exists(out_dir):
-            os.makedirs(out_dir)
-        out = os.path.join(out_dir, post_fname)
-
-        post_template = env.get_template("_post.html")
-        post_template.stream(**kwargs).dump(out)
-
-
-    if __name__ == "__main__":
-        site = Site.make_site(extensions=[
-            MarkdownExtension,
-        ], contexts=[
-            ('.*.md', get_post_contents),
-        ], rules=[
-            ('.*.md', render_post),
-        ])
-        site.render(use_reloader=True)
-
-Note the rule we defined at the bottom. It tells staticjinja to check
-if the filename matches the ``.*.md`` regex, and if it does, to
-compile the file using ``render_post``.
-
-Now just implement ``templates/_post.html``...
-
-.. code-block:: html
-
-    <!-- templates/_post.html -->
-    {% extends "_base.html" %}
-    {% block content %}
-    <div class="post">
-    {% markdown %}
-    {{ post }}
-    {% endmarkdown %}
-    </div>
-    {% endblock %}
-
-This would allow you to drop Markdown files into your ``templates``
-directory and have them compiled into HTML.
+rendering. For instance, you might want to render files with a ``.md``
+from Markdown to HTML, without needing to put jinja syntax in your
+Markdown files. The following walkthrough is an explanation of the example
+that you can find and run yourself at ``examples/markdown/``.
 
 .. note::
 
-     You can grab MarkdownExtension from
-     http://silas.sewell.org/blog/2010/05/10/jinja2-markdown-extension/.
+    If you want to run the example, you will need to install the ``markdown``
+    library from https://pypi.org/project/Markdown/
+
+The structure of the project after running will be::
+
+    markdown
+    ├── build.py
+    ├── src
+    │   ├── _post.html
+    │   └── posts
+    │       ├── post1.md
+    │       └── post2.md
+    └── build
+        └── posts
+            ├── post1.html
+            └── post2.html
+
+First, look at ``src/_post.html``...
+
+.. literalinclude:: ../../examples/markdown/src/_post.html
+   :language: html
+
+This template will be used for each of our markdown files, each of which might
+represent a blog post. This template expects a context with a
+``post_content_html`` entry, which will get generated from each markdown file.
+
+Now let's look at our build script. It does two things:
+
+1. For every markdown template, use a context generator function (see above) to
+   translate the markdown contents into html using the ``markdown`` library.
+2. For each markdown template, compile that context into the ``src/_post.html``
+   template, and then write that to disk. The output ``post1.html`` should be
+   placed in the same location relative to ``out/`` as the input ``post1.md``
+   was relative to ``src/``.
+
+The first step is accomplished in ``md_context()``, and the second step is done
+in ``render_md()``:
+
+.. literalinclude:: ../../examples/markdown/build.py
+   :language: python
+
+Note the rule we defined at the bottom. It tells staticjinja to check
+if the filename matches the ``.*.md`` regex, and if it does, to
+render the file using ``render_md()``.
+
+There are other, more complicated things you could do in a custom render
+function as well, such as not write the output to disk at all, but instead
+pass it somewhere else.
