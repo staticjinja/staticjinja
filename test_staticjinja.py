@@ -33,6 +33,8 @@ def site(template_path, build_path):
     template_path.mkdir('sub').join('template3.html').write('Test {{b}}')
     template_path.mkdir('sub1').join('.ignored2.html').write('Ignored 2')
     template_path.mkdir('sub2').join('_partial2.html').write('Partial 2')
+    template_path.mkdir('.ignoreds').join('ignored3.html').write('Ignored 3')
+    template_path.mkdir('_partials').join('partial3.html').write('Partial 3')
     template_path.join('template4.html').write('Test {{b}} and {{c}}')
     template_path.mkdir('static_css').join('hello.css').write(
         'a { color: blue; }'
