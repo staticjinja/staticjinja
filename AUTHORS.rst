@@ -24,3 +24,4 @@ Patches and Suggestions
 - Anuraag Agrawal (anuraaga)
 - saschalalala
 - Tim Best (timbest)
+- Fasih Ahmad Fakhri
