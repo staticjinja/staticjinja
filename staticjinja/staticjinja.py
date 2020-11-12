@@ -274,39 +274,39 @@ class Site(object):
                 return render_func
         raise ValueError("no matching rule")
 
-    def is_static(self, filename):
-        """Check if a file is a static file. Static files are copied, rather
-        than compiled using Jinja2.
+    def is_static(self, template_name):
+        """Check if a template is a static template. Static template are copied,
+        rather than compiled using Jinja2.
 
-        A file is considered static if it lives in any of the directories
+        A template is considered static if it lives in any of the directories
         specified in ``staticpaths``.
 
-        :param filename: the name of the file to check
+        :param template_name: the name of the template to check
 
         """
-        return any(filename.startswith(path) for path in self.staticpaths)
+        return any(template_name.startswith(path) for path in self.staticpaths)
 
-    def is_partial(self, filename):
-        """Check if a file is a partial. Partial files are not rendered,
-        but they are used in rendering templates.
+    def is_partial(self, template_name):
+        """Check if a template is a partial template. Partial templates are not
+        rendered, but they are used in rendering templates.
 
-        A file is considered a partial if it or any of its parent directories
-        are prefixed with an ``'_'``.
+        A template is considered a partial if it or any of its parent
+        directories are prefixed with an ``'_'``.
 
-        :param filename: the name of the file to check
+        :param template_name: the name of the template to check
         """
-        return any((x.startswith("_") for x in filename.split(os.path.sep)))
+        return any((x.startswith("_") for x in template_name.split("/")))
 
-    def is_ignored(self, filename):
-        """Check if a file is an ignored file. Ignored files are neither
-        rendered nor used in rendering templates.
+    def is_ignored(self, template_name):
+        """Check if a template is an ignored template. Ignored templates are
+        neither rendered nor used in rendering templates.
 
-        A file is considered ignored if it or any of its parent directories
+        A template is considered ignored if it or any of its parent directories
         are prefixed with an ``'.'``.
 
-        :param filename: the name of the file to check
+        :param template_name: the name of the template to check
         """
-        return any((x.startswith(".") for x in filename.split(os.path.sep)))
+        return any((x.startswith(".") for x in template_name.split("/")))
 
     def is_template(self, filename):
         """Check if a file is a template.
@@ -398,11 +398,13 @@ class Site(object):
 
         :param filename: the name of the file to find dependencies of
         """
-        if self.is_partial(filename):
+        template_name = filename.replace(os.path.sep, "/")
+
+        if self.is_partial(template_name):
             return self.templates
-        elif self.is_template(filename):
+        elif self.is_template(template_name):
             return [self.get_template(filename)]
-        elif self.is_static(filename):
+        elif self.is_static(template_name):
             return [filename]
         else:
             return []

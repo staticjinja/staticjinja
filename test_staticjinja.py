@@ -31,6 +31,8 @@ def site(template_path, build_path):
     template_path.join('template1.html').write('Test 1')
     template_path.join('template2.html').write('Test 2')
     template_path.mkdir('sub').join('template3.html').write('Test {{b}}')
+    template_path.mkdir('sub1').join('.ignored2.html').write('Ignored 2')
+    template_path.mkdir('sub2').join('_partial2.html').write('Partial 2')
     template_path.join('template4.html').write('Test {{b}} and {{c}}')
     template_path.mkdir('static_css').join('hello.css').write(
         'a { color: blue; }'
@@ -202,11 +204,15 @@ def test_regular_file_is_not_ignored(site):
 
 
 def test_ignored_file_in_directory_is_ignored(site):
-    assert site.is_ignored(os.sep.join(['.bar', 'index.html']))
+    assert site.is_ignored('/'.join(['.bar', 'index.html']))
 
 
 def test_ignored_file_in_nested_directory_is_ignored(site):
-    assert site.is_ignored(os.sep.join(['foo', '.bar', 'index.html']))
+    assert site.is_ignored('/'.join(['foo', '.bar', 'index.html']))
+
+
+def test_ignored_file_in_normal_nested_directory_is_ignored(site):
+    assert site.is_ignored('/'.join(['foo', 'bar', '.index.html']))
 
 
 def test_partial_file_is_partial(site):
@@ -218,11 +224,15 @@ def test_regular_file_is_not_partial(site):
 
 
 def test_partial_file_in_directory_is_partial(site):
-    assert site.is_partial(os.sep.join(['_bar', 'index.html']))
+    assert site.is_partial('/'.join(['_bar', 'index.html']))
 
 
 def test_partial_file_in_nested_directory_is_partial(site):
-    assert site.is_partial(os.sep.join(['foo', '_bar', 'index.html']))
+    assert site.is_partial('/'.join(['foo', '_bar', 'index.html']))
+
+
+def test_partial_file_in_normal_nested_directory_is_partial(site):
+    assert site.is_partial('/'.join(['foo', 'bar', '_index.html']))
 
 
 @mock.patch('os.path.isdir')
