@@ -65,6 +65,8 @@ class Site(object):
         A logging.Logger object used to log events.
 
     :param staticpaths:
+        .. deprecated:: 0.3.4
+
         List of directory names to get static files from (relative to
         searchpath).
 
@@ -155,6 +157,8 @@ class Site(object):
             :class:`jinja2.Environment` should use. Defaults to ``[]``.
 
         :param staticpaths:
+            .. deprecated:: 0.3.4
+
             List of directories to get static files from (relative to
             searchpath).  Defaults to ``None``.
 
@@ -277,6 +281,8 @@ class Site(object):
     def is_static(self, template_name):
         """Check if a template is a static template. Static template are copied,
         rather than compiled using Jinja2.
+
+        .. deprecated:: 0.3.4
 
         A template is considered static if it lives in any of the directories
         specified in ``staticpaths``.

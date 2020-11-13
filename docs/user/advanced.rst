@@ -53,7 +53,13 @@ To change behavior, pass the appropriate keyword arguments to
   extension2, ...]``.
 * To change which files are considered templates, subclass the
   ``Site`` object and override ``is_template``.
-* To change where static files (such as CSS or JavaScript) are stored,
+
+.. note::
+
+  .. deprecated:: 0.3.4
+     Use ``Make`` or similar to copy static files. See `Issue #58`_
+
+  To change where static files (such as CSS or JavaScript) are stored,
   set ``staticpaths=["mystaticfiles/"]`` (the default is ``None``, which
   means no files are considered to be static files). You can pass
   multiple directories in the list: ``staticpaths=["foo/", "bar/"]``.
@@ -71,6 +77,7 @@ and run it with your Python interpreter.
     Watching 'templates' for changes...
     Press Ctrl+C to stop.
 
+.. _`Issue #58`: https://github.com/staticjinja/staticjinja/issues/58
 
 Loading data
 ------------
