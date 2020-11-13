@@ -1,6 +1,49 @@
 
-0.3.3
------
+
+0.3.5_
+------
+
+.. _0.3.5: https://github.com/staticjinja/staticjinja/compare/0.3.4...0.3.5
+
+* Make README less verbose.
+
+* Only warn about using deprecated ``staticpaths`` if ``staticpaths`` is
+  actually used.
+
+* Updated easywatch to 0.0.5
+
+
+0.3.4_
+------
+
+.. _0.3.4: https://github.com/staticjinja/staticjinja/compare/0.3.3...0.3.4
+
+* Move ``make_site()`` to ``Site.make_site()``.
+
+* Deprecate ``staticpaths`` argument to ``Site()`` and ``Site.make_site()``.
+  See `Issue #58`_.
+
+* Add an option (default ``True``) for Jinja's ``FileSystemLoader``
+  follow to symlinks when loading templates.
+
+* Ensure that the output directory exists, regardless of whether custom
+  rendering rules were supplied. Before that was only ensured if custom
+  rendering rules were not given.
+
+* License file is included now in distributions.
+
+* Add documentation for partial and ignored files.
+
+* Updated easywatch to 0.0.4.
+
+* Fix a few style errors.
+
+.. _`Issue #58`: https://github.com/staticjinja/staticjinja/issues/58
+
+0.3.3_
+------
+
+.. _0.3.3: https://github.com/staticjinja/staticjinja/compare/0.3.2...0.3.3
 
 * Enable users to direct pass dictionaries instead of context generator in Site
   and make_site() for contexts that don't require any logic.
@@ -9,8 +52,10 @@
   staticjinja to either use all matching context generator or only the first
   one when rendering templates.
 
-0.3.2
------
+0.3.2_
+------
+
+.. _0.3.2: https://github.com/staticjinja/staticjinja/compare/0.3.1...0.3.2
 
 * Allow passing keyword arguments to jinja2 Environment.
 
@@ -31,8 +76,10 @@
 
 * Allow users to mark a single file as static, instead of just directories.
 
-0.3.1
------
+0.3.1_
+------
+
+.. _0.3.1: https://github.com/staticjinja/staticjinja/compare/0.3.0...0.3.1
 
 * Add support for filters so that users can define their own Jinja2 filters and
   use them in templates::
@@ -49,8 +96,10 @@
 * "Renderer" was renamed to "Site" and the Reloader was moved
   staticjinja.reloader.
 
-0.3.0
------
+0.3.0_
+------
+
+.. _0.3.0: https://github.com/staticjinja/staticjinja/compare/0.2.0...0.3.0
 
 * Add a command, ``staticjinja``, to handle the simple case of
   building context-less templates.
