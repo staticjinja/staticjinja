@@ -1,4 +1,56 @@
 
+0.4.0_
+------
+
+.. _0.4.0: https://github.com/staticjinja/staticjinja/compare/0.3.5...0.4.0
+
+* Improve Travis CI testing: Add Windows and OSX, stop testing python2,
+  add newer python3 versions, update tox.ini.
+
+* Convert all print()s to logger.logs().
+
+* Make CLI interface use Site.make_site() instead of deprecated make_site().
+
+* Simplify style and how kwargs are passed around.
+
+* Single-source the version info so it's always consistent.
+
+* Minor fixes, updates, improvements to README, AUTHORS, CONTRIBUTING,
+  setup.py, __init__.py docstring,
+
+* Rename Site._env to Site.env, making it publicly accessible, for instance
+  in custom rendering functions.
+
+* Fix docstring for the expected signature of custom rendering rules so they
+  expect a staticjinja.Site as opposed to a jinja2.Environment
+
+* Make is_{template,static,ignored,partial} functions be consistent with
+  taking template names(always use `/`), not file names (use os.path.sep),
+  making them consistent between OSs.
+  https://github.com/staticjinja/staticjinja/issues/88
+
+* Update and improve docs, add .readthedocs.yml so that ReadTheDocs.org can
+  automatically pull from the repo and build docs on changes. Add a badge
+  for if the doc build passes. Add readthedocs build task as a GitHub check,
+  so new PRs and branches will automatically get this check.
+
+* Change single example/ directory to a collection of examples in examples/,
+  and add in an example for using custom rendering rules to generate HTML from
+  markdown. This also fixes the totally wrong tutorial on the docs for how to
+  use custom rendering rules. See https://github.com/staticjinja/staticjinja/pull/102
+
+* Update dependencies using pip-tools to automatically generate indirect
+  dependencies from direct dependencies:
+
+  * jinja2==2.6      -> jinja2==2.11.2
+  * argh==0.21.0     -> REMOVED
+  * argparse==1.2.1  -> REMOVED
+  * docopt==0.6.1    -> docopt==0.6.2
+  * easywatch==0.0.5 -> easywatch==0.0.5
+  * pathtools==0.1.2 -> pathtools==0.1.2
+  * watchdog==0.6.0  -> watchdog==0.10.3
+  * wsgiref==0.1.2   -> REMOVED
+  * NONE             -> markupsafe==1.1.1
 
 0.3.5_
 ------
