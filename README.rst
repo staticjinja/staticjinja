@@ -47,7 +47,7 @@ Documentation
 -------------
 
 Documentation is available at
-http://staticjinja.readthedocs.org/en/latest/.
+http://staticjinja.readthedocs.io.
 
 Contribute
 ----------
