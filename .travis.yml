@@ -1,5 +1,5 @@
 language: python
-matrix:
+jobs:
   include:
     # Run the tests for every version of python on the default OS (linux).
     # "python:" tells Travis what version to use, and
