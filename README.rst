@@ -13,6 +13,14 @@ staticjinja
     :target: https://staticjinja.readthedocs.io/en/stable/?badge=stable&style=plastic
     :alt: Documentation Status
 
+.. image:: https://static.pepy.tech/personalized-badge/staticjinja?period=total&units=international_system&left_color=black&right_color=blue&left_text=downloads
+    :target: https://pepy.tech/project/staticjinja
+    :alt: PyPi downloads total
+
+.. image:: https://static.pepy.tech/personalized-badge/staticjinja?period=month&units=international_system&left_color=black&right_color=blue&left_text=downloads/month
+    :target: https://pepy.tech/project/staticjinja
+    :alt: PyPi downloads per month
+
 **staticjinja** is a library that makes it easy to build static sites using
 Jinja2_.
 
