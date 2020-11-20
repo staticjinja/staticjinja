@@ -54,11 +54,6 @@ def render(args):
     else:
         outpath = os.getcwd()
 
-    if not os.path.isdir(outpath):
-        print("The output directory '%s' is invalid."
-              % outpath)
-        sys.exit(1)
-
     staticdirs = args['--static']
     staticpaths = None
 
