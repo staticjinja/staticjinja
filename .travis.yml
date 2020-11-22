@@ -6,9 +6,6 @@ jobs:
     # "env:" variables are exported, where tox picks them up.
     # The versions must match, or tox won't be able to find the correct
     # interpreter
-    - name: "Python 3.4 on Linux"
-      python: 3.4
-      env: TOXENV=py34
     - name: "Python 3.5 on Linux"
       python: 3.5
       env: TOXENV=py35
