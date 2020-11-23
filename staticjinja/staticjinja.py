@@ -376,20 +376,14 @@ class Site(object):
         else:
             rule(self, template, **context)
 
-    def render_templates(self, templates, filepath=None):
+    def render_templates(self, templates):
         """Render a collection of :class:`jinja2.Template` objects.
 
         :param templates:
-            A collection of Templates to render.
-
-        :param filepath:
-            Optional. A file or file-like object to dump the complete template
-            stream into. Defaults to to ``os.path.join(self.outpath,
-            template.name)``.
-
+            A collection of :class:`jinja2.Template` objects to render.
         """
         for template in templates:
-            self.render_template(template, filepath)
+            self.render_template(template)
 
     def copy_static(self, files):
         for f in files:
