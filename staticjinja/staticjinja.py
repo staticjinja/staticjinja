@@ -26,13 +26,7 @@ def _has_argument(func):
     :param func:
         The function to be tested for existence of an argument.
     """
-    if hasattr(inspect, 'signature'):
-        # New way in python 3.3
-        sig = inspect.signature(func)
-        return bool(sig.parameters)
-    else:
-        # Old way
-        return bool(inspect.getargspec(func).args)
+    return bool(inspect.signature(func).parameters)
 
 
 class Site(object):
