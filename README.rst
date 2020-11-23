@@ -5,9 +5,9 @@ staticjinja
     :target: http://badge.fury.io/py/staticjinja
     :alt: PyPi Badge
 
-.. image:: https://travis-ci.com/staticjinja/staticjinja.svg?branch=main
-    :target: https://travis-ci.com/staticjinja/staticjinja
-    :alt: Travis CI status
+.. image:: https://github.com/staticjinja/staticjinja/workflows/build/badge.svg?branch=main&event=push
+    :target: https://github.com/staticjinja/staticjinja/actions?query=branch%3Amain
+    :alt: Build and Testing Status
 
 .. image:: https://readthedocs.org/projects/staticjinja/badge/?version=stable
     :target: https://staticjinja.readthedocs.io/en/stable/?badge=stable&style=plastic
