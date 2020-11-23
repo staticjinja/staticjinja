@@ -5,7 +5,7 @@ improvement. If you'd like to contribute, here's a quick guide:
 2. Fork the repo.
 3. Make your changes, and test them with `tox`.
 4. Push to your fork and submit a pull request.
-5. Check that the Travis CI tests pass.
+5. Check that the GitHub Actions CI tests pass.
 
 ## Testing your changes
 
@@ -20,10 +20,10 @@ successfully by just running:
 
     $ tox
 
-Once you're happy, push code to your fork, and submit a pull request. Travis CI
-should pick up your PR and automatically run its tests, linter, etc on your
-change as well. It uses multiple OSs and python versions so it may catch
-some errors that your `tox` run didn't.
+Once you're happy, push code to your fork, and submit a pull request. GitHub
+Actions should pick up your PR and automatically run its tests, linter, etc on
+your change. It uses multiple OSs and python versions so it may catch some
+errors that your `tox` run didn't.
 
 ## Getting your pull request accepted
 
