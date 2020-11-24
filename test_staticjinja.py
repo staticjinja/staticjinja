@@ -1,9 +1,6 @@
 import os
 
-try:
-    import unittest.mock as mock
-except ImportError:
-    import mock
+import unittest.mock as mock
 from pytest import fixture, raises
 
 from staticjinja import cli, Site, Reloader

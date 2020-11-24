@@ -14,11 +14,13 @@ Options:
   --version     Show version.
 
 """
-from __future__ import print_function
-from docopt import docopt
 import os
-from staticjinja import Site, __version__
 import sys
+
+from docopt import docopt
+
+from .staticjinja import Site
+from .version import __version__
 
 
 def render(args):
@@ -45,8 +47,7 @@ def render(args):
     )
 
     if not os.path.isdir(srcpath):
-        print("The templates directory '%s' is invalid."
-              % srcpath)
+        print("The templates directory '{}' is invalid.".format(srcpath))
         sys.exit(1)
 
     if args['--outpath'] is not None:
@@ -62,7 +63,8 @@ def render(args):
         for path in staticpaths:
             path = os.path.join(srcpath, path)
             if not os.path.isdir(path):
-                print("The static files directory '%s' is invalid." % path)
+                print("The static files directory '{}' is"
+                      "invalid.".format(path))
                 sys.exit(1)
 
     site = Site.make_site(
