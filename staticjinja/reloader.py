@@ -40,7 +40,7 @@ class Reloader(object):
         """
         filename = os.path.relpath(src_path, self.searchpath)
         if self.should_handle(event_type, src_path):
-            print("%s %s" % (event_type, filename))
+            print("{} {}".format(event_type, filename))
             if self.site.is_static(filename):
                 files = self.site.get_dependencies(filename)
                 self.site.copy_static(files)
