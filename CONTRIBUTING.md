@@ -40,7 +40,8 @@ accepted:
   with it.
 - Update all documentation that would be affected by your
   contribution.
-- Make sure your code passes all `tox` and Travis checks.
+- Make sure your code passes all `tox` checks locally, and all GitHub Actions
+  checks on your PR.
 - Ideally, make sure your commit messages are in the proper format:
 
 ```
