@@ -33,8 +33,17 @@ jobs:
         pip install -r requirements.txt
     - name: Install tox
       run: pip install tox
+    # Run tox using the version of Python in `PATH`
     - name: Run tox
-      run: tox -e py --skip-missing-interpreters=false # Run tox using the version of Python in `PATH`
+      run: tox -e py --skip-missing-interpreters=false
+    # Upload pytest's scratch space, which was set to .pytest/ in tox.ini
+    # Useful for debugging.
+    - name: Upload pytest tmpdir
+      uses: actions/upload-artifact@v2
+      # if: failure() # Only upload on failure or previous step.
+      with:
+        name: pytest-tmpdir ${{ matrix.python-version }} ${{ matrix.os }}
+        path: .pytest/
   lint:
     # Only run the linter on a single python version on Ubuntu
     runs-on: ubuntu-latest
