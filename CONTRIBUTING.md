@@ -7,7 +7,8 @@ quick guide:
    issue. If you want to implement the change yourself (that would be awesome!)
    then continue...
 2. Fork the repo.
-3. Make your changes, and test them with `tox`.
+3. Make your changes, and test them with `tox`. Add yourself to AUTHORS.rst if
+   you want.
 4. Push to your fork and submit a pull request agains the `main` branch.
 5. Check that the GitHub Actions CI tests pass.
 
