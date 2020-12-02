@@ -4,7 +4,7 @@ init:
 	pip install -r requirements.txt
 
 test:
-	py.test test_staticjinja.py
+	tox
 
 coverage:
 	tox -e coverage
