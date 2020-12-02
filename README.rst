@@ -64,13 +64,7 @@ http://staticjinja.readthedocs.io.
 Contribute
 ----------
 
-#. Check for open issues or open a fresh issue to start a discussion
-   around a feature idea or a bug.
-#. Fork `the repository`_ on GitHub to start making your changes to
-   the **main** branch (or branch off of it).
-#. Send a pull request and bug the maintainer until it gets merged and
-   published. :) Make sure to add yourself to AUTHORS_.
+Please see CONTRIBUTING_.
 
-.. _`the repository`: https://github.com/staticjinja/staticjinja
-.. _AUTHORS: https://github.com/staticjinja/staticjinja/blob/main/AUTHORS.rst
+.. _CONTRIBUTING: CONTRIBUTING.md
 .. _Jinja2: http://jinja.pocoo.org/

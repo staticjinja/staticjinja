@@ -1,10 +1,14 @@
 This project is very small, and there's lot of room for
-improvement. If you'd like to contribute, here's a quick guide:
+improvement. If you've found a bug or have an idea for a feature, here's a
+quick guide:
 
-1. Make an issue describing what you wish to fix.
+1. Search the [Issues](https://github.com/staticjinja/staticjinja/issues) to
+   see if anyone else has run into the same thing. If not, start your own
+   issue. If you want to implement the change yourself (that would be awesome!)
+   then continue...
 2. Fork the repo.
 3. Make your changes, and test them with `tox`.
-4. Push to your fork and submit a pull request.
+4. Push to your fork and submit a pull request agains the `main` branch.
 5. Check that the GitHub Actions CI tests pass.
 
 ## Testing your changes
@@ -36,13 +40,13 @@ know.
 Some things that will increase the chance that your pull request is
 accepted:
 
-- If relevant, include tests that fail without your code and pass
-  with it.
+- If relevant, write tests that fail without your code and pass
+  with it. The goal is to increase our test coverage.
 - Update all documentation that would be affected by your
   contribution.
 - Make sure your code passes all `tox` checks locally, and all GitHub Actions
   checks on your PR.
-- Ideally, make sure your commit messages are in the proper format:
+- Make sure your commit messages are in the proper format:
 
 ```
 
