@@ -1,0 +1,8 @@
+# Maybe block PRs that don't have enough coverage.
+coverage:
+  status:
+    project:
+      default:
+        # Fail if coverage drops from base commit.
+        # Use your judgement, maybe ignore this check.
+        target: auto
