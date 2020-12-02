@@ -13,6 +13,10 @@ staticjinja
     :target: https://staticjinja.readthedocs.io/en/stable/?badge=stable&style=plastic
     :alt: Documentation Status
 
+.. image:: https://codecov.io/gh/staticjinja/staticjinja/branch/main/graph/badge.svg?token=En337ZXsPK
+    :target: https://codecov.io/gh/staticjinja/staticjinja
+    :alt: Test coverage status
+
 .. image:: https://static.pepy.tech/personalized-badge/staticjinja?period=total&units=international_system&left_color=black&right_color=blue&left_text=downloads
     :target: https://pepy.tech/project/staticjinja
     :alt: PyPi downloads total
