@@ -7,7 +7,7 @@ test:
 	py.test test_staticjinja.py
 
 coverage:
-	py.test --verbose --cov-report term-missing --cov=staticjinja test_staticjinja.py
+	tox -e coverage
 
 publish:
 	python setup.py sdist upload
