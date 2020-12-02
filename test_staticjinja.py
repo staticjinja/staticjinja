@@ -63,7 +63,7 @@ def template_path(tmpdir):
 
 def example_names():
     names = os.listdir(os.path.join(PROJECT_ROOT, 'examples'))
-    ignored = ['__pycache__']
+    ignored = ['__pycache__', 'README.rst']
     for ig in ignored:
         while ig in names:
             names.remove(ig)
