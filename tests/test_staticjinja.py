@@ -4,6 +4,7 @@ import subprocess
 import filecmp
 import difflib
 import glob
+from pathlib import Path
 
 import unittest.mock as mock
 from pytest import fixture, raises
@@ -11,7 +12,7 @@ import pytest_check as check
 
 from staticjinja import cli, Site, Reloader
 
-PROJECT_ROOT = os.path.dirname(__file__)
+PROJECT_ROOT = Path(__file__).parent.parent
 
 
 class ContentDirCmp(filecmp.dircmp):
@@ -62,7 +63,7 @@ def template_path(tmpdir):
 
 
 def example_names():
-    names = os.listdir(os.path.join(PROJECT_ROOT, 'examples'))
+    names = os.listdir(str(PROJECT_ROOT.joinpath('examples')))
     ignored = ['__pycache__', 'README.rst']
     for ig in ignored:
         while ig in names:
