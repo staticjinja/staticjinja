@@ -28,7 +28,7 @@ setup(
         "GitHub Project": "https://github.com/staticjinja/staticjinja",
         "Issue Tracker": "https://github.com/staticjinja/staticjinja/issues"
     },
-    python_requires=">=3.5",
+    python_requires=">=3.6",
     keywords=["jinja", "static", "website"],
     packages=["staticjinja"],
     entry_points={
@@ -47,10 +47,10 @@ setup(
         "Operating System :: OS Independent",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Development Status :: 4 - Beta",
     ]

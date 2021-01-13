@@ -8,5 +8,4 @@ docopt==0.6.2             # via staticjinja (setup.py)
 easywatch==0.0.5          # via staticjinja (setup.py)
 jinja2==2.11.2            # via staticjinja (setup.py)
 markupsafe==1.1.1         # via jinja2
-pathtools==0.1.2          # via watchdog
-watchdog==0.10.3          # via easywatch
+watchdog==1.0.2           # via easywatch
