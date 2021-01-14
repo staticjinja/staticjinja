@@ -7,18 +7,23 @@ started with staticjinja.
 Installation
 ------------
 
-staticjinja supports Python 2.6, 2.7, 3.3 and 3.4.
-
 Installing staticjinja is simple with `pip
 <http://www.pip-installer.org/>`_::
 
     $ pip install staticjinja
 
-Rendering templates
--------------------
+This installs two things:
+
+* A command line interface (CLI) to staticjinja for basic needs.
+* A python library, accessible via the :ref:`Developer Interface`, to be used with a custom
+  python build script for advanced needs.
+
+
+Rendering templates with CLI
+----------------------------
 
 If you're just looking to render simple data-less templates, you can
-get up and running with the following shortcut:
+get up and running with the command line interface:
 
 .. code-block:: bash
 
@@ -39,8 +44,8 @@ they change, use ``watch``:
     Watching 'templates' for changes...
     Press Ctrl+C to stop.
 
-Configuration
--------------
+CLI Configuration
+-----------------
 
 ``build`` and ``watch`` each take 3 options:
 
@@ -49,12 +54,16 @@ Configuration
 * ``--outpath`` - the directory to place rendered files in (defaults
   to ``.``);
 * ``--static`` - the directory (or directories) within ``srcpath``
-  where static files   (such as CSS and JavaScript) are stored. Static
+  where static files (such as CSS and JavaScript) are stored. Static
   files are copied to the output directory without any template
   compilation, maintaining any directory structure. This defaults to
   ``None``, meaning no files are considered to be static files. You
   can pass multiple directories separating them by commas:
   ``--static="foo,bar/baz,lorem"``.
 
-More advanced configuration can be done using the staticjinja API, see
-:ref:`custom-build-scripts` for details.
+Next Steps
+----------
+
+If the CLI does not satisfy your needs, more advanced configuration can be
+done with custom python build scripts using the staticjinja API.
+See :ref:`Advanced Usage` for details.

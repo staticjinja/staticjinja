@@ -1,6 +1,8 @@
 
 .. _standard Jinja2 filters: http://jinja.pocoo.org/docs/dev/templates/#builtin-filters
 
+.. _Advanced Usage:
+
 Advanced Usage
 ==============
 
@@ -20,8 +22,6 @@ neither rendered nor used in rendering templates.
 
 If you want to configure what is considered a partial or ignored file, subclass
 ``Site`` and override ``is_partial`` or ``is_ignored``.
-
-.. _custom-build-scripts:
 
 Using Custom Build Scripts
 --------------------------
