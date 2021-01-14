@@ -1,6 +1,6 @@
 import os
 
-from pytest import fixture, raises
+from pytest import fixture, mark, raises
 
 from staticjinja import Site, Reloader
 
@@ -193,41 +193,49 @@ def test_event_handler_static(reloader, template_path):
     assert found_files == list(reloader.site.static_names)
 
 
-def test_ignored_file_is_ignored(site):
-    assert site.is_ignored('.index.html')
+is_ignored_cases = [
+    ('index.html', False),
+    ('.index.html', True),
+    ('_index.html', False),
+    ('normal/index.html', False),
+    ('.dotted/index.html', True),
+    ('normal/.index.html', True),
+    ('_undered/index.html', False),
+    ('undered/_index.html', False),
+    ('normal/normal2/index.html', False),
+    ('.dotted/normal/index.html', True),
+    ('normal/.dotted/index.html', True),
+    ('normal/normal2/.index.html', True),
+    ('_undered/normal/index.html', False),
+    ('normal/_undered/index.html', False),
+    ('normal/normal2/_index.html', False),
+]
 
 
-def test_regular_file_is_not_ignored(site):
-    assert not site.is_ignored('index.html')
+@mark.parametrize("name, expected", is_ignored_cases)
+def test_is_ignored(site, name, expected):
+    assert site.is_ignored(name) == expected
 
 
-def test_ignored_file_in_directory_is_ignored(site):
-    assert site.is_ignored('/'.join(['.bar', 'index.html']))
+is_partial_cases = [
+    ('index.html', False),
+    ('.index.html', False),
+    ('_index.html', True),
+    ('normal/index.html', False),
+    ('.dotted/index.html', False),
+    ('normal/.index.html', False),
+    ('_undered/index.html', True),
+    ('undered/_index.html', True),
+    ('normal/normal2/index.html', False),
+    ('.dotted/normal/index.html', False),
+    ('normal/.dotted/index.html', False),
+    ('normal/normal2/.index.html', False),
+    ('_undered/normal/index.html', True),
+    ('normal/_undered/index.html', True),
+    ('normal/normal2/_index.html', True),
+]
 
 
-def test_ignored_file_in_nested_directory_is_ignored(site):
-    assert site.is_ignored('/'.join(['foo', '.bar', 'index.html']))
-
-
-def test_ignored_file_in_normal_nested_directory_is_ignored(site):
-    assert site.is_ignored('/'.join(['foo', 'bar', '.index.html']))
-
-
-def test_partial_file_is_partial(site):
-    assert site.is_partial('_index.html')
-
-
-def test_regular_file_is_not_partial(site):
-    assert not site.is_partial('index.html')
-
-
-def test_partial_file_in_directory_is_partial(site):
-    assert site.is_partial('/'.join(['_bar', 'index.html']))
-
-
-def test_partial_file_in_nested_directory_is_partial(site):
-    assert site.is_partial('/'.join(['foo', '_bar', 'index.html']))
-
-
-def test_partial_file_in_normal_nested_directory_is_partial(site):
-    assert site.is_partial('/'.join(['foo', 'bar', '_index.html']))
+@mark.parametrize("name, expected", is_partial_cases)
+def test_is_partial(site, name, expected):
+    assert site.is_partial(name) == expected
