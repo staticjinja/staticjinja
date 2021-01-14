@@ -1,7 +1,6 @@
 # build.py
 #!/usr/bin/env python3
 import os
-import jinja2
 
 # Markdown to HTML library
 # https://pypi.org/project/Markdown/
