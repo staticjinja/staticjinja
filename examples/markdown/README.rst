@@ -15,4 +15,4 @@ This shows off two of staticjinja's features:
 
 For more info see the `documentation walkthrough`_.
 
-.. _`documentation walkthrough`: https://staticjinja.readthedocs.io/en/latest/user/advanced.html#rendering-rules
+.. _`documentation walkthrough`: https://staticjinja.readthedocs.io/en/stable/user/advanced.html#rendering-rules
