@@ -1,3 +1,6 @@
+Authors
+=======
+
 staticjinja was written and maintained by Ceasar Bautista and
 various contributors. Now Caesar has passed maintaining responsibilities to
 Nick Crews. If you would like to share the responsibilities of maintaining,
