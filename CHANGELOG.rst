@@ -1,6 +1,66 @@
 Changelog
 =========
 
+Unreleased_
+-----------
+
+.. _Unreleased: https://github.com/staticjinja/staticjinja/compare/0.4.0...HEAD
+
+Added
+^^^^^
+
+* Runnable and testable examples in ``examples/``. See ``examples/README.rst``
+  for more info.
+
+* Code coverage at https://codecov.io/gh/staticjinja/staticjinja.
+
+Changed
+^^^^^^^
+
+* Use GitHub Actions instead of Travis CI for CI testing.
+
+* `Out` directory no longer needs to exist in CLI.
+
+* Add more default arguments (logger, outpath, and encoding) to
+  ``Site.__init__()`` so that ``Site.make_site()`` doesn't have to make them.
+
+* Update requirements using ``piptools``. This dropped a dependency on
+  ``pathtools``.
+
+* Upload test results as artifacts to better diagnose failures in
+  GitHub Actions.
+
+Deprecated
+^^^^^^^^^^
+
+Removed
+^^^^^^^
+
+* Python 2, 3.4, and 3.5 support. Now only Python 3.6 to 3.9 is supported.
+
+* Remove broken ``filepath`` arg from ``Site.render_templates()``.
+  You shouldn't notice this though, since it crashed if was used :)
+
+Fixed
+^^^^^
+
+* Fix tests and ``__main__.py`` to use ``Site.make_site()``, not deprecated
+  ``staticjinja.make_site()``.
+
+* Tests are now split up into separate files in the ``tests/`` directory.
+  The one monolithic file was intimidating. Some repeated boilerplate tests
+  were parameterized as well. The tests could still use some more cleanup in
+  general.
+
+* Overhaul contributing info. Port CONTRIBUTING.md over to CONTRIBUTING.rst,
+  edit it, and then import this version in docs.
+
+* Fix CWD logic loophole if ``Site.make_site()`` is called from an interpreter.
+
+* Update use of deprecated ``inspect.getargspec()``.
+
+* A few other trivial fixes.
+
 0.4.0_ (2020-11-14)
 -------------------
 
