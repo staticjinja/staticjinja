@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.4.0_
-------
+0.4.0_ (2020-11-14)
+-------------------
 
 .. _0.4.0: https://github.com/staticjinja/staticjinja/compare/0.3.5...0.4.0
 
@@ -54,8 +54,8 @@ Changelog
   * wsgiref==0.1.2   -> REMOVED
   * NONE             -> markupsafe==1.1.1
 
-0.3.5_
-------
+0.3.5_ (2018-08-16)
+-------------------
 
 .. _0.3.5: https://github.com/staticjinja/staticjinja/compare/0.3.4...0.3.5
 
@@ -67,8 +67,8 @@ Changelog
 * Updated easywatch to 0.0.5
 
 
-0.3.4_
-------
+0.3.4_ (2018-08-14)
+-------------------
 
 .. _0.3.4: https://github.com/staticjinja/staticjinja/compare/0.3.3...0.3.4
 
@@ -94,8 +94,8 @@ Changelog
 
 .. _`Issue #58`: https://github.com/staticjinja/staticjinja/issues/58
 
-0.3.3_
-------
+0.3.3_ (2016-03-08)
+-------------------
 
 .. _0.3.3: https://github.com/staticjinja/staticjinja/compare/0.3.2...0.3.3
 
@@ -106,8 +106,8 @@ Changelog
   staticjinja to either use all matching context generator or only the first
   one when rendering templates.
 
-0.3.2_
-------
+0.3.2_ (2015-11-23)
+-------------------
 
 .. _0.3.2: https://github.com/staticjinja/staticjinja/compare/0.3.1...0.3.2
 
@@ -130,8 +130,8 @@ Changelog
 
 * Allow users to mark a single file as static, instead of just directories.
 
-0.3.1_
-------
+0.3.1_ (2015-01-21)
+-------------------
 
 .. _0.3.1: https://github.com/staticjinja/staticjinja/compare/0.3.0...0.3.1
 
@@ -150,8 +150,8 @@ Changelog
 * "Renderer" was renamed to "Site" and the Reloader was moved
   staticjinja.reloader.
 
-0.3.0_
-------
+0.3.0_ (2014-06-04)
+-------------------
 
 .. _0.3.0: https://github.com/staticjinja/staticjinja/compare/0.2.0...0.3.0
 
@@ -162,8 +162,8 @@ Changelog
 * Add support for testing, linting and checking the documentation
   using ``tox``.
 
-0.2.0
------
+0.2.0 (2014-01-04)
+------------------
 
 * Add a ``Reloader`` class.
 
