@@ -2,7 +2,7 @@ staticjinja
 ===========
 
 staticjinja is a library for easily deploying static sites using the
-Jinja2_ template engine. 
+Jinja2_ template engine.
 
 Most static site generators are cumbersome to use. Nevertheless, when
 deploying a static website that could benefit from factored out data
@@ -56,7 +56,7 @@ documentation is for you.
 .. toctree::
    :maxdepth: 1
 
-   dev/todo
+   dev/contributing
    dev/authors
    dev/changelog
 
