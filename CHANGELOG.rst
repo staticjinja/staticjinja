@@ -4,7 +4,19 @@ Changelog
 Unreleased_
 -----------
 
-.. _Unreleased: https://github.com/staticjinja/staticjinja/compare/1.0.0...HEAD
+.. _Unreleased: https://github.com/staticjinja/staticjinja/compare/1.0.1...HEAD
+
+1.0.1_ (2021-01-22)
+-------------------
+
+.. _1.0.1: https://github.com/staticjinja/staticjinja/compare/1.0.0...1.0.1
+
+Fixed
+^^^^^
+
+* Pin upload to PyPI action (`pypa/gh-action-pypi-publish`, used in the publish
+  workflow) to @v1.4.1, instead of just @master. Less prone to breakage.
+
 
 1.0.0_ (2021-01-19)
 -------------------

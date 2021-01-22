@@ -18,9 +18,9 @@ jobs:
     - name: Build a binary wheel and a source tarball to dist/
       run: python setup.py sdist bdist_wheel
     - name: Publish package to PyPI
-      uses: pypa/gh-action-pypi-publish@master
+      uses: pypa/gh-action-pypi-publish@v1.4.1
       with:
-        user: __token__
+        user: '__token__'
         password: ${{ secrets.PYPI_API_TOKEN }}
     - name: Create GitHub Release
       uses: actions/create-release@v1
