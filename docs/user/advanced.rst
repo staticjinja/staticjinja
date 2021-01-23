@@ -1,5 +1,5 @@
 
-.. _standard Jinja2 filters: http://jinja.pocoo.org/docs/dev/templates/#builtin-filters
+.. _standard Jinja2 filters: https://jinja.palletsprojects.com/templates/#builtin-filters
 
 .. _Advanced Usage:
 

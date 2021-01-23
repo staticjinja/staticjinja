@@ -2,7 +2,7 @@ staticjinja
 ===========
 
 .. image:: https://badge.fury.io/py/staticjinja.png
-    :target: http://badge.fury.io/py/staticjinja
+    :target: https://badge.fury.io/py/staticjinja
     :alt: PyPi Badge
 
 .. image:: https://github.com/staticjinja/staticjinja/workflows/build/badge.svg?branch=main&event=push
@@ -59,12 +59,12 @@ Documentation
 -------------
 
 Documentation is available at
-http://staticjinja.readthedocs.io.
+https://staticjinja.readthedocs.io.
 
 Contribute
 ----------
 
 Please see CONTRIBUTING_.
 
-.. _CONTRIBUTING: CONTRIBUTING.md
-.. _Jinja2: http://jinja.pocoo.org/
+.. _CONTRIBUTING: CONTRIBUTING.rst
+.. _Jinja2: https://jinja.palletsprojects.com

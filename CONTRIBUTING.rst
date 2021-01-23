@@ -80,5 +80,5 @@ Thanks for your help!
 
 .. _staticjinja/staticjinja : https://github.com/staticjinja/staticjinja
 .. _Issues: https://github.com/staticjinja/staticjinja/issues
-.. _tox: http://tox.readthedocs.org/en/stable/
+.. _tox: https://tox.readthedocs.org/en/stable/
 .. _good commit message style: https://chris.beams.io/posts/git-commit/

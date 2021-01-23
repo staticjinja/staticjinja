@@ -60,4 +60,4 @@ documentation is for you.
    dev/authors
    dev/changelog
 
-.. _Jinja2: http://jinja.pocoo.org/
+.. _Jinja2: https://jinja.palletsprojects.com
