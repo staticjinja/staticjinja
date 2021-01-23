@@ -8,7 +8,7 @@ Installation
 ------------
 
 Installing staticjinja is simple with `pip
-<http://www.pip-installer.org/>`_::
+<https://pip.pypa.io>`_::
 
     $ pip install staticjinja
 
