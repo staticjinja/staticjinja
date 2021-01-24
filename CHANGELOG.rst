@@ -4,7 +4,31 @@ Changelog
 Unreleased_
 -----------
 
-.. _Unreleased: https://github.com/staticjinja/staticjinja/compare/1.0.1...HEAD
+.. _Unreleased: https://github.com/staticjinja/staticjinja/compare/1.0.3...HEAD
+
+1.0.3_ (2021-01-24)
+-------------------
+
+.. _1.0.3: https://github.com/staticjinja/staticjinja/compare/1.0.2...1.0.3
+
+Fixed
+^^^^^
+
+* Fix links to external APIs in docs.
+
+* Use the real readthedocs html theme when building docs locally.
+
+1.0.2_ (2021-01-22)
+-------------------
+
+.. _1.0.2: https://github.com/staticjinja/staticjinja/compare/1.0.1...1.0.2
+
+Fixed
+^^^^^
+
+* Fix token to `actions/create-release@v1` in publish workflow
+
+* Fix links throughout project.
 
 1.0.1_ (2021-01-22)
 -------------------
