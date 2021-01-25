@@ -142,15 +142,16 @@ def test_build(site):
     assert templates == list(site.templates)
 
 
-def test_with_reloader(reloader, site):
-    reloader.watch_called = False
+def test_with_reloader(site):
+    watch_called = False
 
-    def watch(self):
-        reloader.watch_called = True
+    def fake_watch(self):
+        nonlocal watch_called
+        watch_called = True
 
-    Reloader.watch = watch
+    Reloader.watch = fake_watch
     site.render(use_reloader=True)
-    assert reloader.watch_called
+    assert watch_called
 
 
 def test_should_handle(reloader, template_path):
