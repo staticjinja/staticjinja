@@ -6,13 +6,18 @@ from staticjinja import Site, Reloader
 
 
 @fixture
-def template_path(tmpdir):
-    return tmpdir.mkdir("templates")
+def root_path(tmpdir):
+    return tmpdir
 
 
 @fixture
-def build_path(tmpdir):
-    return tmpdir.mkdir("build")
+def template_path(root_path):
+    return root_path.mkdir("templates")
+
+
+@fixture
+def build_path(root_path):
+    return root_path.mkdir("build")
 
 
 @fixture
@@ -154,15 +159,15 @@ def test_with_reloader(site):
     assert watch_called
 
 
-def test_should_handle(reloader, template_path):
-    template1_path = template_path.join("template1.html")
-    test4_path = template_path.join("test4.html")
-
-    test4_path.write('')
-    assert reloader.should_handle("modified", str(template1_path))
-    assert reloader.should_handle("modified", str(test4_path))
-    assert reloader.should_handle("created", str(template1_path))
-    assert not reloader.should_handle("deleted", str(template1_path))
+def test_should_handle(reloader, root_path, template_path):
+    exists = template_path / "template1.html"
+    DNE = template_path / "DNE.html"
+    outside_searchpath = root_path / "file.txt"
+    assert reloader.should_handle("created", str(exists))
+    assert reloader.should_handle("modified", str(exists))
+    assert not reloader.should_handle("deleted", str(exists))
+    assert not reloader.should_handle("modified", str(DNE))
+    assert not reloader.should_handle("modified", str(outside_searchpath))
 
 
 def test_event_handler(reloader, template_path):
