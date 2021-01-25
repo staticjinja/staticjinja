@@ -6,11 +6,6 @@ from staticjinja import Site, Reloader
 
 
 @fixture
-def filename():
-    return "test.txt"
-
-
-@fixture
 def template_path(tmpdir):
     return tmpdir.mkdir("templates")
 
@@ -92,7 +87,8 @@ def test_get_rule(site):
     assert site.get_rule('template2.html')
 
 
-def test_get_dependencies(site, filename):
+def test_get_dependencies(site):
+    filename = 'test.txt'
     site.get_template = lambda x: filename
     assert site.get_dependencies(".%s" % filename) == []
     assert (list(site.get_dependencies("_%s" % filename)) ==
