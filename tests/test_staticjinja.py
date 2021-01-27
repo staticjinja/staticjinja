@@ -136,25 +136,25 @@ def test_render_templates(site, build_path):
     assert template3.read() == "Test 3"
 
 
-def test_build(site):
+def test_build(monkeypatch, site):
     templates = []
 
-    def fake_site(template, context=None, filepath=None):
+    def fake_render(template, context=None, filepath=None):
         templates.append(template)
+    monkeypatch.setattr(site, "render_template", fake_render)
 
-    site.render_template = fake_site
     site.render()
     assert templates == list(site.templates)
 
 
-def test_with_reloader(site):
+def test_with_reloader(monkeypatch, site):
     watch_called = False
 
     def fake_watch(self):
         nonlocal watch_called
         watch_called = True
+    monkeypatch.setattr(Reloader, "watch", fake_watch)
 
-    Reloader.watch = fake_watch
     site.render(use_reloader=True)
     assert watch_called
 
@@ -170,29 +170,29 @@ def test_should_handle(reloader, root_path, template_path):
     assert not reloader.should_handle("modified", str(outside_searchpath))
 
 
-def test_event_handler(reloader, template_path):
-    templates = []
+def test_event_handler(monkeypatch, reloader, template_path):
+    rendered = []
 
-    def fake_site(template, context=None, filepath=None):
-        templates.append(template)
+    def fake_renderer(template, context=None, filepath=None):
+        rendered.append(template)
+    monkeypatch.setattr(reloader.site, "render_template", fake_renderer)
 
-    reloader.site.render_template = fake_site
     template1_path = str(template_path.join("template1.html"))
     reloader.event_handler("modified", template1_path)
-    assert templates == [reloader.site.get_template("template1.html")]
+    assert rendered == [reloader.site.get_template("template1.html")]
 
 
-def test_event_handler_static(reloader, template_path):
-    found_files = []
+def test_event_handler_static(monkeypatch, reloader, template_path):
+    copied_files = []
 
     def fake_copy_static(files):
-        found_files.extend(f.replace(os.sep, '/') for f in files)
+        copied_files.extend(f.replace(os.sep, '/') for f in files)
+    monkeypatch.setattr(reloader.site, "copy_static", fake_copy_static)
 
     reloader.site.staticpaths = ["static_css"]
-    reloader.site.copy_static = fake_copy_static
     template1_path = str(template_path.join("static_css").join("hello.css"))
     reloader.event_handler("modified", template1_path)
-    assert found_files == list(reloader.site.static_names)
+    assert copied_files == list(reloader.site.static_names)
 
 
 is_ignored_cases = [
