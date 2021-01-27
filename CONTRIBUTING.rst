@@ -27,16 +27,13 @@ fork, install all the dependencies, and then install tox_ for testing:
 Making Changes
 --------------
 
-Start making edits! If you need to test these changes against your personal
-project, then you'll need to install the local, modified version of
-staticjinja for your project to use. Do this by running
+Start making edits! If you want to test your personal project on your changes,
+then you'll want to install staticjinja as ``editable``. Then your project
+will use the local, edited version of staticjinja.
 
 .. code-block:: bash
 
-    $ python setup.py install
-
-whenever you make edits. There might be a better way to do this, but IDK what
-it is. Please file an Issues_ if you know!
+    $ python3 -m pip install -e .
 
 Testing your Changes
 --------------------
