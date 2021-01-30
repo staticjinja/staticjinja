@@ -78,8 +78,10 @@ def render(args):
     site.render(use_reloader=use_reloader)
 
 
-def main():
-    render(docopt(__doc__, version=__version__))
+def main(argv=None):
+    if argv is None:
+        argv = sys.argv[1:]
+    render(docopt(__doc__, argv=argv, version=__version__))
 
 
 if __name__ == '__main__':
