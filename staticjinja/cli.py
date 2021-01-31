@@ -4,15 +4,21 @@
 """staticjinja
 
 Usage:
-  staticjinja build [--srcpath=<srcpath> --outpath=<outpath> --static=<a,b,c>]
-  staticjinja watch [--srcpath=<srcpath> --outpath=<outpath> --static=<a,b,c>]
-  staticjinja (-h | --help)
+  staticjinja build [options]
+  staticjinja watch [options]
+  staticjinja -h | --help
   staticjinja --version
 
+Commands:
+  build      Render the site
+  watch      Render the site, and re-render on changes to <srcpath>
+
 Options:
+  --srcpath=<srcpath>   Directory in which to build from [default: ./templates]
+  --outpath=<outpath>   Directory in which to build to [default: ./]
+  --static=<a,b,c>      Directory(s) within <srcpath> containing static files
   -h --help     Show this screen.
   --version     Show version.
-
 """
 import os
 import sys
@@ -32,32 +38,28 @@ def render(args):
 
             {
                 '--help': False,
-                '--outpath': None,
-                '--srcpath': None,
+                '--outpath': './',
+                '--srcpath': './templates',
                 '--static': None,
                 '--version': False,
                 'build': True,
                 'watch': False
             }
     """
-    srcpath = (
-        os.path.join(os.getcwd(), 'templates') if args['--srcpath'] is None
-        else args['--srcpath'] if os.path.isabs(args['--srcpath'])
-        else os.path.join(os.getcwd(), args['--srcpath'])
-    )
+    def resolve(path):
+        if not os.path.isabs(path):
+            path = os.path.join(os.getcwd(), path)
+        return os.path.normpath(path)
 
+    srcpath = resolve(args['--srcpath'])
     if not os.path.isdir(srcpath):
         print("The templates directory '{}' is invalid.".format(srcpath))
         sys.exit(1)
 
-    if args['--outpath'] is not None:
-        outpath = args['--outpath']
-    else:
-        outpath = os.getcwd()
+    outpath = resolve(args['--outpath'])
 
     staticdirs = args['--static']
     staticpaths = None
-
     if staticdirs:
         staticpaths = staticdirs.split(",")
         for path in staticpaths:
@@ -72,10 +74,7 @@ def render(args):
         outpath=outpath,
         staticpaths=staticpaths
     )
-
-    use_reloader = args['watch']
-
-    site.render(use_reloader=use_reloader)
+    site.render(use_reloader=args['watch'])
 
 
 def main(argv=None):

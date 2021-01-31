@@ -1,3 +1,4 @@
+import os
 import unittest.mock as mock
 
 import pytest
@@ -26,8 +27,8 @@ def test_srcpath(mock_make_site, mock_getcwd, mock_isdir, srcpath, expected):
         argv.append('--srcpath={}'.format(srcpath))
     cli.main(argv)
     mock_make_site.assert_called_once_with(
-        searchpath=expected,
-        outpath='/cwd',
+        searchpath=os.path.normpath(expected),
+        outpath=os.path.normpath('/cwd'),
         staticpaths=None
     )
 
@@ -54,8 +55,8 @@ def test_outpath(mock_make_site, mock_getcwd, mock_isdir, outpath, expected):
         argv.append('--outpath={}'.format(outpath))
     cli.main(argv)
     mock_make_site.assert_called_once_with(
-        searchpath='/cwd/templates',
-        outpath=expected,
+        searchpath=os.path.normpath('/cwd/templates'),
+        outpath=os.path.normpath(expected),
         staticpaths=None
     )
 
