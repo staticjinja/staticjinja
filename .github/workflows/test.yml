@@ -1,0 +1,20 @@
+name: test
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-sj-install:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.x
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x' # Latest python release
+    - name: try installing SJ from PyPI
+      run: |
+        python -m pip install --upgrade pip
+        pip install staticjinja -vvv
+        which staticjinja
+        staticjinja build
