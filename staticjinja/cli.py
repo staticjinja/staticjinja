@@ -26,7 +26,7 @@ import sys
 from docopt import docopt
 
 from .staticjinja import Site
-from .version import __version__
+from staticjinja import __version__
 
 
 def render(args):

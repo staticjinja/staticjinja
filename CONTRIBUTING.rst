@@ -13,36 +13,38 @@ Get the Code
 ------------
 
 Fork the `staticjinja/staticjinja`_ repository on GitHub. Clone a copy of your
-fork, install all the dependencies, and then install tox_ for testing:
+fork and get set up:
 
 .. code-block:: bash
 
     $ cd $HOME/projects
     $ git clone git://github.com/{YOUR_USERNAME}/staticjinja.git
     $ cd staticjinja
-    $ python -m pip install --upgrade pip
-    $ pip install -r requirements.txt
-    $ pip install tox
+    $ make init
+
+The dev dependencies are installed in a virtual environment managed by poetry.
+To use the dev tools (such as the ``pytest`` or ``flake8`` commands),
+you need to either run them inside the poetry virtual environment with
+``poetry run pytest``, or enter a poetry shell with ``poetry shell`` and then
+you can run them directly such as ``pytest``. See the `Poetry docs`_ for more
+info.
 
 Making Changes
 --------------
 
-Start making edits! If you want to test your personal project on your changes,
-then you'll want to install staticjinja as ``editable``. Then your project
-will use the local, edited version of staticjinja.
-
-.. code-block:: bash
-
-    $ python3 -m pip install -e .
+Start making edits! The ``poetry install`` command that was run in ``make init``
+should have installed the local version of staticjinja in editable mode.
+Any other projects on your system should be using the local version, in case
+you want to test your changes.
 
 Testing your Changes
 --------------------
 
-You should test your changes with tox_:
+You should test your changes:
 
 .. code-block:: bash
 
-    $ tox
+    $ make test
 
 This will:
 
@@ -77,5 +79,5 @@ Thanks for your help!
 
 .. _staticjinja/staticjinja : https://github.com/staticjinja/staticjinja
 .. _Issues: https://github.com/staticjinja/staticjinja/issues
-.. _tox: https://tox.readthedocs.org/en/stable/
+.. _Poetry docs: https://python-poetry.org/docs/basic-usage/#using-your-virtual-environment
 .. _good commit message style: https://chris.beams.io/posts/git-commit/
