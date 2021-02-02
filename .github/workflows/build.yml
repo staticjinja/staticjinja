@@ -28,18 +28,15 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install tox
+      run: make init
     # Run tox using the version of Python in `PATH`
     - name: Run tox
-      run: tox -e py --skip-missing-interpreters=false
+      run: poetry run tox -e py --skip-missing-interpreters=false
     # Upload pytest's scratch space, which was set to .pytest/ in tox.ini
     # Useful for debugging.
     - name: Upload pytest tmpdir
       uses: actions/upload-artifact@v2
-      # if: failure() # Only upload on failure or previous step.
+      if: failure() # Only upload on failure of previous step.
       with:
         name: pytest-tmpdir ${{ matrix.python-version }} ${{ matrix.os }}
         path: .pytest/
@@ -53,12 +50,9 @@ jobs:
       with:
         python-version: '3.x' # Latest python release
     - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install tox
+      run: make init
     - name: Run flake8 with tox
-      run: tox -e flake8 --skip-missing-interpreters=false
+      run: poetry run tox -e flake8 --skip-missing-interpreters=false
   docs:
     runs-on: ubuntu-latest
     steps:
@@ -68,12 +62,9 @@ jobs:
       with:
         python-version: '3.x' # Latest python release
     - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install tox
+      run: make init
     - name: Run tox with docs environment
-      run: tox -e docs --skip-missing-interpreters=false
+      run: poetry run tox -e docs --skip-missing-interpreters=false
   coverage:
     # Only run test coverage on a single python version on Ubuntu
     runs-on: ubuntu-latest
@@ -84,13 +75,10 @@ jobs:
       with:
         python-version: '3.x' # Latest python release
     - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install tox
+      run: make init
     - name: Run tox `coverage` environment and upload results
       # Use -Z to fail the workflow if the upload fails.
       # Use -f to specify the report file explicitly.
       run: |
-        tox -e coverage
+        poetry run tox -e coverage
         bash <(curl -s https://codecov.io/bash) -Z -f coverage.xml

@@ -1,17 +1,28 @@
 .PHONY: docs
 
 init:
-	pip install -r requirements.txt
+	# Need a way to use python3 version of pip, but `python3 -m pip` doesn't
+	# work on windows, and just `python -m pip` or `pip` might use 2.7 on OSX
+	pip3 install poetry
+	# Install dependencies, including dev deps
+	poetry install -E dev
 
 test:
-	tox
+	poetry run tox
 
 coverage:
-	tox -e coverage
+	poetry run tox -e coverage
 
+build:
+	poetry build
+	poetry run twine check dist/*
+	
 publish:
-	python setup.py sdist upload
-	python setup.py bdist_wheel upload
+	poetry publish
+
+update:
+	poetry update
+	poetry install -E dev
 
 docs:
 	cd docs && make html

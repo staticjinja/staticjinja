@@ -6,6 +6,12 @@ Unreleased_
 
 .. _Unreleased: https://github.com/staticjinja/staticjinja/compare/1.0.3...HEAD
 
+Changed
+^^^^^^^
+
+* Use ``poetry`` as our package manager. This should change the development
+  workflow but not the user experience.
+
 1.0.3_ (2021-01-24)
 -------------------
 
