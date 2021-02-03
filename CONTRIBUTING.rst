@@ -49,8 +49,13 @@ You should test your changes:
 This will:
 
 * Run tests on multiple Python versions.
-* Check that the code is formatted to conform to PEP 8.
+* Check that the code is formatted and linted.
 * Check that the documentation builds successfully.
+* Check that the package builds successfully.
+
+If one part of this test in particular is failing, let's say building the docs,
+then you can iterate faster by just testing that one step with ``make docs``.
+See the makefile for all the possible recipes.
 
 Submitting a Pull Request
 -------------------------

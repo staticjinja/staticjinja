@@ -40,6 +40,17 @@ jobs:
       with:
         name: pytest-tmpdir ${{ matrix.python-version }} ${{ matrix.os }}
         path: .pytest/
+  black:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.x' # Latest python release
+    - name: Install dependencies
+      run: make init
+    - name: Check that we conform to black
+      run: make black-check
   flake8:
     # Only run the linter on a single python version on Ubuntu
     runs-on: ubuntu-latest

@@ -46,35 +46,31 @@ def render(args):
                 'watch': False
             }
     """
+
     def resolve(path):
         if not os.path.isabs(path):
             path = os.path.join(os.getcwd(), path)
         return os.path.normpath(path)
 
-    srcpath = resolve(args['--srcpath'])
+    srcpath = resolve(args["--srcpath"])
     if not os.path.isdir(srcpath):
         print("The templates directory '{}' is invalid.".format(srcpath))
         sys.exit(1)
 
-    outpath = resolve(args['--outpath'])
+    outpath = resolve(args["--outpath"])
 
-    staticdirs = args['--static']
+    staticdirs = args["--static"]
     staticpaths = None
     if staticdirs:
         staticpaths = staticdirs.split(",")
         for path in staticpaths:
             path = os.path.join(srcpath, path)
             if not os.path.isdir(path):
-                print("The static files directory '{}' is"
-                      "invalid.".format(path))
+                print("The static files directory '{}' is invalid.".format(path))
                 sys.exit(1)
 
-    site = Site.make_site(
-        searchpath=srcpath,
-        outpath=outpath,
-        staticpaths=staticpaths
-    )
-    site.render(use_reloader=args['watch'])
+    site = Site.make_site(searchpath=srcpath, outpath=outpath, staticpaths=staticpaths)
+    site.render(use_reloader=args["watch"])
 
 
 def main(argv=None):
@@ -83,5 +79,5 @@ def main(argv=None):
     render(docopt(__doc__, argv=argv, version=__version__))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

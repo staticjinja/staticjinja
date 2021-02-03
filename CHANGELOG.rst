@@ -9,10 +9,12 @@ Unreleased_
 Changed
 ^^^^^^^
 
-* Use ``poetry`` as our package manager. This should change the development
-  workflow but not the user experience.
+* Internal: Use ``poetry`` as our package manager. This should change the
+  development workflow but not the user experience.
 
 * Internal: Moved many tests/checks out of tox and into Makefile.
+
+* Internal: Use black as our formatter.
 
 1.0.3_ (2021-01-24)
 -------------------

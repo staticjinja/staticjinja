@@ -9,10 +9,13 @@ import markdown
 from staticjinja import Site
 
 markdowner = markdown.Markdown(output_format="html5")
+
+
 def md_context(template):
     with open(template.filename) as f:
         markdown_content = f.read()
-        return {'post_content_html': markdowner.convert(markdown_content)}
+        return {"post_content_html": markdowner.convert(markdown_content)}
+
 
 def render_md(site, template, **kwargs):
     # Given a template such as posts/post1.md
@@ -31,11 +34,12 @@ def render_md(site, template, **kwargs):
     post_template = site.get_template("_post.html")
     post_template.stream(**kwargs).dump(out, encoding="utf-8")
 
+
 site = Site.make_site(
-        searchpath='src',
-        outpath='build',
-        contexts=[('.*.md', md_context)],
-        rules = [('.*.md', render_md)],
-        )
+    searchpath="src",
+    outpath="build",
+    contexts=[(".*.md", md_context)],
+    rules=[(".*.md", render_md)],
+)
 
 site.render()
