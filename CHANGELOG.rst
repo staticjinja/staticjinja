@@ -4,10 +4,20 @@ Changelog
 Unreleased_
 -----------
 
-.. _Unreleased: https://github.com/staticjinja/staticjinja/compare/1.0.3...HEAD
+.. _Unreleased: https://github.com/staticjinja/staticjinja/compare/1.0.4...HEAD
+
+1.0.4_ (2021-02-02)
+-------------------
+
+.. _1.0.4: https://github.com/staticjinja/staticjinja/compare/1.0.3...1.0.4
 
 Changed
 ^^^^^^^
+
+* Contributing info is updated/improved.
+
+* CLI help message is better formatted and more useful. How it works shouldn't
+  have changed.
 
 * Internal: Use ``poetry`` as our package manager. This should change the
   development workflow but not the user experience.
@@ -15,6 +25,8 @@ Changed
 * Internal: Moved many tests/checks out of tox and into Makefile.
 
 * Internal: Use black as our formatter.
+
+* Improve some tests and add some more CLI tests.
 
 1.0.3_ (2021-01-24)
 -------------------
