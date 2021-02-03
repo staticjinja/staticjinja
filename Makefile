@@ -6,6 +6,8 @@ init:
 	pip3 install poetry
 	# Install dependencies, including dev deps
 	poetry install -E dev
+	# Ignore bulk refactor/reformat changes when running `git blame`
+	git config blame.ignoreRevsFile .git-blame-ignore-revs
 
 black:
 	poetry run black .
