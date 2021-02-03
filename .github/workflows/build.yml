@@ -30,9 +30,9 @@ jobs:
     - name: Install dependencies
       run: make init
     # Run tox using the version of Python in `PATH`
-    - name: Run tox
-      run: poetry run tox -e py --skip-missing-interpreters=false
-    # Upload pytest's scratch space, which was set to .pytest/ in tox.ini
+    - name: Run tests in tox
+      run: poetry run tox -e py
+    # Upload pytest's scratch space, which was set to .pytest/ in setup.cfg
     # Useful for debugging.
     - name: Upload pytest tmpdir
       uses: actions/upload-artifact@v2
@@ -40,7 +40,7 @@ jobs:
       with:
         name: pytest-tmpdir ${{ matrix.python-version }} ${{ matrix.os }}
         path: .pytest/
-  lint:
+  flake8:
     # Only run the linter on a single python version on Ubuntu
     runs-on: ubuntu-latest
     steps:
@@ -51,8 +51,8 @@ jobs:
         python-version: '3.x' # Latest python release
     - name: Install dependencies
       run: make init
-    - name: Run flake8 with tox
-      run: poetry run tox -e flake8 --skip-missing-interpreters=false
+    - name: Run flake8
+      run: make flake8
   docs:
     runs-on: ubuntu-latest
     steps:
@@ -63,8 +63,8 @@ jobs:
         python-version: '3.x' # Latest python release
     - name: Install dependencies
       run: make init
-    - name: Run tox with docs environment
-      run: poetry run tox -e docs --skip-missing-interpreters=false
+    - name: Build docs
+      run: make docs
   coverage:
     # Only run test coverage on a single python version on Ubuntu
     runs-on: ubuntu-latest
@@ -76,9 +76,5 @@ jobs:
         python-version: '3.x' # Latest python release
     - name: Install dependencies
       run: make init
-    - name: Run tox `coverage` environment and upload results
-      # Use -Z to fail the workflow if the upload fails.
-      # Use -f to specify the report file explicitly.
-      run: |
-        poetry run tox -e coverage
-        bash <(curl -s https://codecov.io/bash) -Z -f coverage.xml
+    - name: Measure test coverage and upload results
+      run: make coverage-upload
