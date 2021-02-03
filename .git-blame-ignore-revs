@@ -1,0 +1,6 @@
+# To ignore the following commits when running `git blame` (useful
+# for ignoring bulk reformats that don't actually change anything), run:
+# git config blame.ignoreRevsFile .git-blame-ignore-revs
+
+# Migrate code style to Black
+f1190228226d5c13a3d7e15e0da9b0fdbec8cb77
