@@ -7,12 +7,19 @@ init:
 	# Install dependencies, including dev deps
 	poetry install -E dev
 
+black:
+	poetry run black .
+
+black-check:
+	@echo If you actually want to reformat, run make black instead
+	poetry run black . --check
+
 flake8:
 	poetry run flake8
 
 tox:
 	# If a developer doesn't have all the python versions installed,
-	# It's OK just skip them.
+	# It's OK just skip them. All versions will be tested in CI.
 	poetry run tox --skip-missing-interpreters=true
 
 docs:
@@ -28,7 +35,7 @@ docs:
 docs-view: docs
 	open docs/build/html/index.html
 
-test: flake8 tox docs build
+test: black-check flake8 tox docs build
 
 coverage:
 	poetry run pytest --cov=staticjinja --cov-report=xml --cov-config=setup.cfg

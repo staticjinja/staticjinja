@@ -70,17 +70,18 @@ class Site(object):
         ``False``.
     """
 
-    def __init__(self,
-                 environment,
-                 searchpath,
-                 outpath=".",
-                 encoding="utf8",
-                 logger=None,
-                 contexts=None,
-                 rules=None,
-                 staticpaths=None,
-                 mergecontexts=False,
-                 ):
+    def __init__(
+        self,
+        environment,
+        searchpath,
+        outpath=".",
+        encoding="utf8",
+        logger=None,
+        contexts=None,
+        rules=None,
+        staticpaths=None,
+        mergecontexts=False,
+    ):
         self.env = environment
         self.searchpath = searchpath
         self.outpath = outpath
@@ -98,19 +99,21 @@ class Site(object):
         self.mergecontexts = mergecontexts
 
     @classmethod
-    def make_site(cls,
-                  searchpath="templates",
-                  outpath=".",
-                  contexts=None,
-                  rules=None,
-                  encoding="utf8",
-                  followlinks=True,
-                  extensions=None,
-                  staticpaths=None,
-                  filters={},
-                  env_globals={},
-                  env_kwargs=None,
-                  mergecontexts=False):
+    def make_site(
+        cls,
+        searchpath="templates",
+        outpath=".",
+        contexts=None,
+        rules=None,
+        encoding="utf8",
+        followlinks=True,
+        extensions=None,
+        staticpaths=None,
+        filters={},
+        env_globals={},
+        env_kwargs=None,
+        mergecontexts=False,
+    ):
         """Create a :class:`Site <Site>` object.
 
         :param searchpath:
@@ -186,29 +189,31 @@ class Site(object):
                 project_path = os.getcwd()
             else:
                 # Called from a .py file
-                project_path = os.path.realpath(os.path.dirname(
-                    calling_module.__file__))
+                project_path = os.path.realpath(
+                    os.path.dirname(calling_module.__file__)
+                )
             searchpath = os.path.join(project_path, searchpath)
 
         if env_kwargs is None:
             env_kwargs = {}
-        env_kwargs['loader'] = FileSystemLoader(searchpath=searchpath,
-                                                encoding=encoding,
-                                                followlinks=followlinks)
-        env_kwargs.setdefault('extensions', extensions or [])
+        env_kwargs["loader"] = FileSystemLoader(
+            searchpath=searchpath, encoding=encoding, followlinks=followlinks
+        )
+        env_kwargs.setdefault("extensions", extensions or [])
         environment = Environment(**env_kwargs)
         environment.filters.update(filters)
         environment.globals.update(env_globals)
 
-        return cls(environment,
-                   searchpath=searchpath,
-                   outpath=outpath,
-                   encoding=encoding,
-                   rules=rules,
-                   contexts=contexts,
-                   staticpaths=staticpaths,
-                   mergecontexts=mergecontexts,
-                   )
+        return cls(
+            environment,
+            searchpath=searchpath,
+            outpath=outpath,
+            encoding=encoding,
+            rules=rules,
+            contexts=contexts,
+            staticpaths=staticpaths,
+            mergecontexts=mergecontexts,
+        )
 
     @property
     def template_names(self):
@@ -232,7 +237,7 @@ class Site(object):
         try:
             return self.env.get_template(template_name)
         except UnicodeDecodeError as e:
-            raise UnicodeError('Unable to decode %s: %s' % (template_name, e))
+            raise UnicodeError("Unable to decode %s: %s" % (template_name, e))
 
     def get_context(self, template):
         """Get the context for a template.
@@ -415,14 +420,12 @@ class Site(object):
         self.copy_static(self.static_names)
 
         if use_reloader:
-            self.logger.info("Watching '%s' for changes..." %
-                             self.searchpath)
+            self.logger.info("Watching '%s' for changes..." % self.searchpath)
             self.logger.info("Press Ctrl+C to stop.")
             Reloader(self).watch()
 
     def __repr__(self):
-        return "%s('%s', '%s')" % (type(self).__name__,
-                                   self.searchpath, self.outpath)
+        return "%s('%s', '%s')" % (type(self).__name__, self.searchpath, self.outpath)
 
 
 class Renderer(Site):

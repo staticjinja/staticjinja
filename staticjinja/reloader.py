@@ -10,6 +10,7 @@ class Reloader(object):
         A :class:`Site <Site>` object.
 
     """
+
     def __init__(self, site):
         self.site = site
 
@@ -26,9 +27,11 @@ class Reloader(object):
 
         :param filename: the path to the file that triggered the event.
         """
-        return (event_type in ("modified", "created") and
-                filename.startswith(self.searchpath) and
-                os.path.isfile(filename))
+        return (
+            event_type in ("modified", "created")
+            and filename.startswith(self.searchpath)
+            and os.path.isfile(filename)
+        )
 
     def event_handler(self, event_type, src_path):
         """Re-render templates if they are modified.
@@ -51,4 +54,5 @@ class Reloader(object):
     def watch(self):
         """Watch and reload modified templates."""
         import easywatch
+
         easywatch.watch(self.searchpath, self.event_handler)
