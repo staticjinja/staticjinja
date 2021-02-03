@@ -7,8 +7,7 @@ started with staticjinja.
 Installation
 ------------
 
-Installing staticjinja is simple with `pip
-<https://pip.pypa.io>`_::
+Installing staticjinja is simple:
 
     $ pip install staticjinja
 

@@ -7,11 +7,45 @@ init:
 	# Install dependencies, including dev deps
 	poetry install -E dev
 
-test:
-	poetry run tox
+flake8:
+	poetry run flake8
+
+tox:
+	# If a developer doesn't have all the python versions installed,
+	# It's OK just skip them.
+	poetry run tox --skip-missing-interpreters=true
+
+docs:
+	# Build docs html and verify all external links work
+	poetry run sphinx-build -W \
+	-b html \
+	-b linkcheck \
+	-d docs/build/doctrees \
+	docs \
+	docs/build/html
+
+# Build docs and then view them
+docs-view: docs
+	open docs/build/html/index.html
+
+test: flake8 tox docs build
 
 coverage:
-	poetry run tox -e coverage
+	poetry run pytest --cov=staticjinja --cov-report=xml --cov-config=setup.cfg
+	# Generate the html view of the coverage results, for local viewing.
+	poetry run coverage html
+
+# Make a coverage report and then view them
+coverage-view: coverage
+	open .htmlcov/index.html
+
+# Use bash to evaluate this, since Make by default uses sh
+coverage-upload: SHELL:=/bin/bash
+coverage-upload: coverage
+	# Use -Z to fail if the upload fails.
+	# Use -f to specify the report file explicitly.
+	# If not on CI you will need to run `export CODECOV_TOKEN="token"` before.
+	bash <(curl -s https://codecov.io/bash) -Z -f coverage.xml
 
 build:
 	poetry build
@@ -23,7 +57,3 @@ publish:
 update:
 	poetry update
 	poetry install -E dev
-
-docs:
-	cd docs && make html
-	@echo "\033[95m\n\nBuild successful! View the docs homepage at docs/_build/html/index.html.\n\033[0m"

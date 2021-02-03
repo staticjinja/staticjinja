@@ -12,6 +12,8 @@ Changed
 * Use ``poetry`` as our package manager. This should change the development
   workflow but not the user experience.
 
+* Internal: Moved many tests/checks out of tox and into Makefile.
+
 1.0.3_ (2021-01-24)
 -------------------
 
@@ -257,10 +259,8 @@ Fixed
 * "Renderer" was renamed to "Site" and the Reloader was moved
   staticjinja.reloader.
 
-0.3.0_ (2014-06-04)
+0.3.0 (2014-06-04)
 -------------------
-
-.. _0.3.0: https://github.com/staticjinja/staticjinja/compare/0.2.0...0.3.0
 
 * Add a command, ``staticjinja``, to handle the simple case of
   building context-less templates.
