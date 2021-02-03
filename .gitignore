@@ -27,11 +27,3 @@ coverage.xml
 
 #Translations
 *.mo
-
-#Mr Developer
-.mr.developer.cfg
-
-# Compiled html
-/*.html
-
-docs/_build
