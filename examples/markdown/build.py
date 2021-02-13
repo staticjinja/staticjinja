@@ -1,5 +1,5 @@
-# build.py
 #!/usr/bin/env python3
+# build.py
 import os
 
 # Markdown to HTML library
