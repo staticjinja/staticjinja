@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # staticjinja documentation build configuration file, created by
 # sphinx-quickstart on Sat Nov 30 14:33:03 2013.
 #
