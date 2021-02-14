@@ -25,6 +25,11 @@ def _has_argument(func):
     return bool(inspect.signature(func).parameters)
 
 
+def _ensure_dir(path):
+    """Ensure the directory for a file exists."""
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+
+
 class Site(object):
     """The Site object.
 
@@ -330,14 +335,6 @@ class Site(object):
             return False
         return True
 
-    def _ensure_dir(self, template_name):
-        """Ensure the output directory for a template exists."""
-        head = os.path.dirname(template_name)
-        if head:
-            file_dirpath = os.path.join(self.outpath, head)
-            if not os.path.exists(file_dirpath):
-                os.makedirs(file_dirpath)
-
     def render_template(self, template, context=None, filepath=None):
         """Render a single :class:`jinja2.Template` object.
 
@@ -363,15 +360,12 @@ class Site(object):
         if context is None:
             context = self.get_context(template)
 
-        if not os.path.exists(self.outpath):
-            os.makedirs(self.outpath)
-        self._ensure_dir(template.name)
-
         try:
             rule = self.get_rule(template.name)
         except ValueError:
             if filepath is None:
                 filepath = os.path.join(self.outpath, template.name)
+            _ensure_dir(filepath)
             template.stream(**context).dump(filepath, self.encoding)
         else:
             rule(self, template, **context)
@@ -390,7 +384,7 @@ class Site(object):
             input_location = os.path.join(self.searchpath, f)
             output_location = os.path.join(self.outpath, f)
             self.logger.info("Copying %s to %s." % (f, output_location))
-            self._ensure_dir(f)
+            _ensure_dir(output_location)
             shutil.copy2(input_location, output_location)
 
     def get_dependencies(self, filename):
