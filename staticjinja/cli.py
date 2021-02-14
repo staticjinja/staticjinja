@@ -16,8 +16,8 @@ Options:
   --srcpath=<srcpath>   Directory in which to build from [default: ./templates]
   --outpath=<outpath>   Directory in which to build to [default: ./]
   --static=<a,b,c>      Directory(s) within <srcpath> containing static files
-  -h --help     Show this screen.
-  --version     Show version.
+  -h --help             Show this screen.
+  --version             Show version.
 """
 import os
 import sys
