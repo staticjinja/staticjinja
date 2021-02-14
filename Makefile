@@ -24,18 +24,25 @@ tox:
 	# It's OK just skip them. All versions will be tested in CI.
 	poetry run tox --skip-missing-interpreters=true
 
-docs:
-	# Build docs html and verify all external links work
+# Build the docs HTML
+docs-html:
 	poetry run sphinx-build -W \
 	-b html \
-	-b linkcheck \
 	-d docs/build/doctrees \
 	docs \
 	docs/build/html
 
 # Build docs and then view them
-docs-view: docs
+docs-view: docs-html
 	open docs/build/html/index.html
+
+# Build docs and verify all external links work
+docs: docs-html
+	poetry run sphinx-build -W \
+	-b linkcheck \
+	-d docs/build/doctrees \
+	docs \
+	docs/build/html
 
 test: black-check flake8 tox docs build
 
