@@ -276,7 +276,7 @@ in ``render_md()``:
    :language: python
 
 Note the rule we defined at the bottom. It tells staticjinja to check
-if the filename matches the ``.*.md`` regex, and if it does, to
+if the filename matches the ``.*\.md`` regex, and if it does, to
 render the file using ``render_md()``.
 
 There are other, more complicated things you could do in a custom render
