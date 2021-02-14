@@ -6,6 +6,23 @@ Unreleased_
 
 .. _Unreleased: https://github.com/staticjinja/staticjinja/compare/1.0.4...HEAD
 
+Changed
+^^^^^^^
+
+* Improved CLI help message formatting
+
+* Revert the change made in #71_. Ensuring output locations exist should be the
+  responsibility of the custom render function, since there's no guarantee
+  what output locations the custom render function might use. This might only
+  affect those using custom render functions.
+
+.. _#71: https://github.com/staticjinja/staticjinja/pull/71
+
+Fixed
+^^^^^
+
+* Internal: Made flake8 check actually runs against files, other small fixups
+
 1.0.4_ (2021-02-02)
 -------------------
 
