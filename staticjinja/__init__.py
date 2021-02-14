@@ -15,10 +15,9 @@ Please file bugs, view source code, and contribute at
 https://github.com/staticjinja/staticjinja/
 """
 
-# flake8: noqa
 # This needs to match what is in pyproject.toml
 __version_info__ = (1, 0, 4)
 __version__ = ".".join(map(str, __version_info__))
 
-from .reloader import Reloader
-from .staticjinja import make_site, Site
+from .reloader import Reloader  # noqa: F401 (unused import)
+from .staticjinja import make_site, Site  # noqa: F401 (unused import)
