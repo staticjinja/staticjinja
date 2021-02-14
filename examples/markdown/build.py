@@ -38,8 +38,8 @@ def render_md(site, template, **kwargs):
 site = Site.make_site(
     searchpath="src",
     outpath="build",
-    contexts=[(".*.md", md_context)],
-    rules=[(".*.md", render_md)],
+    contexts=[(r".*\.md", md_context)],
+    rules=[(r".*\.md", render_md)],
 )
 
 site.render()
