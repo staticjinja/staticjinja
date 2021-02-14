@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 # build.py
 import os
+from pathlib import Path
 
-# Markdown to HTML library
-# https://pypi.org/project/Markdown/
 import markdown
 
 from staticjinja import Site
@@ -12,27 +11,17 @@ markdowner = markdown.Markdown(output_format="html5")
 
 
 def md_context(template):
-    with open(template.filename) as f:
-        markdown_content = f.read()
-        return {"post_content_html": markdowner.convert(markdown_content)}
+    markdown_content = Path(template.filename).read_text()
+    return {"post_content_html": markdowner.convert(markdown_content)}
 
 
 def render_md(site, template, **kwargs):
-    # Given a template such as posts/post1.md
-    # Determine the post's title (post1) and it's directory (posts/)
-    directory, fname = os.path.split(template.name)
-    post_title, _ = fname.split(".")
+    # i.e. posts/post1.md -> build/posts/post1.html
+    out = site.outpath / Path(template.name).with_suffix(".html")
 
-    # Determine where the result will be streamed (build/posts/post1.html)
-    out_dir = os.path.join(site.outpath, directory)
-    post_fname = "{}.html".format(post_title)
-    out = os.path.join(out_dir, post_fname)
-
-    # Render and stream the result
-    if not os.path.exists(out_dir):
-        os.makedirs(out_dir)
-    post_template = site.get_template("_post.html")
-    post_template.stream(**kwargs).dump(out, encoding="utf-8")
+    # Compile and stream the result
+    os.makedirs(out.parent, exist_ok=True)
+    site.get_template("_post.html").stream(**kwargs).dump(str(out), encoding="utf-8")
 
 
 site = Site.make_site(
