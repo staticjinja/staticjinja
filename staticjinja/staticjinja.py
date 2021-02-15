@@ -7,6 +7,7 @@ Uses Jinja2 to compile templates.
 import inspect
 import logging
 import os
+from pathlib import Path
 import re
 import shutil
 import warnings
@@ -27,7 +28,7 @@ def _has_argument(func):
 
 def _ensure_dir(path):
     """Ensure the directory for a file exists."""
-    os.makedirs(os.path.dirname(path), exist_ok=True)
+    os.makedirs(os.path.dirname(Path(path)), exist_ok=True)
 
 
 class Site(object):
@@ -237,6 +238,7 @@ class Site(object):
 
         :param template_name: A string representing the name of the template.
         """
+        template_name = Path(template_name).as_posix()
         try:
             return self.env.get_template(template_name)
         except UnicodeDecodeError as e:
@@ -283,41 +285,42 @@ class Site(object):
                 return render_func
         raise ValueError("no matching rule")
 
-    def is_static(self, template_name):
-        """Check if a template is a static template. Static template are copied,
-        rather than compiled using Jinja2.
+    def is_static(self, filename):
+        """Check if a file is static. Static files are copied, rather than
+        compiled using Jinja2.
 
         .. deprecated:: 0.3.4
 
         A template is considered static if it lives in any of the directories
         specified in ``staticpaths``.
 
-        :param template_name: the name of the template to check
+        :param filename: A PathLike name of the file to check.
 
         """
-        return any(template_name.startswith(path) for path in self.staticpaths)
+        path = Path(filename).as_posix()
+        return any(path.startswith(Path(sp).as_posix()) for sp in self.staticpaths)
 
-    def is_partial(self, template_name):
-        """Check if a template is a partial template. Partial templates are not
+    def is_partial(self, filename):
+        """Check if a file is partial. Partial files are not
         rendered, but they are used in rendering templates.
 
-        A template is considered a partial if it or any of its parent
+        A file is considered a partial if it or any of its parent
         directories are prefixed with an ``'_'``.
 
-        :param template_name: the name of the template to check
+        :param filename: A PathLike name of the file to check
         """
-        return any((x.startswith("_") for x in template_name.split("/")))
+        return any(part.startswith("_") for part in Path(filename).parts)
 
-    def is_ignored(self, template_name):
-        """Check if a template is an ignored template. Ignored templates are
+    def is_ignored(self, filename):
+        """Check if a file is an ignored. Ignored files are
         neither rendered nor used in rendering templates.
 
-        A template is considered ignored if it or any of its parent directories
+        A file is considered ignored if it or any of its parent directories
         are prefixed with an ``'.'``.
 
-        :param template_name: the name of the template to check
+        :param filename: A PathLike name of the file to check
         """
-        return any((x.startswith(".") for x in template_name.split("/")))
+        return any(part.startswith(".") for part in Path(filename).parts)
 
     def is_template(self, filename):
         """Check if a file is a template.
@@ -325,7 +328,7 @@ class Site(object):
         A file is a considered a template if it is not partial, ignored, or
         static.
 
-        :param filename: the name of the file to check
+        :param filename: A PathLike name of the file to check
         """
         if self.is_partial(filename):
             return False
@@ -381,9 +384,10 @@ class Site(object):
 
     def copy_static(self, files):
         for f in files:
-            input_location = os.path.join(self.searchpath, f)
-            output_location = os.path.join(self.outpath, f)
-            self.logger.info("Copying %s to %s." % (f, output_location))
+            f = Path(f)
+            input_location = Path(self.searchpath) / f
+            output_location = Path(self.outpath) / f
+            self.logger.info("Copying %s to %s.", f, output_location)
             _ensure_dir(output_location)
             shutil.copy2(input_location, output_location)
 
