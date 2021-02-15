@@ -43,7 +43,7 @@ class Reloader(object):
         """
         filename = os.path.relpath(src_path, self.searchpath)
         if self.should_handle(event_type, src_path):
-            print("{} {}".format(event_type, filename))
+            self.site.logger.info("%s %s", event_type, filename)
             if self.site.is_static(filename):
                 files = self.site.get_dependencies(filename)
                 self.site.copy_static(files)
@@ -55,4 +55,6 @@ class Reloader(object):
         """Watch and reload modified templates."""
         import easywatch
 
+        self.site.logger.info("Watching '%s' for changes...", self.searchpath)
+        self.site.logger.info("Press Ctrl+C to stop.")
         easywatch.watch(self.searchpath, self.event_handler)
