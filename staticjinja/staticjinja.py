@@ -412,8 +412,6 @@ class Site(object):
         self.copy_static(self.static_names)
 
         if use_reloader:
-            self.logger.info("Watching '%s' for changes..." % self.searchpath)
-            self.logger.info("Press Ctrl+C to stop.")
             Reloader(self).watch()
 
     def __repr__(self):
