@@ -160,12 +160,10 @@ def test_with_reloader(monkeypatch, site):
 def test_should_handle(reloader, root_path, template_path):
     exists = template_path / "template1.html"
     DNE = template_path / "DNE.html"
-    outside_searchpath = root_path / "file.txt"
     assert reloader.should_handle("created", str(exists))
     assert reloader.should_handle("modified", str(exists))
     assert not reloader.should_handle("deleted", str(exists))
     assert not reloader.should_handle("modified", str(DNE))
-    assert not reloader.should_handle("modified", str(outside_searchpath))
 
 
 def test_event_handler(monkeypatch, reloader, template_path):

@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 
 class Reloader(object):
@@ -21,17 +22,14 @@ class Reloader(object):
     def should_handle(self, event_type, filename):
         """Check if an event should be handled.
 
-        An event should be handled if a file in the searchpath was modified.
+        An event should be handled if a file was created or modified, and
+        still exists.
 
         :param event_type: a string, representing the type of event
 
         :param filename: the path to the file that triggered the event.
         """
-        return (
-            event_type in ("modified", "created")
-            and filename.startswith(self.searchpath)
-            and os.path.isfile(filename)
-        )
+        return event_type in ("modified", "created") and Path(filename).is_file()
 
     def event_handler(self, event_type, src_path):
         """Re-render templates if they are modified.
