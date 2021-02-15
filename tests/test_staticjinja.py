@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 
 from pytest import fixture, mark, raises
 
@@ -87,12 +87,17 @@ def test_get_rule(site):
     assert site.get_rule("template2.html")
 
 
-def test_get_dependencies(site):
+def test_get_dependents(monkeypatch, site):
     filename = "test.txt"
-    site.get_template = lambda x: filename
-    assert site.get_dependencies(".%s" % filename) == []
-    assert list(site.get_dependencies("_%s" % filename)) == list(site.templates)
-    assert list(site.get_dependencies("%s" % filename)) == [filename]
+    # An ignored file has no dependendents
+    assert site.get_dependents(".%s" % filename) == []
+    # All the other templates might depend on a partial
+    mock_template_names = ["a", "b", "c"]
+    monkeypatch.setattr(Site, "template_names", mock_template_names)
+    assert list(site.get_dependents("_%s" % filename)) == mock_template_names
+    # A normal template only has itself as a dependent
+    assert list(site.get_dependents("%s" % filename)) == [filename]
+    # TODO maybe test that static files only have themselves as dependents
 
 
 def test_render_template(site, build_path):
@@ -180,17 +185,17 @@ def test_event_handler(monkeypatch, reloader, template_path):
 
 
 def test_event_handler_static(monkeypatch, reloader, template_path):
-    copied_files = []
+    copied_paths = []
 
     def fake_copy_static(files):
-        copied_files.extend(f.replace(os.sep, "/") for f in files)
+        copied_paths.extend(Path(f) for f in files)
 
     monkeypatch.setattr(reloader.site, "copy_static", fake_copy_static)
 
     reloader.site.staticpaths = ["static_css"]
-    template1_path = str(template_path.join("static_css").join("hello.css"))
-    reloader.event_handler("modified", template1_path)
-    assert copied_files == list(reloader.site.static_names)
+    css_path = Path("static_css") / "hello.css"
+    reloader.event_handler("modified", template_path / css_path)
+    assert copied_paths == [css_path]
 
 
 is_ignored_cases = [

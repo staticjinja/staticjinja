@@ -391,21 +391,40 @@ class Site(object):
             _ensure_dir(output_location)
             shutil.copy2(input_location, output_location)
 
-    def get_dependencies(self, filename):
-        """Get a list of files that depends on the file named *filename*.
+    def get_dependents(self, filename):
+        """Get a list of files that depends on *filename*. Useful to decide
+        what to re-render when *filename* changes.
 
-        :param filename: the name of the file to find dependencies of
+        - Ignored files have no dependents.
+        - Static and template files just have themselves as dependents.
+        - Partial files have all the templates as dependents, since any template
+          may rely upon a partial.
+
+        .. versionchanged:: 1.1.0
+           Now always returns list of filenames. Before the return type
+           was either a list of templates or list of filenames.
+
+        :param filename: the name of the file to find dependents of
+        :return: list of filenames of dependents.
         """
-        template_name = filename.replace(os.path.sep, "/")
-
-        if self.is_partial(template_name):
-            return self.templates
-        elif self.is_template(template_name):
-            return [self.get_template(filename)]
-        elif self.is_static(template_name):
+        if self.is_partial(filename):
+            return self.template_names
+        elif self.is_template(filename):
+            return [filename]
+        elif self.is_static(filename):
             return [filename]
         else:
             return []
+
+    def get_dependencies(self, filename):
+        """
+        .. deprecated:: 1.1.0
+           Use :meth:`Site.get_dependents` instead.
+        """
+        warnings.warn(
+            "Site.get_dependencies() is deprecated. Use Site.get_dependents() instead."
+        )
+        return self.get_dependents(filename)
 
     def render(self, use_reloader=False):
         """Generate the site.
