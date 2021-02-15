@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 
 
@@ -36,18 +35,18 @@ class Reloader(object):
 
         :param event_type: a string, representing the type of event
 
-        :param src_path: the path to the file that triggered the event.
-
+        :param src_path: the absolute path to the file that triggered the event.
         """
-        filename = os.path.relpath(src_path, self.searchpath)
-        if self.should_handle(event_type, src_path):
-            self.site.logger.info("%s %s", event_type, filename)
-            if self.site.is_static(filename):
-                files = self.site.get_dependencies(filename)
-                self.site.copy_static(files)
-            else:
-                templates = self.site.get_dependencies(filename)
-                self.site.render_templates(templates)
+        if not self.should_handle(event_type, src_path):
+            return
+        filename = Path(src_path).relative_to(self.searchpath)
+        self.site.logger.info("%s %s", event_type, filename)
+        for f in self.site.get_dependents(filename):
+            if self.site.is_static(f):
+                self.site.copy_static([f])
+            elif self.site.is_template(f):
+                t = self.site.get_template(f)
+                self.site.render_template(t)
 
     def watch(self):
         """Watch and reload modified templates."""
