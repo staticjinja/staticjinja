@@ -28,4 +28,4 @@ logger.setLevel(logging.INFO)
 logger.addHandler(logging.StreamHandler())
 
 from .reloader import Reloader  # noqa: F401,E402 (unused import, not at top of file)
-from .staticjinja import make_site, Site  # noqa: F401,E402
+from .staticjinja import Site  # noqa: F401,E402
