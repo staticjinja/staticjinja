@@ -4,6 +4,11 @@ Changelog
 Unreleased_
 -----------
 
+Added
+^^^^^
+
+* ``--log`` argument to CLI to set log level.
+
 Removed
 ^^^^^^^
 
