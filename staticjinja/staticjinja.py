@@ -480,34 +480,3 @@ class Site:
 
     def __repr__(self):
         return "%s('%s', '%s')" % (type(self).__name__, self.searchpath, self.outpath)
-
-
-class Renderer(Site):
-    def __init__(self, *args, **kwargs):
-        """
-        .. deprecated:: 0.3.1
-           Use :meth:`Site.make_site` instead.
-        """
-        warnings.warn("Renderer was renamed to Site.")
-        super().__init__(*args, **kwargs)
-
-    def run(self, use_reloader=False):
-        return self.render(use_reloader)
-
-
-def make_site(*args, **kwargs):
-    """
-    .. deprecated:: 0.3.4
-       Use :meth:`Site.make_site` instead.
-    """
-    warnings.warn("make_site was renamed to Site.make_site.")
-    return Site.make_site(*args, **kwargs)
-
-
-def make_renderer(*args, **kwargs):
-    """
-    .. deprecated:: 0.3.1
-       Use :meth:`Site.make_site` instead.
-    """
-    warnings.warn("make_renderer was renamed to Site.make_site.")
-    return make_site(*args, **kwargs)

@@ -16,6 +16,10 @@ Removed
   staticjinja-wide logger instead. See
   https://github.com/staticjinja/staticjinja/issues/144
 
+* Removed ``Renderer`` class and ``make_renderer`` function. Remove the bare
+  ``make_site`` function, use ``Site.make_site`` instead. All of this was deprecated 6
+  years ago, no one should still be using them.
+
 .. _Unreleased: https://github.com/staticjinja/staticjinja/compare/3.0.1...HEAD
 
 3.0.1_ (2021-07-02)
