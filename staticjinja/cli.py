@@ -16,16 +16,24 @@ Options:
   --srcpath=<srcpath>   Directory in which to build from [default: ./templates]
   --outpath=<outpath>   Directory in which to build to [default: ./]
   --static=<a,b,c>      Directory(s) within <srcpath> containing static files
+  --log=<level>         Log level {debug,info,warn,error,critical} [default: info]
   -h --help             Show this screen.
   --version             Show version.
 """
+import logging
 import os
 import sys
 
 from docopt import docopt
 
-from .staticjinja import Site
-from staticjinja import __version__
+import staticjinja
+
+
+def setup_logging(log_string):
+    numeric_level = getattr(logging, log_string.upper(), None)
+    if not isinstance(numeric_level, int):
+        raise ValueError(f"Invalid log level: {log_string}")
+    staticjinja.logger.setLevel(numeric_level)
 
 
 def render(args):
@@ -37,6 +45,7 @@ def render(args):
 
             {
                 '--help': False,
+                '--log': 'info',
                 '--outpath': './',
                 '--srcpath': './templates',
                 '--static': None,
@@ -45,6 +54,7 @@ def render(args):
                 'watch': False
             }
     """
+    setup_logging(args["--log"])
 
     def resolve(path):
         if not os.path.isabs(path):
@@ -68,14 +78,16 @@ def render(args):
                 print("The static files directory '{}' is invalid.".format(path))
                 sys.exit(1)
 
-    site = Site.make_site(searchpath=srcpath, outpath=outpath, staticpaths=staticpaths)
+    site = staticjinja.Site.make_site(
+        searchpath=srcpath, outpath=outpath, staticpaths=staticpaths
+    )
     site.render(use_reloader=args["watch"])
 
 
 def main(argv=None):
     if argv is None:
         argv = sys.argv[1:]
-    render(docopt(__doc__, argv=argv, version=__version__))
+    render(docopt(__doc__, argv=argv, version=staticjinja.__version__))
 
 
 if __name__ == "__main__":
