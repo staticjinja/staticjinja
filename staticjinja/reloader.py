@@ -1,4 +1,7 @@
+import logging
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 
 class Reloader:
@@ -40,7 +43,7 @@ class Reloader:
         if not self.should_handle(event_type, src_path):
             return
         filename = Path(src_path).relative_to(self.searchpath)
-        self.site.logger.info("%s %s", event_type, filename)
+        logger.info("%s %s", event_type, filename)
         for f in self.site.get_dependents(filename):
             if self.site.is_static(f):
                 self.site.copy_static([f])
@@ -52,6 +55,6 @@ class Reloader:
         """Watch and reload modified templates."""
         import easywatch
 
-        self.site.logger.info("Watching '%s' for changes...", self.searchpath)
-        self.site.logger.info("Press Ctrl+C to stop.")
+        logger.info("Watching '%s' for changes...", self.searchpath)
+        logger.info("Press Ctrl+C to stop.")
         easywatch.watch(self.searchpath, self.event_handler)

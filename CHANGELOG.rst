@@ -4,6 +4,13 @@ Changelog
 Unreleased_
 -----------
 
+Removed
+^^^^^^^
+
+* Removed ``logger`` argument to Site(). Use ``staticjinja.logger`` for the
+  staticjinja-wide logger instead. See
+  https://github.com/staticjinja/staticjinja/issues/144
+
 .. _Unreleased: https://github.com/staticjinja/staticjinja/compare/3.0.1...HEAD
 
 3.0.1_ (2021-07-02)
