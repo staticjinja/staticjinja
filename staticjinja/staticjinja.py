@@ -16,6 +16,8 @@ from jinja2 import Environment, FileSystemLoader
 
 from .reloader import Reloader
 
+logger = logging.getLogger(__name__)
+
 
 def _compute_context(context_like, template):
     if callable(context_like):
@@ -110,8 +112,9 @@ class Site:
         The encoding of templates to use.
 
     :param logger:
-        A logging.Logger object used to log events. Defaults to
-        ``logging.getLogger(__name__)``
+        .. deprecated:: 4.0.0
+
+        Use ``staticjinja.logger`` instead.
 
     :param staticpaths:
         .. deprecated:: 0.3.4
@@ -142,11 +145,12 @@ class Site:
         self.searchpath = searchpath
         self.outpath = outpath
         self.encoding = encoding
-        if logger is None:
-            logger = logging.getLogger(__name__)
-            logger.setLevel(logging.INFO)
-            logger.addHandler(logging.StreamHandler())
-        self.logger = logger
+        if logger is not None:
+            # TODO: Remove logger arg from __init__() completely.
+            # This might be buggy,
+            # See https://github.com/staticjinja/staticjinja/issues/144
+            warnings.warn("Site.logger is deprecated. Use staticjinja.logger instead.")
+            globals()["logger"] = logger
         self.contexts = contexts or []
         self.rules = rules or []
         if staticpaths:
@@ -395,7 +399,7 @@ class Site:
             Optional. A PathLike representing the output location.
             Defaults to to ``os.path.join(self.outpath, template.name)``.
         """
-        self.logger.info("Rendering %s..." % template.name)
+        logger.info("Rendering %s...", template.name)
 
         if context is None:
             context = self.get_context(template)
@@ -424,7 +428,7 @@ class Site:
             f = Path(f)
             input_location = Path(self.searchpath) / f
             output_location = Path(self.outpath) / f
-            self.logger.info("Copying %s to %s.", f, output_location)
+            logger.info("Copying %s to %s.", f, output_location)
             _ensure_dir(output_location)
             shutil.copy2(input_location, output_location)
 
