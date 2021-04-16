@@ -46,39 +46,35 @@ def test_get_dependents(monkeypatch, site):
 
 def test_render_template(site, build_path):
     site.render_template(site.get_template("template1.html"))
-    template1 = build_path.join("template1.html")
-    assert template1.check()
-    assert template1.read() == "Test 1"
+    template1 = build_path.joinpath("template1.html")
+    assert template1.read_text() == "Test 1"
 
 
 def test_render_nested_template(site, build_path):
     site.render_template(site.get_template("sub/template3.html"))
-    template3 = build_path.join("sub").join("template3.html")
-    assert template3.check()
-    assert template3.read() == "Test 3"
+    template3 = build_path.joinpath("sub", "template3.html")
+    assert template3.read_text() == "Test 3"
 
 
 def test_render_template_with_env_globals(template_path, build_path):
     """Ensure variables defined in env_globals can be accessed globally."""
     template_name = "template.html"
-    template_path.join(template_name).write("<h1>{{greeting}}</h1>")
+    template_path.joinpath(template_name).write_text("<h1>{{greeting}}</h1>")
     site = Site.make_site(
         searchpath=str(template_path),
         outpath=str(build_path),
         env_globals={"greeting": "Hello world!"},
     )
     site.render_template(site.get_template(template_name))
-    assert build_path.join(template_name).read() == "<h1>Hello world!</h1>"
+    assert build_path.joinpath(template_name).read_text() == "<h1>Hello world!</h1>"
 
 
 def test_render_templates(site, build_path):
     site.render_templates(site.templates)
-    template1 = build_path.join("template1.html")
-    assert template1.check()
-    assert template1.read() == "Test 1"
-    template3 = build_path.join("sub").join("template3.html")
-    assert template3.check()
-    assert template3.read() == "Test 3"
+    template1 = build_path.joinpath("template1.html")
+    assert template1.read_text() == "Test 1"
+    template3 = build_path.joinpath("sub", "template3.html")
+    assert template3.read_text() == "Test 3"
 
 
 def test_build(monkeypatch, site):
