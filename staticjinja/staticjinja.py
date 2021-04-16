@@ -189,7 +189,8 @@ class Site(object):
         # Coerce search to an absolute path if it is not already
         if not os.path.isabs(searchpath):
             # TODO: Determine if there is a better way to do this
-            calling_module = inspect.getmodule(inspect.stack()[-1][0])
+            last_frame_info = inspect.stack()[-1]
+            calling_module = inspect.getmodule(last_frame_info.frame)
             if calling_module is None:
                 # Called from the interpreter or similar
                 project_path = os.getcwd()
