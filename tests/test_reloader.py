@@ -27,7 +27,7 @@ def test_event_handler(monkeypatch, reloader, template_path):
 
     monkeypatch.setattr(reloader.site, "render_template", fake_renderer)
 
-    template1_path = str(template_path.join("template1.html"))
+    template1_path = str(template_path.joinpath("template1.html"))
     reloader.event_handler("modified", template1_path)
     assert rendered == [reloader.site.get_template("template1.html")]
 
