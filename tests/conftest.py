@@ -1,4 +1,5 @@
 """Fixtures and code common to many tests."""
+import os
 
 import pytest
 
@@ -7,7 +8,10 @@ import staticjinja
 
 @pytest.fixture
 def root_path(tmp_path):
-    return tmp_path
+    old_cwd = os.getcwd()
+    os.chdir(tmp_path)
+    yield tmp_path
+    os.chdir(old_cwd)
 
 
 @pytest.fixture
