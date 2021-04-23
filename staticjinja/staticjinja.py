@@ -33,7 +33,7 @@ def _ensure_dir(path):
     os.makedirs(os.path.dirname(Path(path)), exist_ok=True)
 
 
-class Site(object):
+class Site:
     """The Site object.
 
     :param environment:

@@ -1,7 +1,7 @@
 from pathlib import Path
 
 
-class Reloader(object):
+class Reloader:
     """
     Watches ``site.searchpath`` for changes and re-renders any changed
     Templates.
