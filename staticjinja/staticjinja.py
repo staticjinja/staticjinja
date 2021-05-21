@@ -349,10 +349,8 @@ class Site(object):
             used to provide a context.
 
         :param filepath:
-            Optional. A file or file-like object to dump the complete template
-            stream into. Defaults to to ``os.path.join(self.outpath,
-            template.name)``.
-
+            Optional. A PathLike representing the output location.
+            Defaults to to ``os.path.join(self.outpath, template.name)``.
         """
         self.logger.info("Rendering %s..." % template.name)
 
