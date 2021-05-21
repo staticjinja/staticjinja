@@ -4,7 +4,13 @@ Changelog
 Unreleased_
 -----------
 
-.. _Unreleased: https://github.com/staticjinja/staticjinja/compare/1.0.4...HEAD
+.. _Unreleased: https://github.com/staticjinja/staticjinja/compare/2.0.0...HEAD
+
+2.0.0_ (2021-05-21)
+-------------------
+
+.. _2.0.0: https://github.com/staticjinja/staticjinja/compare/1.0.4...2.0.0
+
 
 Deprecated
 ^^^^^^^^^^
