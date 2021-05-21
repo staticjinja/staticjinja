@@ -442,7 +442,7 @@ class Renderer(Site):
            Use :meth:`Site.make_site` instead.
         """
         warnings.warn("Renderer was renamed to Site.")
-        super(Renderer, Site).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def run(self, use_reloader=False):
         return self.render(use_reloader)

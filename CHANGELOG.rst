@@ -26,6 +26,9 @@ Fixed
 
 * Docs: Fix docstring for ``Site.render_template``.
 
+* Make Renderer call super() correctly. It's deprecated, so probably no point, but
+  might as well fix it.
+
 * Internal: Made flake8 check actually runs against files, other small fixups
 
 .. _#143: https://github.com/staticjinja/staticjinja/issues/145
