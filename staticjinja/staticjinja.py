@@ -17,13 +17,15 @@ from jinja2 import Environment, FileSystemLoader
 from .reloader import Reloader
 
 
-def _has_argument(func):
-    """Test whether a function expects an argument.
-
-    :param func:
-        The function to be tested for existence of an argument.
-    """
-    return bool(inspect.signature(func).parameters)
+def _compute_context(context_like, template):
+    if callable(context_like):
+        has_argument = bool(inspect.signature(context_like).parameters)
+        if has_argument:
+            return context_like(template)
+        else:
+            return context_like()
+    else:
+        return context_like
 
 
 def _ensure_dir(path):
@@ -259,16 +261,10 @@ class Site(object):
         :param template: the template to get the context for
         """
         context = {}
-        for regex, context_generator in self.contexts:
+        for regex, context_like in self.contexts:
             if re.match(regex, template.name):
-                if inspect.isfunction(context_generator):
-                    if _has_argument(context_generator):
-                        context.update(context_generator(template))
-                    else:
-                        context.update(context_generator())
-                else:
-                    context.update(context_generator)
-
+                new_context = _compute_context(context_like, template)
+                context.update(new_context)
                 if not self.mergecontexts:
                     break
         return context

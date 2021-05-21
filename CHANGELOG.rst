@@ -21,7 +21,12 @@ Changed
 Fixed
 ^^^^^
 
+* Change from inspect.isfunction() -> callable(), per #143_.
+  Now you should be able to use methods which are instance members of classes.
+
 * Internal: Made flake8 check actually runs against files, other small fixups
+
+.. _#143: https://github.com/staticjinja/staticjinja/issues/145
 
 1.0.4_ (2021-02-02)
 -------------------
