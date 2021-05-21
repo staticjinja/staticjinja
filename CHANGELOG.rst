@@ -6,6 +6,12 @@ Unreleased_
 
 .. _Unreleased: https://github.com/staticjinja/staticjinja/compare/1.0.4...HEAD
 
+Deprecated
+^^^^^^^^^^
+
+* Renamed ``Site.get_dependencies()`` to ``Site.get_dependents()``.
+  See https://github.com/staticjinja/staticjinja/commit/170b027a4fff86790bc69a1222d7b0a36c1080bc
+
 Changed
 ^^^^^^^
 
@@ -16,10 +22,25 @@ Changed
   what output locations the custom render function might use. This might only
   affect those using custom render functions.
 
+* Slightly changed the return type of ``Site.get_dependencies()``.
+  See https://github.com/staticjinja/staticjinja/commit/170b027a4fff86790bc69a1222d7b0a36c1080bc
+
+* Make Reloader piggyback off of Site's logger, so we don't have any bare print statements
+  dangling about.
+
 .. _#71: https://github.com/staticjinja/staticjinja/pull/71
+
+
+Added
+^^^^^
+
+* Many ``Site`` functions now accept PathLike args, not just str's or template names.
+  See https://github.com/staticjinja/staticjinja/commit/a662a37994ccd1e6b5d37c1bd4666ac30c74899d
 
 Fixed
 ^^^^^
+
+* Fix and improve the ``markdown`` example.
 
 * Change from inspect.isfunction() -> callable(), per #143_.
   Now you should be able to use methods which are instance members of classes.
