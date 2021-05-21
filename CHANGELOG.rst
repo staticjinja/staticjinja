@@ -24,6 +24,8 @@ Fixed
 * Change from inspect.isfunction() -> callable(), per #143_.
   Now you should be able to use methods which are instance members of classes.
 
+* Docs: Fix docstring for ``Site.render_template``.
+
 * Internal: Made flake8 check actually runs against files, other small fixups
 
 .. _#143: https://github.com/staticjinja/staticjinja/issues/145
