@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "staticjinja"
-version = "2.0.0" # This needs to match what is in the source code.
+version = "2.0.1" # This needs to match what is in the source code.
 description = "jinja based static site generator"
 authors = [
     "Ceasar Bautista <cbautista2010@gmail.com>",

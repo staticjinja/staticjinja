@@ -4,7 +4,17 @@ Changelog
 Unreleased_
 -----------
 
-.. _Unreleased: https://github.com/staticjinja/staticjinja/compare/2.0.0...HEAD
+.. _Unreleased: https://github.com/staticjinja/staticjinja/compare/2.0.1...HEAD
+
+2.0.1_ (2021-05-21)
+-------------------
+
+.. _2.0.1: https://github.com/staticjinja/staticjinja/compare/2.0.0...2.0.1
+
+Added
+^^^^^
+
+* Auto release when the version number is bumped.
 
 2.0.0_ (2021-05-21)
 -------------------
