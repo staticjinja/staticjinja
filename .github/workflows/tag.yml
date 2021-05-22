@@ -1,0 +1,25 @@
+name: tag
+on:
+  push:
+    branches: [main]
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - name: Set up latest Python 3
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+      - name: Install dependencies
+        run: make init
+      - name: If the version number bumped, push a new tag.
+        uses: salsify/action-detect-and-tag-new-version@v2.0.1
+        with:
+          create-tag: true
+          tag-template: "{VERSION}"
+          version-command: |
+            poetry run python3 -c "import staticjinja; print(staticjinja.__version__)"
