@@ -1,3 +1,5 @@
+import os
+
 from pytest import mark, raises
 
 from staticjinja import Site, Reloader
@@ -148,3 +150,45 @@ is_partial_cases = [
 @mark.parametrize("name, expected", is_partial_cases)
 def test_is_partial(site, name, expected):
     assert site.is_partial(name) == expected
+
+
+def test_followlinks(root_path):
+    # Set up a directory that is outside the searchpath
+    # and put a file in it
+    outside_dir = root_path / "outside"
+    os.mkdir(outside_dir)
+    outside_file = outside_dir / "outside.html"
+    outside_file.write_text("I'm some text!")
+
+    # Create our searchpath directory, and then create both a
+    # symlink to a file, and a symlink to a directory
+    searchpath = root_path / "src"
+    os.mkdir(searchpath)
+    sym_file = searchpath / "symlink_to_file"
+    os.symlink(outside_file, sym_file)
+    sym_dir = searchpath / "symlink_to_dir"
+    os.symlink(outside_dir, sym_dir)
+
+    # Regardless of what we set `followlinks`, the `os.walk()`
+    # call that underlies jinja's FileSystemLoader will always
+    # resolve symlinks that point to files. That's just how
+    # `os.walk()` works.
+    # Here we don't resolve directory symlinks.
+    s = Site.make_site(searchpath=searchpath, followlinks=False)
+    assert s.template_names == ["symlink_to_file"]
+    # Here, we resolve both file and directory symlinks.
+    s = Site.make_site(searchpath=searchpath, followlinks=True)
+    assert sorted(s.template_names) == sorted(
+        ["symlink_to_file", "symlink_to_dir/outside.html"]
+    )
+
+    # If the searchpath itself is a symlink, then we always resolve it.
+    # This again emerges from the behavior of `os.walk()`, where `os.walk(abc)`
+    # always resolves `abc` (the root directory of the walk), regardless of
+    # `followlinks`.
+    sym_searchpath = root_path / "sym_src"
+    os.symlink(outside_dir, sym_searchpath)
+    s = Site.make_site(searchpath=sym_searchpath, followlinks=True)
+    assert s.template_names == ["outside.html"]
+    s = Site.make_site(searchpath=sym_searchpath, followlinks=False)
+    assert s.template_names == ["outside.html"]
