@@ -1,8 +1,10 @@
 import os
+from pathlib import Path
 
-from pytest import mark, raises
+from pytest import mark, raises, warns
 
 from staticjinja import Site, Reloader
+import staticjinja
 
 
 def test_template_names(site):
@@ -150,6 +152,60 @@ is_partial_cases = [
 @mark.parametrize("name, expected", is_partial_cases)
 def test_is_partial(site, name, expected):
     assert site.is_partial(name) == expected
+
+
+def test_path_absolute(root_path):
+    expected = "/absolute/path/to/templates"
+    s = Site.make_site(searchpath=expected)
+    # On windows, ignore the drive (eg "C:") prefix.
+    drive, searchpath = os.path.splitdrive(s.searchpath)
+    assert Path(searchpath) == Path(expected)
+
+
+def test_path_relative_warning(root_path):
+    """If a relative path is given to staticjinja, it will try to infer the root
+    of the project. If staticjinja was invoked from a python build script,
+    then SJ will infer the project root is the directory of that build script.
+    This is behavior is deprecated in #149, in the future pathlib.Path.cwd() will
+    always be used.
+
+    If someone *is* relying upon this deprecated behavior, (ie they are
+    supplying relative paths, and build_script_dir!=pathlib.Path.cwd(), then they
+    *should* get a warning.
+    """
+    entry_point_dir = staticjinja.staticjinja.get_build_script_directory()
+    print(f"entry_point_dir={entry_point_dir}")
+    print(f"CWD={Path.cwd()}")
+    # Sanity check that we are set up properly to actually test this behavior
+    assert Path.cwd() != Path(entry_point_dir)
+
+    searchpath = "relative/path/to/templates"
+    with warns(FutureWarning):
+        s = Site.make_site(searchpath=searchpath)
+    assert Path(s.searchpath) == entry_point_dir / searchpath
+
+
+def test_path_relative_no_warning(root_path):
+    """See sibling test for more info.
+
+    If someone *is not* relying upon this deprecated behavior, (ie they are
+    supplying relative paths, but build_script_dir==pathlib.Path.cwd(), then they
+    *should not* get a warning.
+    """
+    entry_point_dir = staticjinja.staticjinja.get_build_script_directory()
+    print(f"entry_point_dir={entry_point_dir}")
+    try:
+        original_cwd = Path.cwd()
+        os.chdir(entry_point_dir)
+        # Sanity check that we are set up properly to actually test this behavior
+        assert Path.cwd() == Path(entry_point_dir)
+
+        # This should not give a warning or anything
+        searchpath = "relative/path/to/templates"
+        s = Site.make_site(searchpath=searchpath)
+        assert Path(s.searchpath) == Path.cwd() / searchpath
+    finally:
+        os.chdir(original_cwd)
 
 
 def test_followlinks(root_path):

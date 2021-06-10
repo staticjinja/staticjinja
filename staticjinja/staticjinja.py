@@ -33,6 +33,56 @@ def _ensure_dir(path):
     os.makedirs(os.path.dirname(Path(path)), exist_ok=True)
 
 
+def get_build_script_directory():
+    """Return dir of the build script that called staticjinja. If DNE, return None.
+
+    If you invoked ``python /scripts/build.py``, then this would return "/scripts/".
+    If called from the interpreter, return None.
+
+    .. deprecated:: 2.1.0
+       This will be removed in the future. See
+       https://github.com/staticjinja/staticjinja/issues/149
+    """
+    # The outermost callframe on the stack
+    entry_frame_info = inspect.stack()[-1]
+    entry_module = inspect.getmodule(entry_frame_info.frame)
+    if entry_module is not None:
+        # Called from a .py file
+        return Path(entry_module.__file__).resolve().parent
+    else:
+        # Called from interpreter or similar
+        return None
+
+
+def resolve_path(path):
+    """Resolve a (possibly relative) path to absolute.
+
+    If staticjinja was called from a python build script, then use the build
+    script's directory as the root. Otherwise, use ``os.getcwd()``.
+
+    .. deprecated:: 2.1.0
+       In the future staticjinja will always use ``os.getcwd()`` as root.
+       See https://github.com/staticjinja/staticjinja/issues/149
+    """
+    if Path(path).is_absolute():
+        return path
+
+    project_root = Path.cwd()
+    build_script_directory = get_build_script_directory()
+    if build_script_directory is not None:
+        if build_script_directory != project_root:
+            warnings.warn(
+                FutureWarning(
+                    "Inferring project root to be the build script directory is "
+                    "deprecated. For more info see "
+                    "https://github.com/staticjinja/staticjinja/issues/149"
+                ),
+                stacklevel=2,  # Show the caller of resolve_path() in error
+            )
+        project_root = build_script_directory
+    return str(project_root / path)
+
+
 class Site:
     """The Site object.
 
@@ -132,6 +182,11 @@ class Site:
             example, if you invoke staticjinja using ``python build.py`` in
             directory ``/foo``, then *searchpath* will be ``/foo/templates``.
 
+            .. deprecated:: 2.1.0
+               In the future staticjinja will always use ``os.getcwd()`` when
+               resolving a relative path to absolute. See
+               https://github.com/staticjinja/staticjinja/issues/149
+
         :param outpath:
             A string representing the name of the directory that the Site
             should store rendered files in. Defaults to ``'.'``.
@@ -186,20 +241,7 @@ class Site:
             context.  Otherwise, only the first matching regex is used.
             Defaults to ``False``.
         """
-        # Coerce search to an absolute path if it is not already
-        if not os.path.isabs(searchpath):
-            # TODO: Determine if there is a better way to do this
-            last_frame_info = inspect.stack()[-1]
-            calling_module = inspect.getmodule(last_frame_info.frame)
-            if calling_module is None:
-                # Called from the interpreter or similar
-                project_path = os.getcwd()
-            else:
-                # Called from a .py file
-                project_path = os.path.realpath(
-                    os.path.dirname(calling_module.__file__)
-                )
-            searchpath = os.path.join(project_path, searchpath)
+        searchpath = resolve_path(searchpath)
 
         if env_kwargs is None:
             env_kwargs = {}
