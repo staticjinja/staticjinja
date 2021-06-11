@@ -4,7 +4,22 @@ Changelog
 Unreleased_
 -----------
 
-.. _Unreleased: https://github.com/staticjinja/staticjinja/compare/2.0.1...HEAD
+.. _Unreleased: https://github.com/staticjinja/staticjinja/compare/2.1.0...HEAD
+
+2.1.0_ (2021-06-10)
+-------------------
+
+.. _2.1.0: https://github.com/staticjinja/staticjinja/compare/2.0.1...2.1.0
+
+Deprecated
+^^^^^^^^^^
+
+* Deprecate inferring project root directory from build script directory.
+  In the future, if staticjinja ever receives a relative path, it will use
+  the CWD as the root. If you rely upon the location of your build script
+  that uses the staticjinja API, then you may need to change. If you're just
+  using the CLI, then you don't need to change anything.
+  See https://github.com/staticjinja/staticjinja/issues/149 for more info.
 
 2.0.1_ (2021-05-21)
 -------------------
@@ -14,7 +29,8 @@ Unreleased_
 Added
 ^^^^^
 
-* Auto release when the version number is bumped.
+* A failed attempt at auto release when the version number is bumped. Nothing
+  actually changed here.
 
 2.0.0_ (2021-05-21)
 -------------------
