@@ -1,5 +1,6 @@
 import os
 import unittest.mock as mock
+import subprocess
 
 import pytest
 
@@ -96,3 +97,32 @@ def test_nonexistent_srcpath(mock_make_site):
     assert pytest_wrapped_e.type == SystemExit
     assert pytest_wrapped_e.value.code == 1
     mock_make_site.assert_not_called()
+
+
+@pytest.mark.parametrize(
+    "command",
+    [
+        ["staticjinja"],
+        ["python3", "-m", "staticjinja"],
+    ],
+)
+def test_entrypoints_no_args(command):
+    """Ensure we can access the staticjinja CLI from the shell.
+
+    Don't bother testing for any complex inputs or outputs, this is just to
+    ensure that the entrypoints are properly installed.
+    """
+    result = subprocess.run(
+        command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=5
+    )
+    expected_help_message = b"""Usage:
+  staticjinja build [options]
+  staticjinja watch [options]
+  staticjinja -h | --help
+  staticjinja --version
+""".replace(
+        b"\n", os.linesep.encode("utf8")
+    )
+    assert result.returncode == 1
+    assert result.stdout == b""
+    assert result.stderr == expected_help_message

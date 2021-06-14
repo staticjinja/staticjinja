@@ -6,6 +6,15 @@ Unreleased_
 
 .. _Unreleased: https://github.com/staticjinja/staticjinja/compare/2.1.0...HEAD
 
+Changed
+^^^^^^^
+
+* Calling ``python3 -m staticjinja`` now works exactly the same as calling
+  ``staticjinja`` directly. If you were using ``python3 -m staticjinja``, this
+  probably broke you, you now need to explicitly give the ``watch`` subcommand
+  with ``python3 -m staticjinja watch``. For more info see
+  https://github.com/staticjinja/staticjinja/issues/152. 
+
 2.1.0_ (2021-06-10)
 -------------------
 
