@@ -4,10 +4,20 @@ Changelog
 Unreleased_
 -----------
 
-.. _Unreleased: https://github.com/staticjinja/staticjinja/compare/3.0.0...HEAD
+.. _Unreleased: https://github.com/staticjinja/staticjinja/compare/3.0.1...HEAD
+
+3.0.1_ (2021-07-02)
+-------------------
+
+.. _3.0.1: https://github.com/staticjinja/staticjinja/compare/3.0.0...3.0.1
+
+Fixed
+^^^^^
+
+* Formatting error in this changelog.
 
 3.0.0_ (2021-07-02)
------------
+-------------------
 
 .. _3.0.0: https://github.com/staticjinja/staticjinja/compare/2.1.0...3.0.0
 

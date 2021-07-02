@@ -16,7 +16,7 @@ https://github.com/staticjinja/staticjinja/
 """
 
 # This needs to match what is in pyproject.toml
-__version_info__ = (3, 0, 0)
+__version_info__ = (3, 0, 1)
 __version__ = ".".join(map(str, __version_info__))
 
 from .reloader import Reloader  # noqa: F401 (unused import)
