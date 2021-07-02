@@ -1,6 +1,7 @@
 import os
 import unittest.mock as mock
 import subprocess
+import sys
 
 import pytest
 
@@ -103,7 +104,7 @@ def test_nonexistent_srcpath(mock_make_site):
     "command",
     [
         ["staticjinja"],
-        ["python3", "-m", "staticjinja"],
+        [sys.executable, "-m", "staticjinja"],
     ],
 )
 def test_entrypoints_no_args(command):
