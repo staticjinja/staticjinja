@@ -1,4 +1,6 @@
 # A composite workflow that is reused in other workflows
+# Due to some stupid design decision this has to be named
+# "setup/action.yml" instead of "setup.yml".
 # https://docs.github.com/en/actions/creating-actions/creating-a-composite-run-steps-action
 name: "Setup Environment"
 description: "Downloads the repo, sets up python, installs dependencies"
