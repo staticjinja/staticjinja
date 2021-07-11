@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 2
-      - uses: ./.github/wokflows/setup.yml
+      - uses: ./.github/workflows/setup
       - name: If the version number bumped, push a new tag.
         uses: salsify/action-detect-and-tag-new-version@v2.0.1
         with:

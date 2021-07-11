@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/wokflows/setup.yml
+      - uses: ./.github/workflows/setup
       - name: Build package
         run: make build
       - name: Publish package to PyPI
