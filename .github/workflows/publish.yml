@@ -3,38 +3,33 @@ on:
   push:
     # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet
     tags:
-      - '[0-9]+.[0-9]+.[0-9]+'
+      - "[0-9]+.[0-9]+.[0-9]+"
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up latest Python 3
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
-    - name: Install dependencies
-      run: make init
-    - name: Build package
-      run: make build
-    - name: Publish package to PyPI
-      uses: pypa/gh-action-pypi-publish@v1.4.1
-      with:
-        user: '__token__'
-        password: ${{ secrets.PYPI_API_TOKEN }}
-    - name: Create GitHub Release
-      uses: actions/create-release@v1
-      env:
+      - uses: actions/checkout@v2
+      - uses: ./.github/wokflows/setup.yml
+      - name: Build package
+        run: make build
+      - name: Publish package to PyPI
+        uses: pypa/gh-action-pypi-publish@v1.4.1
+        with:
+          user: "__token__"
+          password: ${{ secrets.PYPI_API_TOKEN }}
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
           # secrets.GITHUB_TOKEN is provided by GitHub.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        body: See CHANGELOG.rst
-        draft: false
-        prerelease: false
-    - name: Upload dist/ as workflow artifact (mostly for debugging)
-      uses: actions/upload-artifact@v2
-      with:
-        name: dist
-        path: dist
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: See CHANGELOG.rst
+          draft: false
+          prerelease: false
+      - name: Upload dist/ as workflow artifact (mostly for debugging)
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: dist
