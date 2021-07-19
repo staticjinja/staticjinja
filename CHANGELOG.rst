@@ -4,6 +4,11 @@ Changelog
 Unreleased_
 -----------
 
+.. _Unreleased: https://github.com/staticjinja/staticjinja/compare/3.0.1...HEAD
+
+4.0.0_
+------
+
 Added
 ^^^^^
 
@@ -20,7 +25,7 @@ Removed
   ``make_site`` function, use ``Site.make_site`` instead. All of this was deprecated 6
   years ago, no one should still be using them.
 
-.. _Unreleased: https://github.com/staticjinja/staticjinja/compare/3.0.1...HEAD
+.. _4.0.0: https://github.com/staticjinja/staticjinja/compare/3.0.1...4.0.0
 
 3.0.1_ (2021-07-02)
 -------------------
