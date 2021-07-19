@@ -441,7 +441,7 @@ class Site:
         - Partial files have all the templates as dependents, since any template
           may rely upon a partial.
 
-        .. versionchanged:: 1.1.0
+        .. versionchanged:: 2.0.0
            Now always returns list of filenames. Before the return type
            was either a list of templates or list of filenames.
 
@@ -459,7 +459,7 @@ class Site:
 
     def get_dependencies(self, filename):
         """
-        .. deprecated:: 1.1.0
+        .. deprecated:: 2.0.0
            Use :meth:`Site.get_dependents` instead.
         """
         warnings.warn(
