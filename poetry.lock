@@ -195,9 +195,9 @@ optional = true
 python-versions = "*"
 
 [[package]]
-name = "docopt"
-version = "0.6.2"
-description = "Pythonic argument parser, that will make you smile"
+name = "docopt-ng"
+version = "0.7.2"
+description = "More-magic command line arguments parser. Now with more maintenance!"
 category = "main"
 optional = false
 python-versions = "*"
@@ -920,7 +920,7 @@ dev = ["black", "flake8", "markdown", "pytest", "pytest-check", "pytest-cov", "s
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "63213bb910b7e7ace4b327823d02d758f9eec987de633e7e0ed49296a3de4ebe"
+content-hash = "20eecef54f54b39f80e155b4b625ead4a8db3374a827c5d95afd2de0871bda4f"
 
 [metadata.files]
 alabaster = [
@@ -1088,8 +1088,9 @@ distlib = [
     {file = "distlib-0.3.2-py2.py3-none-any.whl", hash = "sha256:23e223426b28491b1ced97dc3bbe183027419dfc7982b4fa2f05d5f3ff10711c"},
     {file = "distlib-0.3.2.zip", hash = "sha256:106fef6dc37dd8c0e2c0a60d3fca3e77460a48907f335fa28420463a6f799736"},
 ]
-docopt = [
-    {file = "docopt-0.6.2.tar.gz", hash = "sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491"},
+docopt-ng = [
+    {file = "docopt-ng-0.7.2.tar.gz", hash = "sha256:86ceea032f0cfa59e60776eb0cf38ac73653581022872320f47dc874678d7244"},
+    {file = "docopt_ng-0.7.2-py2.py3-none-any.whl", hash = "sha256:e98145cc02220ac5b1a8ee1c40ca9cc0cbd8e480a1b4928872bde686dc48660b"},
 ]
 docutils = [
     {file = "docutils-0.16-py2.py3-none-any.whl", hash = "sha256:0c5b78adfbf7762415433f5515cd5c9e762339e23369dbe8000d84a4bf4ab3af"},
