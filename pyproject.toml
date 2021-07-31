@@ -35,7 +35,7 @@ classifiers = [
 python = "^3.6"
 docopt-ng = "^0.7.2"
 easywatch = "^0.0.5"
-jinja2 = "^2.10.1"
+jinja2 = ">=2.10.1, < 4"
 
 # Dev dependencies
 black = { version = "^20.8b1", optional = true }
