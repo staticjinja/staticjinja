@@ -4,10 +4,22 @@ Changelog
 Unreleased_
 -----------
 
-.. _Unreleased: https://github.com/staticjinja/staticjinja/compare/3.0.1...HEAD
+.. _Unreleased: https://github.com/staticjinja/staticjinja/compare/main
 
-4.0.0_
-------
+4.1.0_ (2021-07-31)
+-------------------
+
+.. _4.1.0: https://github.com/staticjinja/staticjinja/compare/4.0.0...4.1.0
+
+Added
+^^^^^
+
+* Allow jinja version 3.x.
+  See https://github.com/staticjinja/staticjinja/issues/158
+
+
+4.0.0_ (2021-07-18)
+-------------------
 
 Added
 ^^^^^
