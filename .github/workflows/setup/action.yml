@@ -1,0 +1,20 @@
+# A composite workflow that is reused in other workflows
+# Due to some stupid design decision this has to be named
+# "setup/action.yml" instead of "setup.yml".
+# https://docs.github.com/en/actions/creating-actions/creating-a-composite-run-steps-action
+name: "Setup Environment"
+description: "Downloads the repo, sets up python, installs dependencies"
+inputs:
+  python-version:
+    description: "Python version to set up (default '3.x')"
+    required: false
+    default: "3.x" # latest python release
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python ${{ inputs.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ inputs.python-version }}
+    - name: Install dependencies
+      run: make init

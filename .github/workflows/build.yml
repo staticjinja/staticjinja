@@ -5,11 +5,11 @@ name: build
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   schedule:
-    - cron: '0 0 * * 0' # weekly, to catch exterior dependencies changing
+    - cron: "0 0 * * 0" # weekly, to catch exterior dependencies changing
 
 jobs:
   test:
@@ -18,74 +18,48 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: [3.6, 3.7, 3.8, 3.9]
-        # exclude: #If you want to do this...
-        #  - os: macos-latest
-        #    python-version: 3.6:
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }} on ${{ matrix.os }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: make init
-    # Run tox using the version of Python in `PATH`
-    - name: Run tests in tox
-      run: poetry run tox -e py
-    # Upload pytest's scratch space, which was set to .pytest/ in setup.cfg
-    # Useful for debugging.
-    - name: Upload pytest tmpdir
-      uses: actions/upload-artifact@v2
-      if: failure() # Only upload on failure of previous step.
-      with:
-        name: pytest-tmpdir ${{ matrix.python-version }} ${{ matrix.os }}
-        path: .pytest/
+      - uses: actions/checkout@v2
+      - uses: ./.github/workflows/setup
+        with:
+          python-version: ${{ matrix.python-version}}
+      - name: Run tests in tox with Python ${{ matrix.python-version}}
+        run: poetry run tox -e py
+      # Upload pytest's scratch space, which was set to .pytest/ in setup.cfg
+      # Useful for debugging.
+      - name: Upload pytest tmpdir
+        uses: actions/upload-artifact@v2
+        if: failure() # Only upload on failure of previous step.
+        with:
+          name: pytest-tmpdir ${{ matrix.python-version }} ${{ matrix.os }}
+          path: .pytest/
   black:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
-      with:
-        python-version: '3.x' # Latest python release
-    - name: Install dependencies
-      run: make init
-    - name: Check that we conform to black
-      run: make black-check
+      - uses: actions/checkout@v2
+      - uses: ./.github/workflows/setup
+      - name: Check that we conform to black
+        run: make black-check
   flake8:
     # Only run the linter on a single python version on Ubuntu
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.x
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x' # Latest python release
-    - name: Install dependencies
-      run: make init
-    - name: Run flake8
-      run: make flake8
+      - uses: actions/checkout@v2
+      - uses: ./.github/workflows/setup
+      - name: Run flake8
+        run: make flake8
   docs:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.x
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x' # Latest python release
-    - name: Install dependencies
-      run: make init
-    - name: Build docs
-      run: make docs
+      - uses: actions/checkout@v2
+      - uses: ./.github/workflows/setup
+      - name: Build docs
+        run: make docs
   coverage:
     # Only run test coverage on a single python version on Ubuntu
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.x
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x' # Latest python release
-    - name: Install dependencies
-      run: make init
-    - name: Measure test coverage and upload results
-      run: make coverage-upload
+      - uses: actions/checkout@v2
+      - uses: ./.github/workflows/setup
+      - name: Measure test coverage and upload results
+        run: make coverage-upload
