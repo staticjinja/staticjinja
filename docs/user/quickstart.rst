@@ -60,6 +60,9 @@ CLI Configuration
   can pass multiple directories separating them by commas:
   ``--static="foo,bar/baz,lorem"``.
 
+Additionally, you can specify the logging level with
+``--log={debug,info,warning,error,critical}``. Default is ``info``.
+
 Next Steps
 ----------
 

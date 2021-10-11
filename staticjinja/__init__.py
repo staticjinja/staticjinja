@@ -16,8 +16,16 @@ https://github.com/staticjinja/staticjinja/
 """
 
 # This needs to match what is in pyproject.toml
-__version_info__ = (3, 0, 1)
+__version_info__ = (4, 1, 0)
 __version__ = ".".join(map(str, __version_info__))
 
-from .reloader import Reloader  # noqa: F401 (unused import)
-from .staticjinja import make_site, Site  # noqa: F401 (unused import)
+import logging
+
+# Set up logging (before importing anything else that may use this logger).
+# Users can configure/disable logging via staticjinja.logger
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+logger.addHandler(logging.StreamHandler())
+
+from .reloader import Reloader  # noqa: F401,E402 (unused import, not at top of file)
+from .staticjinja import Site  # noqa: F401,E402

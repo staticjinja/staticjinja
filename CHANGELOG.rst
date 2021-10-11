@@ -4,7 +4,40 @@ Changelog
 Unreleased_
 -----------
 
-.. _Unreleased: https://github.com/staticjinja/staticjinja/compare/3.0.1...HEAD
+.. _Unreleased: https://github.com/staticjinja/staticjinja/compare/main
+
+4.1.0_ (2021-07-31)
+-------------------
+
+.. _4.1.0: https://github.com/staticjinja/staticjinja/compare/4.0.0...4.1.0
+
+Added
+^^^^^
+
+* Allow jinja version 3.x.
+  See https://github.com/staticjinja/staticjinja/issues/158
+
+
+4.0.0_ (2021-07-18)
+-------------------
+
+Added
+^^^^^
+
+* ``--log`` argument to CLI to set log level.
+
+Removed
+^^^^^^^
+
+* Removed ``logger`` argument to Site(). Use ``staticjinja.logger`` for the
+  staticjinja-wide logger instead. See
+  https://github.com/staticjinja/staticjinja/issues/144
+
+* Removed ``Renderer`` class and ``make_renderer`` function. Remove the bare
+  ``make_site`` function, use ``Site.make_site`` instead. All of this was deprecated 6
+  years ago, no one should still be using them.
+
+.. _4.0.0: https://github.com/staticjinja/staticjinja/compare/3.0.1...4.0.0
 
 3.0.1_ (2021-07-02)
 -------------------
