@@ -5,7 +5,7 @@ staticjinja
     :target: https://badge.fury.io/py/staticjinja
     :alt: PyPi Badge
 
-.. image:: https://github.com/staticjinja/staticjinja/workflows/build/badge.svg?branch=main&event=push
+.. image:: https://github.com/staticjinja/staticjinja/workflows/build/badge.svg?branch=main&event=schedule
     :target: https://github.com/staticjinja/staticjinja/actions?query=branch%3Amain
     :alt: Build and Testing Status
 
