@@ -212,7 +212,7 @@ Added
 * Runnable and testable examples in ``examples/``. See ``examples/README.rst``
   for more info.
 
-* Code coverage at https://codecov.io/gh/staticjinja/staticjinja.
+* Code coverage at https://app.codecov.io/gh/staticjinja/staticjinja.
 
 Changed
 ^^^^^^^
