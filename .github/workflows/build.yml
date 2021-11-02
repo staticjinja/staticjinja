@@ -71,7 +71,7 @@ jobs:
       - name: Set up Python 3.x
         uses: actions/setup-python@v2
         with:
-          python-version: "3.x" # Latest python release
+          python-version: "3.9" # 3.10 doesn't work with sphinx yet
       - name: Install dependencies
         run: make init
       - name: Build docs
