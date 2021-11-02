@@ -2,7 +2,6 @@
 
 import difflib
 import filecmp
-import glob
 import os
 from pathlib import Path
 import shutil
@@ -55,7 +54,7 @@ def check_same(dir1, dir2):
 
 
 def example_names():
-    names = os.listdir(str(PROJECT_ROOT.joinpath("examples")))
+    names = os.listdir(PROJECT_ROOT / "examples")
     ignored = ["__pycache__", "README.rst"]
     for ig in ignored:
         while ig in names:
@@ -68,30 +67,13 @@ def example_name(request):
     return request.param
 
 
-def test_example(tmpdir, example_name):
+def test_example(tmp_path, example_name):
     """Builds an example, ensures the rendered output matches the expected."""
-    source_directory = os.path.join(PROJECT_ROOT, "examples", example_name)
-    working_directory = os.path.join(str(tmpdir), example_name)
+    example_directory = PROJECT_ROOT / "examples" / example_name
+    source_directory = example_directory / "before"
+    expected_directory = example_directory / "after"
+    working_directory = tmp_path / example_name
     shutil.copytree(source_directory, working_directory)
-
-    # On windows, when the repo is checked out with git, all the unix-standard
-    # NL linefeed characters are converted to the dos-standard CRNL newline
-    # characters. However, jinja2 always uses NL newlines. Thus all the
-    # rendered files in `build/` will have NL, but all the files in
-    # `build-EXPECTED/` will have CRNL. Therefore convert `build-EXPECTED/`
-    # to use NL, so we can meaningfully compare them.
-    # I figured it's better to just do the conversion here, as opposed to a
-    # change in globl .gitconfig.
-    if os.name == "nt":
-        pattern = os.path.join(
-            working_directory,
-            "build-EXPECTED",
-            "**",
-            "*.html",
-        )
-        file_list = glob.glob(pattern, recursive=True)
-        args = ["dos2unix"] + file_list
-        assert subprocess.call(args) == 0, "dos2unix failed"
 
     # os.getcwd() starts in the project's root directory.
     # But, we want to emulate running build.sh as if we were inside
@@ -102,6 +84,19 @@ def test_example(tmpdir, example_name):
         print("Running example {}".format(source_directory))
         print("Working directory for debugging: {}".format(working_directory))
         assert subprocess.call(["sh", "build.sh"]) == 0, "build.sh failed"
-        check_same("build-EXPECTED", "build")
+
+        # On windows, when the repo is checked out with git, all the unix-standard
+        # NL linefeed characters are converted to the dos-standard CRNL newline
+        # characters. However, jinja2 always uses NL newlines, so all the
+        # rendered files will have NL. Just convert everything to us NL so
+        # we can compare them.
+        # I figured it's better to just do the conversion here, as opposed to a
+        # change in globl .gitconfig.
+        if os.name == "nt":
+            before_files = [str(path) for path in expected_directory.glob("**/*")]
+            ouput_files = [str(path) for path in working_directory.glob("**/*")]
+            args = ["dos2unix"] + before_files + ouput_files
+            assert subprocess.call(args) == 0, "dos2unix failed"
+        check_same(expected_directory, working_directory)
     finally:
         os.chdir(initial_directory)
