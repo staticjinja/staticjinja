@@ -1,15 +1,26 @@
 Changelog
 =========
 
-Unreleased_
------------
+`Unreleased <https://github.com/staticjinja/staticjinja/compare/main>`_
+-----------------------------------------------------------------------
 
-.. _Unreleased: https://github.com/staticjinja/staticjinja/compare/main
+`4.1.1 <https://github.com/staticjinja/staticjinja/compare/4.1.0...4.1.1>`_ (2021-11-02)
+----------------------------------------------------------------------------------------
 
-4.1.0_ (2021-07-31)
--------------------
+Fixed
+^^^^^
 
-.. _4.1.0: https://github.com/staticjinja/staticjinja/compare/4.0.0...4.1.0
+*  Fix _ensure_dir() when a folder-less path is used
+    
+   If a folder-less path, like "file.txt" is passed, then
+   `os.path.dirname(Path(path))` results in `""`, instead
+   of `"."`, like we want. This causes `mkdir()` to fail.
+   This fixes it, and adds a test for it. The test fails without the change.
+
+   Fixes https://github.com/staticjinja/staticjinja/issues/160
+
+`4.1.0 <https://github.com/staticjinja/staticjinja/compare/4.0.0...4.1.0>`_ (2021-07-31)
+----------------------------------------------------------------------------------------
 
 Added
 ^^^^^
@@ -18,8 +29,8 @@ Added
   See https://github.com/staticjinja/staticjinja/issues/158
 
 
-4.0.0_ (2021-07-18)
--------------------
+`4.0.0 <https://github.com/staticjinja/staticjinja/compare/3.0.1...4.0.0>`_ (2021-07-18)
+----------------------------------------------------------------------------------------
 
 Added
 ^^^^^
@@ -37,22 +48,16 @@ Removed
   ``make_site`` function, use ``Site.make_site`` instead. All of this was deprecated 6
   years ago, no one should still be using them.
 
-.. _4.0.0: https://github.com/staticjinja/staticjinja/compare/3.0.1...4.0.0
-
-3.0.1_ (2021-07-02)
--------------------
-
-.. _3.0.1: https://github.com/staticjinja/staticjinja/compare/3.0.0...3.0.1
+`3.0.1 <https://github.com/staticjinja/staticjinja/compare/3.0.0...3.0.1>`_ (2021-07-02)
+----------------------------------------------------------------------------------------
 
 Fixed
 ^^^^^
 
 * Formatting error in this changelog.
 
-3.0.0_ (2021-07-02)
--------------------
-
-.. _3.0.0: https://github.com/staticjinja/staticjinja/compare/2.1.0...3.0.0
+`3.0.0 <https://github.com/staticjinja/staticjinja/compare/2.1.0...3.0.0>`_ (2021-07-02)
+----------------------------------------------------------------------------------------
 
 Changed
 ^^^^^^^
@@ -63,10 +68,8 @@ Changed
   with ``python3 -m staticjinja watch``. For more info see
   https://github.com/staticjinja/staticjinja/issues/152. 
 
-2.1.0_ (2021-06-10)
--------------------
-
-.. _2.1.0: https://github.com/staticjinja/staticjinja/compare/2.0.1...2.1.0
+`2.1.0 <https://github.com/staticjinja/staticjinja/compare/2.0.1...2.1.0>`_ (2021-06-10)
+----------------------------------------------------------------------------------------
 
 Deprecated
 ^^^^^^^^^^
@@ -78,10 +81,8 @@ Deprecated
   using the CLI, then you don't need to change anything.
   See https://github.com/staticjinja/staticjinja/issues/149 for more info.
 
-2.0.1_ (2021-05-21)
--------------------
-
-.. _2.0.1: https://github.com/staticjinja/staticjinja/compare/2.0.0...2.0.1
+`2.0.1 <https://github.com/staticjinja/staticjinja/compare/2.0.0...2.0.1>`_ (2021-05-21)
+----------------------------------------------------------------------------------------
 
 Added
 ^^^^^
@@ -89,11 +90,8 @@ Added
 * A failed attempt at auto release when the version number is bumped. Nothing
   actually changed here.
 
-2.0.0_ (2021-05-21)
--------------------
-
-.. _2.0.0: https://github.com/staticjinja/staticjinja/compare/1.0.4...2.0.0
-
+`2.0.0 <https://github.com/staticjinja/staticjinja/compare/1.0.4...2.0.0>`_ (2021-05-21)
+----------------------------------------------------------------------------------------
 
 Deprecated
 ^^^^^^^^^^
@@ -143,10 +141,8 @@ Fixed
 
 .. _#143: https://github.com/staticjinja/staticjinja/issues/145
 
-1.0.4_ (2021-02-02)
--------------------
-
-.. _1.0.4: https://github.com/staticjinja/staticjinja/compare/1.0.3...1.0.4
+`1.0.4 <https://github.com/staticjinja/staticjinja/compare/1.0.3...1.0.4>`_ (2021-02-02)
+----------------------------------------------------------------------------------------
 
 Changed
 ^^^^^^^
@@ -165,10 +161,8 @@ Changed
 
 * Improve some tests and add some more CLI tests.
 
-1.0.3_ (2021-01-24)
--------------------
-
-.. _1.0.3: https://github.com/staticjinja/staticjinja/compare/1.0.2...1.0.3
+`1.0.3 <https://github.com/staticjinja/staticjinja/compare/1.0.2...1.0.3>`_ (2021-01-24)
+----------------------------------------------------------------------------------------
 
 Fixed
 ^^^^^
@@ -177,10 +171,8 @@ Fixed
 
 * Use the real readthedocs html theme when building docs locally.
 
-1.0.2_ (2021-01-22)
--------------------
-
-.. _1.0.2: https://github.com/staticjinja/staticjinja/compare/1.0.1...1.0.2
+`1.0.2 <https://github.com/staticjinja/staticjinja/compare/1.0.1...1.0.2>`_ (2021-01-22)
+----------------------------------------------------------------------------------------
 
 Fixed
 ^^^^^
@@ -189,11 +181,8 @@ Fixed
 
 * Fix links throughout project.
 
-1.0.1_ (2021-01-22)
--------------------
-
-.. _1.0.1: https://github.com/staticjinja/staticjinja/compare/1.0.0...1.0.1
-
+`1.0.1 <https://github.com/staticjinja/staticjinja/compare/1.0.0...1.0.1>`_ (2021-01-22)
+------------------------------------------------------------------------------------------
 Fixed
 ^^^^^
 
@@ -201,11 +190,8 @@ Fixed
   workflow) to @v1.4.1, instead of just @master. Less prone to breakage.
 
 
-1.0.0_ (2021-01-19)
--------------------
-
-.. _1.0.0: https://github.com/staticjinja/staticjinja/compare/0.4.0...1.0.0
-
+`1.0.0 <https://github.com/staticjinja/staticjinja/compare/0.4.0...1.0.0>`_ (2021-01-19)
+------------------------------------------------------------------------------------------
 Added
 ^^^^^
 
@@ -261,11 +247,8 @@ Fixed
 
 * A few other trivial fixes.
 
-0.4.0_ (2020-11-14)
--------------------
-
-.. _0.4.0: https://github.com/staticjinja/staticjinja/compare/0.3.5...0.4.0
-
+`0.4.0 <https://github.com/staticjinja/staticjinja/compare/0.3.5...0.4.0>`_ (2020-11-14)
+------------------------------------------------------------------------------------------
 * Improve Travis CI testing: Add Windows and OSX, stop testing python2,
   add newer python3 versions, update tox.ini.
 
@@ -314,11 +297,8 @@ Fixed
   * wsgiref==0.1.2   -> REMOVED
   * NONE             -> markupsafe==1.1.1
 
-0.3.5_ (2018-08-16)
--------------------
-
-.. _0.3.5: https://github.com/staticjinja/staticjinja/compare/0.3.4...0.3.5
-
+`0.3.5 <https://github.com/staticjinja/staticjinja/compare/0.3.4...0.3.5>`_ (2018-08-16)
+------------------------------------------------------------------------------------------
 * Make README less verbose.
 
 * Only warn about using deprecated ``staticpaths`` if ``staticpaths`` is
@@ -327,11 +307,8 @@ Fixed
 * Updated easywatch to 0.0.5
 
 
-0.3.4_ (2018-08-14)
--------------------
-
-.. _0.3.4: https://github.com/staticjinja/staticjinja/compare/0.3.3...0.3.4
-
+`0.3.4 <https://github.com/staticjinja/staticjinja/compare/0.3.3...0.3.4>`_ (2018-08-14)
+------------------------------------------------------------------------------------------
 * Move ``make_site()`` to ``Site.make_site()``.
 
 * Deprecate ``staticpaths`` argument to ``Site()`` and ``Site.make_site()``.
@@ -354,10 +331,8 @@ Fixed
 
 .. _`Issue #58`: https://github.com/staticjinja/staticjinja/issues/58
 
-0.3.3_ (2016-03-08)
--------------------
-
-.. _0.3.3: https://github.com/staticjinja/staticjinja/compare/0.3.2...0.3.3
+`0.3.3 <https://github.com/staticjinja/staticjinja/compare/0.3.2...0.3.3>`_ (2016-03-08)
+------------------------------------------------------------------------------------------
 
 * Enable users to direct pass dictionaries instead of context generator in Site
   and make_site() for contexts that don't require any logic.
@@ -366,10 +341,8 @@ Fixed
   staticjinja to either use all matching context generator or only the first
   one when rendering templates.
 
-0.3.2_ (2015-11-23)
--------------------
-
-.. _0.3.2: https://github.com/staticjinja/staticjinja/compare/0.3.1...0.3.2
+`0.3.2 <https://github.com/staticjinja/staticjinja/compare/0.3.1...0.3.2>`_ (2015-11-23)
+------------------------------------------------------------------------------------------
 
 * Allow passing keyword arguments to jinja2 Environment.
 
@@ -390,10 +363,8 @@ Fixed
 
 * Allow users to mark a single file as static, instead of just directories.
 
-0.3.1_ (2015-01-21)
--------------------
-
-.. _0.3.1: https://github.com/staticjinja/staticjinja/compare/0.3.0...0.3.1
+`0.3.1 <https://github.com/staticjinja/staticjinja/compare/0.3.0...0.3.1>`_ (2015-01-21)
+------------------------------------------------------------------------------------------
 
 * Add support for filters so that users can define their own Jinja2 filters and
   use them in templates::
