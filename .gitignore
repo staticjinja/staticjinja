@@ -27,3 +27,6 @@ coverage.xml
 
 #Translations
 *.mo
+
+# DO include the build folders in examples
+!examples/**/build

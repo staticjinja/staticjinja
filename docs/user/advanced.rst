@@ -253,7 +253,7 @@ The structure of the project after running will be::
 
 First, look at ``src/_post.html``...
 
-.. literalinclude:: ../../examples/markdown/src/_post.html
+.. literalinclude:: ../../examples/markdown/before/src/_post.html
    :language: html
 
 This template will be used for each of our markdown files, each of which might
@@ -272,7 +272,7 @@ Now let's look at our build script. It does two things:
 The first step is accomplished in ``md_context()``, and the second step is done
 in ``render_md()``:
 
-.. literalinclude:: ../../examples/markdown/build.py
+.. literalinclude:: ../../examples/markdown/before/build.py
    :language: python
 
 Note the rule we defined at the bottom. It tells staticjinja to check
