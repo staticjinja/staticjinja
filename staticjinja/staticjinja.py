@@ -340,8 +340,23 @@ class Site:
         :param filename: A PathLike name of the file to check.
 
         """
-        path = Path(filename).as_posix()
-        return any(path.startswith(Path(sp).as_posix()) for sp in self.staticpaths)
+        filepath = Path(filename)
+        absolute_filepath = filepath.absolute()
+
+        for sp in self.staticpaths:
+            static_path = Path(sp)
+            absolute_parents = [p.absolute() for p in filepath.parents]
+            if (
+                static_path.is_dir()
+                and static_path.absolute() in absolute_parents
+            ):
+                return True
+            elif (
+                static_path.is_file()
+                and static_path.absolute() == absolute_filepath
+            ):
+                return True
+        return False
 
     def is_partial(self, filename):
         """Check if a file is partial. Partial files are not
