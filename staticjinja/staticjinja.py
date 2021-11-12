@@ -32,7 +32,7 @@ def _compute_context(context_like, template):
 
 def _ensure_dir(path):
     """Ensure the directory for a file exists."""
-    Path(path).parent.mkdir(exist_ok=True)
+    Path(path).parent.mkdir(exist_ok=True, parents=True)
 
 
 def get_build_script_directory():
