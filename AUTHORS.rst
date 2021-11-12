@@ -28,3 +28,4 @@ Patches and Suggestions
 - saschalalala
 - Tim Best (timbest)
 - Fasih Ahmad Fakhri
+- zakx
