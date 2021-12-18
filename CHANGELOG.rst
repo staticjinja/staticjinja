@@ -4,6 +4,15 @@ Changelog
 `Unreleased <https://github.com/staticjinja/staticjinja/compare/main>`_
 -----------------------------------------------------------------------
 
+`4.1.2 <https://github.com/staticjinja/staticjinja/compare/4.1.1...4.1.2>`_ (2021-12-18)
+----------------------------------------------------------------------------------------
+
+Fixed
+^^^^^
+
+* Allow nested directories to be created. Thanks @zakx! See
+  https://github.com/staticjinja/staticjinja/pull/167
+
 `4.1.1 <https://github.com/staticjinja/staticjinja/compare/4.1.0...4.1.1>`_ (2021-11-02)
 ----------------------------------------------------------------------------------------
 

@@ -16,7 +16,7 @@ https://github.com/staticjinja/staticjinja/
 """
 
 # This needs to match what is in pyproject.toml
-__version_info__ = (4, 1, 1)
+__version_info__ = (4, 1, 2)
 __version__ = ".".join(map(str, __version_info__))
 
 import logging
