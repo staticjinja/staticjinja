@@ -32,7 +32,7 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.6.2, <3.10"
+python = "^3.6.2"
 docopt-ng = ">=0.7.2, <0.9"
 easywatch = "^0.0.5"
 jinja2 = ">=2.10.1, < 4"
