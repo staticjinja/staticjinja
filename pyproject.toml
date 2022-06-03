@@ -33,9 +33,9 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.6.2"
-docopt-ng = ">=0.7.2, <0.9"
+docopt-ng = ">=0.7.2"
 easywatch = "^0.0.5"
-jinja2 = ">=2.10.1, < 4"
+jinja2 = ">=2.10.1"
 
 # Dev dependencies
 black = { version = "^21.12b0", optional = true }
