@@ -4,6 +4,15 @@ Changelog
 `Unreleased <https://github.com/staticjinja/staticjinja/compare/main>`_
 -----------------------------------------------------------------------
 
+`4.1.3 <https://github.com/staticjinja/staticjinja/compare/4.1.2...4.1.3>`_ (2022-06-03)
+----------------------------------------------------------------------------------------
+
+Fixed
+^^^^^
+
+* Removed upper limits on dependencies. See
+  https://github.com/staticjinja/staticjinja/pull/171
+
 `4.1.2 <https://github.com/staticjinja/staticjinja/compare/4.1.1...4.1.2>`_ (2021-12-18)
 ----------------------------------------------------------------------------------------
 
