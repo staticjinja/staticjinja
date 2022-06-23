@@ -19,6 +19,9 @@ black-check:
 flake8:
 	poetry run flake8
 
+mypy:
+	poetry run mypy staticjinja --ignore-missing-imports
+
 tox:
 	# If a developer doesn't have all the python versions installed,
 	# It's OK just skip them. All versions will be tested in CI.
@@ -44,7 +47,7 @@ docs: docs-html
 	docs \
 	docs/build/html
 
-test: black-check flake8 tox docs build
+test: black-check mypy flake8 tox docs build
 
 coverage:
 	poetry run pytest --cov=staticjinja --cov-report=xml --cov-config=setup.cfg

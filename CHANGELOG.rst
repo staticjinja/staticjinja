@@ -10,6 +10,9 @@ Changed
 * Stop testing for Python 3.6, add testing for Python 3.10. See
   https://github.com/staticjinja/staticjinja/pull/174
 
+* Add type hints throughout the project. See
+  https://github.com/staticjinja/staticjinja/pull/175
+
 `4.1.3 <https://github.com/staticjinja/staticjinja/compare/4.1.2...4.1.3>`_ (2022-06-03)
 ----------------------------------------------------------------------------------------
 

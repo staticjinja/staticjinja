@@ -20,23 +20,25 @@ Options:
   -h --help             Show this screen.
   --version             Show version.
 """
+from __future__ import annotations
+
 import logging
 import os
 import sys
 
-from docopt import docopt
+from docopt import ParsedOptions, docopt
 
 import staticjinja
 
 
-def setup_logging(log_string):
+def setup_logging(log_string: str) -> None:
     numeric_level = getattr(logging, log_string.upper(), None)
     if not isinstance(numeric_level, int):
         raise ValueError(f"Invalid log level: {log_string}")
     staticjinja.logger.setLevel(numeric_level)
 
 
-def render(args):
+def render(args: ParsedOptions) -> None:
     """
     Render a site.
 
@@ -56,19 +58,19 @@ def render(args):
     """
     setup_logging(args["--log"])
 
-    def resolve(path):
+    def resolve(path: str) -> str:
         if not os.path.isabs(path):
             path = os.path.join(os.getcwd(), path)
         return os.path.normpath(path)
 
-    srcpath = resolve(args["--srcpath"])
+    srcpath: str = resolve(args["--srcpath"])
     if not os.path.isdir(srcpath):
         print("The templates directory '{}' is invalid.".format(srcpath))
         sys.exit(1)
 
-    outpath = resolve(args["--outpath"])
+    outpath: str = resolve(args["--outpath"])
 
-    staticdirs = args["--static"]
+    staticdirs: str = args["--static"]
     staticpaths = None
     if staticdirs:
         staticpaths = staticdirs.split(",")
@@ -84,7 +86,7 @@ def render(args):
     site.render(use_reloader=args["watch"])
 
 
-def main(argv=None):
+def main(argv: list[str] | None = None) -> None:
     if argv is None:
         argv = sys.argv[1:]
     render(docopt(__doc__, argv=argv, version=staticjinja.__version__))
