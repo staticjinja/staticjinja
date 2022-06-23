@@ -29,6 +29,12 @@ def test_get_context(site):
     assert site.get_context(site.get_template("template4.html")) == {"b": 4, "c": 6}
 
 
+def test_bad_context(site):
+    site.contexts.append((".*", "bad context"))
+    with raises(TypeError, match="Unexpected type for context: <class 'str'>"):
+        site.get_context(site.get_template("template1.html"))
+
+
 def test_get_rule(site):
     with raises(ValueError):
         assert site.get_rule("template1.html")

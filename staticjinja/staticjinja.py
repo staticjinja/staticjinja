@@ -3,39 +3,56 @@ Simple static page generator.
 
 Uses Jinja2 to compile templates.
 """
+from __future__ import annotations
 
 import inspect
 import logging
 import os
-from pathlib import Path
 import re
 import shutil
+import typing as t
 import warnings
+from pathlib import Path
 
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader, Template
 
 from .reloader import Reloader
+
+if t.TYPE_CHECKING:
+    import typing_extensions as te
+
+
+T = t.TypeVar("T")
+
+FilePath: te.TypeAlias = "str | Path"
+Rule: te.TypeAlias = "t.Callable[[Site, Template], None]"
+Context: te.TypeAlias = "dict[str, t.Any]"
+ContextLike: te.TypeAlias = (
+    "Context | t.Callable[[], Context] | t.Callable[[Template], Context]"
+)
+
+PageMapping: te.TypeAlias = t.Iterable["tuple[str, T]"]
 
 logger = logging.getLogger(__name__)
 
 
-def _compute_context(context_like, template):
-    if callable(context_like):
-        has_argument = bool(inspect.signature(context_like).parameters)
-        if has_argument:
-            return context_like(template)
-        else:
-            return context_like()
-    else:
+def _compute_context(context_like: ContextLike, template: Template) -> Context:
+    if isinstance(context_like, dict):
         return context_like
 
+    if callable(context_like):
+        params = len(inspect.signature(context_like).parameters)
+        return context_like(*[template][:params])
 
-def _ensure_dir(path):
+    raise TypeError(f"Unexpected type for context: {type(context_like)}")
+
+
+def _ensure_dir(path: FilePath) -> None:
     """Ensure the directory for a file exists."""
     Path(path).parent.mkdir(exist_ok=True, parents=True)
 
 
-def get_build_script_directory():
+def get_build_script_directory() -> Path | None:
     """Return dir of the build script that called staticjinja. If DNE, return None.
 
     If you invoked ``python /scripts/build.py``, then this would return "/scripts/".
@@ -48,7 +65,7 @@ def get_build_script_directory():
     # The outermost callframe on the stack
     entry_frame_info = inspect.stack()[-1]
     entry_module = inspect.getmodule(entry_frame_info.frame)
-    if entry_module is not None:
+    if entry_module is not None and entry_module.__file__ is not None:
         # Called from a .py file
         return Path(entry_module.__file__).resolve().parent
     else:
@@ -56,7 +73,7 @@ def get_build_script_directory():
         return None
 
 
-def resolve_path(path):
+def resolve_path(path: str) -> str:
     """Resolve a (possibly relative) path to absolute.
 
     If staticjinja was called from a python build script, then use the build
@@ -83,6 +100,11 @@ def resolve_path(path):
             )
         project_root = build_script_directory
     return str(project_root / path)
+
+
+# TODO replace with te.Self
+# https://github.com/python/mypy/pull/11666
+TSite = t.TypeVar("TSite", bound="Site")
 
 
 class Site:
@@ -131,16 +153,16 @@ class Site:
 
     def __init__(
         self,
-        environment,
-        searchpath,
-        outpath=".",
-        encoding="utf8",
-        logger=None,
-        contexts=None,
-        rules=None,
-        staticpaths=None,
-        mergecontexts=False,
-    ):
+        environment: Environment,
+        searchpath: str,
+        outpath: str = ".",
+        encoding: str = "utf8",
+        logger: logging.Logger | None = None,
+        contexts: PageMapping[ContextLike] | None = None,
+        rules: PageMapping[Rule] | None = None,
+        staticpaths: list[str] | None = None,
+        mergecontexts: bool = False,
+    ) -> None:
         self.env = environment
         self.searchpath = searchpath
         self.outpath = outpath
@@ -160,20 +182,20 @@ class Site:
 
     @classmethod
     def make_site(
-        cls,
-        searchpath="templates",
-        outpath=".",
-        contexts=None,
-        rules=None,
-        encoding="utf8",
-        followlinks=True,
-        extensions=None,
-        staticpaths=None,
-        filters={},
-        env_globals={},
-        env_kwargs=None,
-        mergecontexts=False,
-    ):
+        cls: type[TSite],
+        searchpath: str = "templates",
+        outpath: str = ".",
+        contexts: PageMapping[ContextLike] | None = None,
+        rules: PageMapping[Rule] | None = None,
+        encoding: str = "utf8",
+        followlinks: bool = True,
+        extensions: list[str] | None = None,
+        staticpaths: list[str] | None = None,
+        filters: dict[str, t.Any] = {},
+        env_globals: dict[str, t.Any] = {},
+        env_kwargs: dict[str, t.Any] | None = None,
+        mergecontexts: bool = False,
+    ) -> TSite:
         """Create a :class:`Site <Site>` object.
 
         :param searchpath:
@@ -269,20 +291,20 @@ class Site:
         )
 
     @property
-    def template_names(self):
+    def template_names(self) -> list[str]:
         return self.env.list_templates(filter_func=self.is_template)
 
     @property
-    def templates(self):
+    def templates(self) -> t.Iterator[Template]:
         """Generator for templates."""
         for template_name in self.template_names:
             yield self.get_template(template_name)
 
     @property
-    def static_names(self):
+    def static_names(self) -> list[str]:
         return self.env.list_templates(filter_func=self.is_static)
 
-    def get_template(self, template_name):
+    def get_template(self, template_name: FilePath) -> Template:
         """Get a :class:`jinja2.Template` from the environment.
 
         :param template_name: A string representing the name of the template.
@@ -293,7 +315,7 @@ class Site:
         except UnicodeDecodeError as e:
             raise UnicodeError("Unable to decode %s: %s" % (template_name, e))
 
-    def get_context(self, template):
+    def get_context(self, template: Template) -> Context:
         """Get the context for a template.
 
         If no matching value is found, an empty context is returned.
@@ -309,6 +331,8 @@ class Site:
         """
         context = {}
         for regex, context_like in self.contexts:
+            # TODO unlink name from the template
+            assert template.name is not None
             if re.match(regex, template.name):
                 new_context = _compute_context(context_like, template)
                 context.update(new_context)
@@ -316,7 +340,7 @@ class Site:
                     break
         return context
 
-    def get_rule(self, template_name):
+    def get_rule(self, template_name: str) -> Rule:
         """Find a matching compilation rule for a function.
 
         Raises a :exc:`ValueError` if no matching rule can be found.
@@ -328,7 +352,7 @@ class Site:
                 return render_func
         raise ValueError("no matching rule")
 
-    def is_static(self, filename):
+    def is_static(self, filename: FilePath) -> bool:
         """Check if a file is static. Static files are copied, rather than
         compiled using Jinja2.
 
@@ -343,7 +367,7 @@ class Site:
         path = Path(filename).as_posix()
         return any(path.startswith(Path(sp).as_posix()) for sp in self.staticpaths)
 
-    def is_partial(self, filename):
+    def is_partial(self, filename: FilePath) -> bool:
         """Check if a file is partial. Partial files are not
         rendered, but they are used in rendering templates.
 
@@ -354,7 +378,7 @@ class Site:
         """
         return any(part.startswith("_") for part in Path(filename).parts)
 
-    def is_ignored(self, filename):
+    def is_ignored(self, filename: FilePath) -> bool:
         """Check if a file is an ignored. Ignored files are
         neither rendered nor used in rendering templates.
 
@@ -365,7 +389,7 @@ class Site:
         """
         return any(part.startswith(".") for part in Path(filename).parts)
 
-    def is_template(self, filename):
+    def is_template(self, filename: FilePath) -> bool:
         """Check if a file is a template.
 
         A file is a considered a template if it is not partial, ignored, or
@@ -381,7 +405,12 @@ class Site:
             return False
         return True
 
-    def render_template(self, template, context=None, filepath=None):
+    def render_template(
+        self,
+        template: Template,
+        context: Context | None = None,
+        filepath: str | None = None,
+    ) -> None:
         """Render a single :class:`jinja2.Template` object.
 
         If a Rule matching the template is found, the rendering task is
@@ -404,6 +433,7 @@ class Site:
         if context is None:
             context = self.get_context(template)
 
+        assert template.name is not None
         try:
             rule = self.get_rule(template.name)
         except ValueError:
@@ -414,7 +444,7 @@ class Site:
         else:
             rule(self, template, **context)
 
-    def render_templates(self, templates):
+    def render_templates(self, templates: t.Iterable[Template]) -> None:
         """Render a collection of :class:`jinja2.Template` objects.
 
         :param templates:
@@ -423,7 +453,7 @@ class Site:
         for template in templates:
             self.render_template(template)
 
-    def copy_static(self, files):
+    def copy_static(self, files: t.Iterable[FilePath]) -> None:
         for f in files:
             f = Path(f)
             input_location = Path(self.searchpath) / f
@@ -432,7 +462,7 @@ class Site:
             _ensure_dir(output_location)
             shutil.copy2(input_location, output_location)
 
-    def get_dependents(self, filename):
+    def get_dependents(self, filename: FilePath) -> t.Iterable[FilePath]:
         """Get a list of files that depends on *filename*. Useful to decide
         what to re-render when *filename* changes.
 
@@ -457,7 +487,7 @@ class Site:
         else:
             return []
 
-    def get_dependencies(self, filename):
+    def get_dependencies(self, filename: FilePath) -> t.Iterable[FilePath]:
         """
         .. deprecated:: 2.0.0
            Use :meth:`Site.get_dependents` instead.
@@ -467,7 +497,7 @@ class Site:
         )
         return self.get_dependents(filename)
 
-    def render(self, use_reloader=False):
+    def render(self, use_reloader: bool = False) -> None:
         """Generate the site.
 
         :param use_reloader: if given, reload templates on modification
@@ -478,5 +508,5 @@ class Site:
         if use_reloader:
             Reloader(self).watch()
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "%s('%s', '%s')" % (type(self).__name__, self.searchpath, self.outpath)

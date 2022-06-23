@@ -1,5 +1,13 @@
+from __future__ import annotations
+
 import logging
+import typing
 from pathlib import Path
+
+if typing.TYPE_CHECKING:
+    # recursive imports
+    from .staticjinja import Site
+
 
 logger = logging.getLogger(__name__)
 
@@ -14,14 +22,14 @@ class Reloader:
 
     """
 
-    def __init__(self, site):
+    def __init__(self, site: Site) -> None:
         self.site = site
 
     @property
-    def searchpath(self):
+    def searchpath(self) -> str:
         return self.site.searchpath
 
-    def should_handle(self, event_type, filename):
+    def should_handle(self, event_type: str, filename: str) -> bool:
         """Check if an event should be handled.
 
         An event should be handled if a file was created or modified, and
@@ -33,7 +41,7 @@ class Reloader:
         """
         return event_type in ("modified", "created") and Path(filename).is_file()
 
-    def event_handler(self, event_type, src_path):
+    def event_handler(self, event_type: str, src_path: str) -> None:
         """Re-render templates if they are modified.
 
         :param event_type: a string, representing the type of event
@@ -51,7 +59,7 @@ class Reloader:
                 t = self.site.get_template(f)
                 self.site.render_template(t)
 
-    def watch(self):
+    def watch(self) -> None:
         """Watch and reload modified templates."""
         import easywatch
 
