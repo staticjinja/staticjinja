@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: [3.6, 3.7, 3.8, 3.9]
+        python-version: [3.7, 3.8, 3.9, "3.10"]
         # exclude: #If you want to do this...
         #  - os: macos-latest
         #    python-version: 3.6:
@@ -72,7 +72,7 @@ jobs:
       - name: Set up Python 3.x
         uses: actions/setup-python@v2
         with:
-          python-version: "3.9" # 3.10 doesn't work with sphinx yet
+          python-version: "3.x" # Latest python release
       - name: Install dependencies
         run: make init
       - name: Build docs
