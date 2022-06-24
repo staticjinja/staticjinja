@@ -38,7 +38,7 @@ easywatch = "^0.0.5"
 jinja2 = ">=2.10.1"
 
 # Dev dependencies
-black = { version = "^21.12b0", optional = true }
+black = { version = "^22.3.0", optional = true }
 flake8 = { version = "^3.8.4", optional = true }
 markdown = { version = "^3.3.3", optional = true }
 pytest = { version = "^6.0.0", optional = true }
