@@ -17,21 +17,7 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader, Template
 
 from .reloader import Reloader
-
-if t.TYPE_CHECKING:
-    import typing_extensions as te
-
-
-T = t.TypeVar("T")
-
-FilePath: te.TypeAlias = "str | Path"
-Rule: te.TypeAlias = "t.Callable[[Site, Template], None]"
-Context: te.TypeAlias = "dict[str, t.Any]"
-ContextLike: te.TypeAlias = (
-    "Context | t.Callable[[], Context] | t.Callable[[Template], Context]"
-)
-
-PageMapping: te.TypeAlias = t.Iterable["tuple[str, T]"]
+from .types import Context, ContextLike, FilePath, PageMapping, Rule
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +38,7 @@ def _ensure_dir(path: FilePath) -> None:
     Path(path).parent.mkdir(exist_ok=True, parents=True)
 
 
-def get_build_script_directory() -> Path | None:
+def get_build_script_directory() -> Path:
     """Return dir of the build script that called staticjinja. If DNE, return None.
 
     If you invoked ``python /scripts/build.py``, then this would return "/scripts/".
@@ -70,10 +56,10 @@ def get_build_script_directory() -> Path | None:
         return Path(entry_module.__file__).resolve().parent
     else:
         # Called from interpreter or similar
-        return None
+        return Path.cwd()
 
 
-def resolve_path(path: str) -> str:
+def resolve_path(path: FilePath) -> str:
     """Resolve a (possibly relative) path to absolute.
 
     If staticjinja was called from a python build script, then use the build
@@ -84,20 +70,19 @@ def resolve_path(path: str) -> str:
        See https://github.com/staticjinja/staticjinja/issues/149
     """
     if Path(path).is_absolute():
-        return path
+        return str(path)
 
     project_root = Path.cwd()
     build_script_directory = get_build_script_directory()
-    if build_script_directory is not None:
-        if build_script_directory != project_root:
-            warnings.warn(
-                FutureWarning(
-                    "Inferring project root to be the build script directory is "
-                    "deprecated. For more info see "
-                    "https://github.com/staticjinja/staticjinja/issues/149"
-                ),
-                stacklevel=2,  # Show the caller of resolve_path() in error
-            )
+    if build_script_directory != project_root:
+        warnings.warn(
+            FutureWarning(
+                "Inferring project root to be the build script directory is "
+                "deprecated. For more info see "
+                "https://github.com/staticjinja/staticjinja/issues/149"
+            ),
+            stacklevel=2,  # Show the caller of resolve_path() in error
+        )
         project_root = build_script_directory
     return str(project_root / path)
 
@@ -154,8 +139,8 @@ class Site:
     def __init__(
         self,
         environment: Environment,
-        searchpath: str,
-        outpath: str = ".",
+        searchpath: FilePath,
+        outpath: FilePath = ".",
         encoding: str = "utf8",
         logger: logging.Logger | None = None,
         contexts: PageMapping[ContextLike] | None = None,
@@ -183,8 +168,8 @@ class Site:
     @classmethod
     def make_site(
         cls: type[TSite],
-        searchpath: str = "templates",
-        outpath: str = ".",
+        searchpath: FilePath = "templates",
+        outpath: FilePath = ".",
         contexts: PageMapping[ContextLike] | None = None,
         rules: PageMapping[Rule] | None = None,
         encoding: str = "utf8",
