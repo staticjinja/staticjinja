@@ -1,13 +1,17 @@
+from __future__ import annotations
+
 import os
 from pathlib import Path
 
-from pytest import mark, raises, warns
+from jinja2 import Template
+from pytest import MonkeyPatch, mark, raises, warns
 
-from staticjinja import Site, Reloader
 import staticjinja
+from staticjinja import Reloader, Site
+from staticjinja.types import Context, FilePath
 
 
-def test_template_names(site):
+def test_template_names(site: Site) -> None:
     site.staticpaths = ["static_css", "static_js", "favicon.ico"]
     expected_templates = set(
         ["template1.html", "template2.html", "sub/template3.html", "template4.html"]
@@ -15,12 +19,12 @@ def test_template_names(site):
     assert set(site.template_names) == expected_templates
 
 
-def test_templates(site):
+def test_templates(site: Site) -> None:
     expected = list(site.template_names)
     assert [t.name for t in site.templates] == expected
 
 
-def test_get_context(site):
+def test_get_context(site: Site) -> None:
     assert site.get_context(site.get_template("template1.html")) == {}
     assert site.get_context(site.get_template("template2.html")) == {"a": 1}
     assert site.get_context(site.get_template("sub/template3.html")) == {"b": 3}
@@ -29,19 +33,19 @@ def test_get_context(site):
     assert site.get_context(site.get_template("template4.html")) == {"b": 4, "c": 6}
 
 
-def test_bad_context(site):
-    site.contexts.append((".*", "bad context"))
+def test_bad_context(site: Site) -> None:
+    site.contexts.append((".*", "bad context"))  # type: ignore
     with raises(TypeError, match="Unexpected type for context: <class 'str'>"):
         site.get_context(site.get_template("template1.html"))
 
 
-def test_get_rule(site):
+def test_get_rule(site: Site) -> None:
     with raises(ValueError):
         assert site.get_rule("template1.html")
     assert site.get_rule("template2.html")
 
 
-def test_get_dependents(monkeypatch, site):
+def test_get_dependents(monkeypatch: MonkeyPatch, site: Site) -> None:
     filename = "test.txt"
     # An ignored file has no dependendents
     assert site.get_dependents(".%s" % filename) == []
@@ -54,19 +58,21 @@ def test_get_dependents(monkeypatch, site):
     # TODO maybe test that static files only have themselves as dependents
 
 
-def test_render_template(site, build_path):
+def test_render_template(site: Site, build_path: Path) -> None:
     site.render_template(site.get_template("template1.html"))
     template1 = build_path.joinpath("template1.html")
     assert template1.read_text() == "Test 1"
 
 
-def test_render_nested_template(site, build_path):
+def test_render_nested_template(site: Site, build_path: Path) -> None:
     site.render_template(site.get_template("sub/template3.html"))
     template3 = build_path.joinpath("sub", "template3.html")
     assert template3.read_text() == "Test 3"
 
 
-def test_render_template_with_env_globals(template_path, build_path):
+def test_render_template_with_env_globals(
+    template_path: Path, build_path: Path
+) -> None:
     """Ensure variables defined in env_globals can be accessed globally."""
     template_name = "template.html"
     template_path.joinpath(template_name).write_text("<h1>{{greeting}}</h1>")
@@ -79,7 +85,7 @@ def test_render_template_with_env_globals(template_path, build_path):
     assert build_path.joinpath(template_name).read_text() == "<h1>Hello world!</h1>"
 
 
-def test_render_templates(site, build_path):
+def test_render_templates(site: Site, build_path: Path) -> None:
     site.render_templates(site.templates)
     template1 = build_path.joinpath("template1.html")
     assert template1.read_text() == "Test 1"
@@ -87,10 +93,14 @@ def test_render_templates(site, build_path):
     assert template3.read_text() == "Test 3"
 
 
-def test_build(monkeypatch, site):
-    templates = []
+def test_build(monkeypatch: MonkeyPatch, site: Site) -> None:
+    templates: list[Template] = []
 
-    def fake_render(template, context=None, filepath=None):
+    def fake_render(
+        template: Template,
+        context: Context | None = None,
+        filepath: FilePath | None = None,
+    ) -> None:
         templates.append(template)
 
     monkeypatch.setattr(site, "render_template", fake_render)
@@ -99,10 +109,10 @@ def test_build(monkeypatch, site):
     assert templates == list(site.templates)
 
 
-def test_with_reloader(monkeypatch, site):
+def test_with_reloader(monkeypatch: MonkeyPatch, site: Site) -> None:
     watch_called = False
 
-    def fake_watch(self):
+    def fake_watch(self: Reloader) -> None:
         nonlocal watch_called
         watch_called = True
 
@@ -132,7 +142,7 @@ is_ignored_cases = [
 
 
 @mark.parametrize("name, expected", is_ignored_cases)
-def test_is_ignored(site, name, expected):
+def test_is_ignored(site: Site, name: str, expected: bool) -> None:
     assert site.is_ignored(name) == expected
 
 
@@ -156,11 +166,11 @@ is_partial_cases = [
 
 
 @mark.parametrize("name, expected", is_partial_cases)
-def test_is_partial(site, name, expected):
+def test_is_partial(site: Site, name: str, expected: bool) -> None:
     assert site.is_partial(name) == expected
 
 
-def test_path_absolute(root_path):
+def test_path_absolute(root_path: Path) -> None:
     expected = "/absolute/path/to/templates"
     s = Site.make_site(searchpath=expected)
     # On windows, ignore the drive (eg "C:") prefix.
@@ -168,7 +178,7 @@ def test_path_absolute(root_path):
     assert Path(searchpath) == Path(expected)
 
 
-def test_path_relative_warning(root_path):
+def test_path_relative_warning(root_path: Path) -> None:
     """If a relative path is given to staticjinja, it will try to infer the root
     of the project. If staticjinja was invoked from a python build script,
     then SJ will infer the project root is the directory of that build script.
@@ -191,7 +201,7 @@ def test_path_relative_warning(root_path):
     assert Path(s.searchpath) == entry_point_dir / searchpath
 
 
-def test_path_relative_no_warning(root_path):
+def test_path_relative_no_warning(root_path: Path) -> None:
     """See sibling test for more info.
 
     If someone *is not* relying upon this deprecated behavior, (ie they are
@@ -200,8 +210,8 @@ def test_path_relative_no_warning(root_path):
     """
     entry_point_dir = staticjinja.staticjinja.get_build_script_directory()
     print(f"entry_point_dir={entry_point_dir}")
+    original_cwd = Path.cwd()
     try:
-        original_cwd = Path.cwd()
         os.chdir(entry_point_dir)
         # Sanity check that we are set up properly to actually test this behavior
         assert Path.cwd() == Path(entry_point_dir)
@@ -214,7 +224,7 @@ def test_path_relative_no_warning(root_path):
         os.chdir(original_cwd)
 
 
-def test_followlinks(root_path):
+def test_followlinks(root_path: Path) -> None:
     # Set up a directory that is outside the searchpath
     # and put a file in it
     outside_dir = root_path / "outside"
