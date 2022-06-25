@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pathlib import Path
 
 import pytest
@@ -6,11 +8,15 @@ import staticjinja
 
 
 @pytest.fixture
-def reloader(site):
+def reloader(site: staticjinja.Site) -> staticjinja.Reloader:
     return staticjinja.Reloader(site)
 
 
-def test_should_handle(reloader, root_path, template_path):
+def test_should_handle(
+    reloader: staticjinja.Reloader,
+    root_path: Path,
+    template_path: Path,
+) -> None:
     exists = template_path / "template1.html"
     DNE = template_path / "DNE.html"
     assert reloader.should_handle("created", str(exists))
@@ -19,7 +25,11 @@ def test_should_handle(reloader, root_path, template_path):
     assert not reloader.should_handle("modified", str(DNE))
 
 
-def test_event_handler(monkeypatch, reloader, template_path):
+def test_event_handler(
+    monkeypatch: pytest.MonkeyPatch,
+    reloader: staticjinja.Reloader,
+    template_path: Path,
+) -> None:
     rendered = []
 
     def fake_renderer(template, context=None, filepath=None):
@@ -32,7 +42,11 @@ def test_event_handler(monkeypatch, reloader, template_path):
     assert rendered == [reloader.site.get_template("template1.html")]
 
 
-def test_event_handler_static(monkeypatch, reloader, template_path):
+def test_event_handler_static(
+    monkeypatch: pytest.MonkeyPatch,
+    reloader: staticjinja.Reloader,
+    template_path: Path,
+) -> None:
     copied_paths = []
 
     def fake_copy_static(files):

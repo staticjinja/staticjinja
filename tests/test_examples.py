@@ -1,14 +1,16 @@
 """Runs integration tests on the examples."""
+from __future__ import annotations
 
 import difflib
 import filecmp
 import os
-from pathlib import Path
 import shutil
 import subprocess
+from pathlib import Path
 
-from pytest import fixture
 import pytest_check as check
+from _pytest.fixtures import SubRequest
+from pytest import fixture
 
 PROJECT_ROOT = Path(__file__).parent.parent
 
@@ -30,7 +32,7 @@ class ContentDirCmp(filecmp.dircmp):
         self.same_files, self.diff_files, self.funny_files = fcomp
 
 
-def print_diff(filename1, filename2):
+def print_diff(filename1: str, filename2: str) -> None:
     with open(filename1) as f1, open(filename2) as f2:
         diff = difflib.unified_diff(
             f1.readlines(), f2.readlines(), fromfile=filename1, tofile=filename2
@@ -40,7 +42,7 @@ def print_diff(filename1, filename2):
             print(line, end="")
 
 
-def check_same(dir1, dir2):
+def check_same(dir1: str | Path, dir2: str | Path) -> None:
     cmp = ContentDirCmp(dir1, dir2)
     cmp.report()
     for df in cmp.diff_files:
@@ -53,7 +55,7 @@ def check_same(dir1, dir2):
         check_same(os.path.join(dir1, subdir), os.path.join(dir2, subdir))
 
 
-def example_names():
+def example_names() -> list[str]:
     names = os.listdir(PROJECT_ROOT / "examples")
     ignored = ["__pycache__", "README.rst"]
     for ig in ignored:
@@ -63,11 +65,11 @@ def example_names():
 
 
 @fixture(params=example_names())
-def example_name(request):
+def example_name(request: SubRequest) -> str:
     return request.param
 
 
-def test_example(tmp_path, example_name):
+def test_example(tmp_path: Path, example_name: str) -> None:
     """Builds an example, ensures the rendered output matches the expected."""
     example_directory = PROJECT_ROOT / "examples" / example_name
     source_directory = example_directory / "before"

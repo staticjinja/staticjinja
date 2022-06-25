@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 import logging
 import os
-import unittest.mock as mock
 import subprocess
 import sys
+import unittest.mock as mock
 
 import pytest
 
@@ -22,7 +24,13 @@ srcpath_cases = [
 @mock.patch("os.path.isdir")
 @mock.patch("os.getcwd")
 @mock.patch("staticjinja.cli.staticjinja.Site.make_site")
-def test_srcpath(mock_make_site, mock_getcwd, mock_isdir, srcpath, expected):
+def test_srcpath(
+    mock_make_site: mock.Mock,
+    mock_getcwd: mock.Mock,
+    mock_isdir: mock.Mock,
+    srcpath: str | None,
+    expected: str,
+) -> None:
     """Test that various `--srcpath` args given to the CLI result in
     Site.make_site() being called with the correct searchpath parameter."""
     mock_isdir.return_value = True
@@ -51,7 +59,13 @@ outpath_cases = [
 @mock.patch("os.path.isdir")
 @mock.patch("os.getcwd")
 @mock.patch("staticjinja.cli.staticjinja.Site.make_site")
-def test_outpath(mock_make_site, mock_getcwd, mock_isdir, outpath, expected):
+def test_outpath(
+    mock_make_site: mock.Mock,
+    mock_getcwd: mock.Mock,
+    mock_isdir: mock.Mock,
+    outpath: str | None,
+    expected: str,
+) -> None:
     """Test that various `--outpath` args given to the CLI result in
     Site.make_site() being called with the correct outpath parameter."""
     mock_isdir.return_value = True
@@ -69,7 +83,7 @@ def test_outpath(mock_make_site, mock_getcwd, mock_isdir, outpath, expected):
 
 @mock.patch("os.path.isdir")
 @mock.patch("os.getcwd")
-def test_log(mock_getcwd, mock_isdir):
+def test_log(mock_getcwd: mock.Mock, mock_isdir: mock.Mock) -> None:
     mock_isdir.return_value = True
     mock_getcwd.return_value = "/cwd"
 
@@ -99,7 +113,13 @@ def test_log(mock_getcwd, mock_isdir):
 @mock.patch("os.path.isdir")
 @mock.patch("os.getcwd")
 @mock.patch("staticjinja.cli.staticjinja.Site.make_site")
-def test_watch(mock_make_site, mock_getcwd, mock_isdir, command, expected):
+def test_watch(
+    mock_make_site: mock.Mock,
+    mock_getcwd: mock.Mock,
+    mock_isdir: mock.Mock,
+    command: str,
+    expected: bool,
+) -> None:
     """Test that build/watch commands result in Site.render() being called
     with the correct use_reloader values."""
     mock_isdir.return_value = True
@@ -113,7 +133,7 @@ def test_watch(mock_make_site, mock_getcwd, mock_isdir, command, expected):
 
 
 @mock.patch("staticjinja.cli.staticjinja.Site.make_site")
-def test_nonexistent_srcpath(mock_make_site):
+def test_nonexistent_srcpath(mock_make_site: mock.Mock) -> None:
     """Test that a nonexistent `--srcpath` exits early."""
     # Technique from
     # medium.com/python-pandemonium/testing-sys-exit-with-pytest-10c6e5f7726f
@@ -131,7 +151,7 @@ def test_nonexistent_srcpath(mock_make_site):
         [sys.executable, "-m", "staticjinja"],
     ],
 )
-def test_entrypoints_no_args(command):
+def test_entrypoints_no_args(command: list[str]) -> None:
     """Ensure we can access the staticjinja CLI from the shell.
 
     Don't bother testing for any complex inputs or outputs, this is just to
