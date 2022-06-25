@@ -4,6 +4,8 @@ import logging
 import typing
 from pathlib import Path
 
+from .types import FilePath
+
 if typing.TYPE_CHECKING:
     # recursive imports
     from .staticjinja import Site
@@ -26,10 +28,10 @@ class Reloader:
         self.site = site
 
     @property
-    def searchpath(self) -> str:
+    def searchpath(self) -> FilePath:
         return self.site.searchpath
 
-    def should_handle(self, event_type: str, filename: str) -> bool:
+    def should_handle(self, event_type: str, filename: FilePath) -> bool:
         """Check if an event should be handled.
 
         An event should be handled if a file was created or modified, and
@@ -41,7 +43,7 @@ class Reloader:
         """
         return event_type in ("modified", "created") and Path(filename).is_file()
 
-    def event_handler(self, event_type: str, src_path: str) -> None:
+    def event_handler(self, event_type: str, src_path: FilePath) -> None:
         """Re-render templates if they are modified.
 
         :param event_type: a string, representing the type of event
