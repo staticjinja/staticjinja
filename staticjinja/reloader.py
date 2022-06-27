@@ -4,11 +4,10 @@ import logging
 import typing
 from pathlib import Path
 
-from .types import FilePath
-
 if typing.TYPE_CHECKING:
     # recursive imports
     from .staticjinja import Site
+    from .types import FilePath
 
 
 logger = logging.getLogger(__name__)
