@@ -299,3 +299,56 @@ fairly easily by modifying ``staticjinja.logger``:
     # Or do whatever else you want, such as logging to a file instead of stderr
     staticjinja.logger.loggers = []
     staticjinja.logger.addHandler(logging.FileHandler('site.log'))
+
+Building with a ``Makefile``
+----------------------------
+
+You also have the option to use make to build your static site. You can use the
+folowing ``Makefile`` as a template.
+
+This Makefile defines a few configurable options at the top of the file.
+
+* ``OUTPATH`` - This is the directory your rendered site will be built to.
+* ``SRCPATH`` - This is the directory containing your templates.
+* ``STATICPATH`` - This is the directory conaining all your static files.
+* ``EXTRAS`` - This is a list of (space-separated) files which will trigger a
+  rebuild.
+* ``STATICJINJA`` - This is the command that will be run to build your
+  templates. Set this to ``./build.py`` if you are `using custom build scripts`_.
+
+.. literalinclude:: ../../examples/makefile/before/Makefile
+   :language: makefile
+
+To recreate the ``staticjinja watch`` command, you can use the command
+``watchmedo shell-command`` from ``watchdog``.
+
+.. code-block:: shell
+
+    $ watchmedo shell-command \
+        --patterns="*.html;*.css;*.js" \
+        --ignore-patterns="build/*" \
+        --ignore-directories \
+        --recursive \
+        --wait \
+        --command="make -q || make" \
+        .
+
+You can also define it as a watchdog trick. Create the following in a yaml file.
+
+.. code-block:: yaml
+    
+    tricks:
+    - watchdog.tricks.ShellCommandTrick:
+        patterns: ["*.html", "*.css", "*.js"]
+        ignore_patterns: ["build/*"]
+        ignore_directories: true
+        wait_for_process: true
+        shell_command: |
+            make -q || make
+
+Now you can start a watchdog daemon using the ``watchmedo tricks`` command.
+Give it the name of the yaml file as an argument.
+
+.. code-block:: shell
+    
+    $ watchmedo tricks tricks.yaml
