@@ -17,7 +17,9 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader, Template
 
 from .reloader import Reloader
-from .types import Context, ContextLike, FilePath, PageMapping, Rule
+
+if t.TYPE_CHECKING:
+    from .types import Context, ContextLike, FilePath, PageMapping, Rule
 
 logger = logging.getLogger(__name__)
 

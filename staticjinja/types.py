@@ -1,13 +1,12 @@
 from __future__ import annotations
 
 import typing as t
-from pathlib import Path  # noqa: F401
+from pathlib import Path  # noqa: F401 (unused import, but it is used)
 
 import typing_extensions as te
 from jinja2 import Template
 
-if t.TYPE_CHECKING:
-    from .staticjinja import Site
+from .staticjinja import Site
 
 _T = t.TypeVar("_T")
 
