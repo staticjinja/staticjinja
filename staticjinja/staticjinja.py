@@ -19,7 +19,14 @@ from jinja2 import Environment, FileSystemLoader, Template
 from .reloader import Reloader
 
 if t.TYPE_CHECKING:
-    from .types import Context, ContextLike, FilePath, PageMapping, Rule
+    from .types import (
+        Context,
+        ContextLike,
+        ContextMapping,
+        FilePath,
+        Rule,
+        RuleMapping,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -145,8 +152,8 @@ class Site:
         outpath: FilePath = ".",
         encoding: str = "utf8",
         logger: logging.Logger | None = None,
-        contexts: PageMapping[ContextLike] | None = None,
-        rules: PageMapping[Rule] | None = None,
+        contexts: ContextMapping | None = None,
+        rules: RuleMapping | None = None,
         staticpaths: list[str] | None = None,
         mergecontexts: bool = False,
     ) -> None:
@@ -172,8 +179,8 @@ class Site:
         cls: type[TSite],
         searchpath: FilePath = "templates",
         outpath: FilePath = ".",
-        contexts: PageMapping[ContextLike] | None = None,
-        rules: PageMapping[Rule] | None = None,
+        contexts: ContextMapping | None = None,
+        rules: RuleMapping | None = None,
         encoding: str = "utf8",
         followlinks: bool = True,
         extensions: list[str] | None = None,

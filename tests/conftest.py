@@ -62,14 +62,14 @@ def site(template_path: Path, build_path: Path) -> staticjinja.Site:
     static_js.mkdir()
     static_js.joinpath("hello.js").write_text("var a = function () {return true};")
     template_path.joinpath("favicon.ico").write_text("Fake favicon")
-    contexts: st.PageMapping[st.ContextLike] = [
+    contexts: st.ContextMapping = [
         ("template2.html", lambda t: {"a": 1}),
         (".*template3.html", lambda: {"b": 3}),
         ("template4.html", {"b": 4, "c": 5}),
         (".*[4-9].html", {"c": 6}),
     ]
 
-    rules: st.PageMapping[st.Rule] = [
+    rules: st.RuleMapping = [
         ("template2.html", lambda env, t, *, a, **_: None),
     ]
     return staticjinja.Site.make_site(
