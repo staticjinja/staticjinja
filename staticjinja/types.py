@@ -26,9 +26,13 @@ class ContextTemplateCallable(te.Protocol):
         ...
 
 
+ContextLike: te.TypeAlias = "Context | ContextCallable | ContextTemplateCallable"
+
+
 class Rule(te.Protocol):
     def __call__(self, __site: Site, __template: Template, **metadata: t.Any) -> None:
         ...
 
 
-ContextLike: te.TypeAlias = "Context | ContextCallable | ContextTemplateCallable"
+ContextMapping: te.TypeAlias = "PageMapping[ContextLike]"
+RuleMapping: te.TypeAlias = "PageMapping[Rule]"
