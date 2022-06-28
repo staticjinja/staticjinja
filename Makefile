@@ -20,7 +20,7 @@ flake8:
 	poetry run flake8
 
 mypy:
-	poetry run mypy staticjinja --ignore-missing-imports
+	poetry run mypy
 
 tox:
 	# If a developer doesn't have all the python versions installed,
