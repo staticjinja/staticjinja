@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextlib
 import os
 from pathlib import Path
 
@@ -9,6 +10,17 @@ from pytest import MonkeyPatch, mark, raises, warns
 import staticjinja
 from staticjinja import Reloader, Site
 from staticjinja.types import Context, FilePath
+
+
+@contextlib.contextmanager
+def in_directory(new_dir):
+    old_dir = os.getcwd()
+    try:
+        os.chdir(new_dir)
+        assert Path.cwd() == Path(new_dir)
+        yield
+    finally:
+        os.chdir(old_dir)
 
 
 def test_template_names(site: Site) -> None:
@@ -189,11 +201,11 @@ def test_path_relative_warning(root_path: Path) -> None:
     supplying relative paths, and build_script_dir!=pathlib.Path.cwd(), then they
     *should* get a warning.
     """
-    entry_point_dir = staticjinja.staticjinja.get_build_script_directory()
+    entry_point_dir = staticjinja.staticjinja._depr_project_root()
     print(f"entry_point_dir={entry_point_dir}")
     print(f"CWD={Path.cwd()}")
     # Sanity check that we are set up properly to actually test this behavior
-    assert Path.cwd() != Path(entry_point_dir)
+    assert Path.cwd() != entry_point_dir
 
     searchpath = "relative/path/to/templates"
     with warns(FutureWarning):
@@ -205,23 +217,15 @@ def test_path_relative_no_warning(root_path: Path) -> None:
     """See sibling test for more info.
 
     If someone *is not* relying upon this deprecated behavior, (ie they are
-    supplying relative paths, but build_script_dir==pathlib.Path.cwd(), then they
+    supplying relative paths, but entry_point_dir==pathlib.Path.cwd(), then they
     *should not* get a warning.
     """
-    entry_point_dir = staticjinja.staticjinja.get_build_script_directory()
-    print(f"entry_point_dir={entry_point_dir}")
-    original_cwd = Path.cwd()
-    try:
-        os.chdir(entry_point_dir)
-        # Sanity check that we are set up properly to actually test this behavior
-        assert Path.cwd() == Path(entry_point_dir)
-
+    entry_point_dir = staticjinja.staticjinja._depr_project_root()
+    with in_directory(entry_point_dir):
         # This should not give a warning or anything
         searchpath = "relative/path/to/templates"
         s = Site.make_site(searchpath=searchpath)
         assert Path(s.searchpath) == Path.cwd() / searchpath
-    finally:
-        os.chdir(original_cwd)
 
 
 def test_followlinks(root_path: Path) -> None:

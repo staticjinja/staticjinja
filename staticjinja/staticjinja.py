@@ -40,11 +40,11 @@ def _ensure_dir(path: FilePath) -> None:
     Path(path).parent.mkdir(exist_ok=True, parents=True)
 
 
-def get_build_script_directory() -> Path:
-    """Return dir of the build script that called staticjinja. If DNE, return None.
+def _depr_project_root() -> Path:
+    """Compatibility shim for inferring the project root from the build script.
 
     If you invoked ``python /scripts/build.py``, then this would return "/scripts/".
-    If called from the interpreter, return None.
+    If called from the interpreter, return os.getcwd().
 
     .. deprecated:: 2.1.0
        This will be removed in the future. See
@@ -75,8 +75,8 @@ def resolve_path(path: FilePath) -> str:
         return str(path)
 
     project_root = Path.cwd()
-    build_script_directory = get_build_script_directory()
-    if build_script_directory != project_root:
+    depr_project_root = _depr_project_root()
+    if project_root != depr_project_root:
         warnings.warn(
             FutureWarning(
                 "Inferring project root to be the build script directory is "
@@ -85,7 +85,7 @@ def resolve_path(path: FilePath) -> str:
             ),
             stacklevel=2,  # Show the caller of resolve_path() in error
         )
-        project_root = build_script_directory
+        project_root = depr_project_root
     return str(project_root / path)
 
 
