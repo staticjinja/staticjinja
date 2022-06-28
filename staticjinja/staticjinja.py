@@ -449,7 +449,7 @@ class Site:
             _ensure_dir(output_location)
             shutil.copy2(input_location, output_location)
 
-    def get_dependents(self, filename: FilePath) -> t.Iterable[FilePath]:
+    def get_dependents(self, filename: FilePath) -> t.Sequence[FilePath]:
         """Get a list of files that depends on *filename*. Useful to decide
         what to re-render when *filename* changes.
 
@@ -474,7 +474,7 @@ class Site:
         else:
             return []
 
-    def get_dependencies(self, filename: FilePath) -> t.Iterable[FilePath]:
+    def get_dependencies(self, filename: FilePath) -> t.Sequence[FilePath]:
         """
         .. deprecated:: 2.0.0
            Use :meth:`Site.get_dependents` instead.
