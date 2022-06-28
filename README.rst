@@ -65,10 +65,17 @@ Documentation
 Documentation is available at
 https://staticjinja.readthedocs.io.
 
+
+Examples
+--------
+
+See the examples_ directory for a few examples.
+
 Contribute
 ----------
 
 Please see CONTRIBUTING_.
 
+.. _examples: examples
 .. _CONTRIBUTING: CONTRIBUTING.rst
 .. _Jinja2: https://jinja.palletsprojects.com
