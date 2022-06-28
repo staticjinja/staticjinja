@@ -70,7 +70,7 @@ def site(template_path: Path, build_path: Path) -> staticjinja.Site:
     ]
 
     rules: st.RuleMapping = [
-        ("template2.html", lambda env, t, *, a, **_: None),
+        ("template2.html", lambda site, template, **ctx: None),
     ]
     return staticjinja.Site.make_site(
         searchpath=str(template_path),

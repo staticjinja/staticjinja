@@ -30,7 +30,11 @@ ContextLike: te.TypeAlias = "Context | ContextCallable | ContextTemplateCallable
 
 
 class Rule(te.Protocol):
-    def __call__(self, __site: Site, __template: Template, **metadata: t.Any) -> None:
+    # This is a little restrictive, mypy will complain (when it shouldn't) for
+    # def f(site, template, other_kwarg=42, **kwargs)
+    # But it's better than nothing. Users can either #  type: ignore
+    # that line in their code, or submit a PR that actually fixes it.
+    def __call__(self, site: Site, template: Template, **context: t.Any) -> t.Any:
         ...
 
 
