@@ -85,4 +85,4 @@ Thanks for your help!
 .. _staticjinja/staticjinja : https://github.com/staticjinja/staticjinja
 .. _Issues: https://github.com/staticjinja/staticjinja/issues
 .. _Poetry docs: https://python-poetry.org/docs/basic-usage/#using-your-virtual-environment
-.. _good commit message style: https://chris.beams.io/posts/git-commit/
+.. _good commit message style: https://cbea.ms/git-commit/
