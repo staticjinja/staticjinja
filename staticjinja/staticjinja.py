@@ -438,16 +438,6 @@ class Site:
         else:
             return []
 
-    def get_dependencies(self, filename: FilePath) -> t.Sequence[FilePath]:
-        """
-        .. deprecated:: 2.0.0
-           Use :meth:`Site.get_dependents` instead.
-        """
-        warnings.warn(
-            "Site.get_dependencies() is deprecated. Use Site.get_dependents() instead."
-        )
-        return self.get_dependents(filename)
-
     def render(self, use_reloader: bool = False) -> None:
         """Generate the site.
 
