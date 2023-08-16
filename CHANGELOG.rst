@@ -14,6 +14,9 @@ Changed
 Removed
 ^^^^^^^
 
+* Remove previously deprecated ``Site.get_dependencies()``.
+  Use ``Site.get_dependents()`` instead. See
+  https://github.com/staticjinja/staticjinja/commit/170b027a4fff86790bc69a1222d7b0a36c1080bc
 * Stop testing for Python 3.6. It still may work, just not officially supported.
 
 Added
