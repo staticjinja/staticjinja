@@ -91,11 +91,6 @@ class Site:
     :param encoding:
         The encoding of templates to use.
 
-    :param logger:
-        .. deprecated:: 4.0.0
-
-        Use ``staticjinja.logger`` instead.
-
     :param staticpaths:
         .. deprecated:: 0.3.4
 
@@ -115,7 +110,6 @@ class Site:
         searchpath: FilePath,
         outpath: FilePath = ".",
         encoding: str = "utf8",
-        logger: logging.Logger | None = None,
         contexts: ContextMapping | None = None,
         rules: RuleMapping | None = None,
         staticpaths: list[str] | None = None,
@@ -125,12 +119,6 @@ class Site:
         self.searchpath = searchpath
         self.outpath = outpath
         self.encoding = encoding
-        if logger is not None:
-            # TODO: Remove logger arg from __init__() completely.
-            # This might be buggy,
-            # See https://github.com/staticjinja/staticjinja/issues/144
-            warnings.warn("Site.logger is deprecated. Use staticjinja.logger instead.")
-            globals()["logger"] = logger
         self.contexts = contexts or []
         self.rules = rules or []
         if staticpaths:
