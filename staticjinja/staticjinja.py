@@ -47,53 +47,17 @@ def _ensure_dir(path: FilePath) -> None:
     Path(path).parent.mkdir(exist_ok=True, parents=True)
 
 
-def _depr_project_root() -> Path:
-    """Compatibility shim for inferring the project root from the build script.
-
-    If you invoked ``python /scripts/build.py``, then this would return "/scripts/".
-    If called from the interpreter, return os.getcwd().
-
-    .. deprecated:: 2.1.0
-       This will be removed in the future. See
-       https://github.com/staticjinja/staticjinja/issues/149
-    """
-    # The outermost callframe on the stack
-    entry_frame_info = inspect.stack()[-1]
-    entry_module = inspect.getmodule(entry_frame_info.frame)
-    if entry_module is not None and entry_module.__file__ is not None:
-        # Called from a .py file
-        return Path(entry_module.__file__).resolve().parent
-    else:
-        # Called from interpreter or similar
-        return Path.cwd()
-
-
 def resolve_path(path: FilePath) -> str:
-    """Resolve a (possibly relative) path to absolute.
+    """Ensure a path is absolute. If relative, make it relative to ``os.getcwd()``.
 
-    If staticjinja was called from a python build script, then use the build
-    script's directory as the root. Otherwise, use ``os.getcwd()``.
-
-    .. deprecated:: 2.1.0
-       In the future staticjinja will always use ``os.getcwd()`` as root.
+    .. changed:: 5.0.0
+       Previous to 5.0.0, if staticjinja was called from a python build script,
+       then use the build script's directory was used as the root.
        See https://github.com/staticjinja/staticjinja/issues/149
     """
-    if Path(path).is_absolute():
-        return str(path)
-
-    project_root = Path.cwd()
-    depr_project_root = _depr_project_root()
-    if project_root != depr_project_root:
-        warnings.warn(
-            FutureWarning(
-                "Inferring project root to be the build script directory is "
-                "deprecated. For more info see "
-                "https://github.com/staticjinja/staticjinja/issues/149"
-            ),
-            stacklevel=2,  # Show the caller of resolve_path() in error
-        )
-        project_root = depr_project_root
-    return str(project_root / path)
+    if not Path(path).is_absolute():
+        path = Path.cwd() / path
+    return str(path)
 
 
 # TODO replace with te.Self
@@ -193,19 +157,12 @@ class Site:
         """Create a :class:`Site <Site>` object.
 
         :param searchpath:
-            A string representing the absolute path to the directory that the
+            A string or Path representing the path to the directory that the
             Site should search to discover templates. Defaults to
             ``'templates'``.
 
             If a relative path is provided, it will be coerced to an absolute
-            path by prepending the directory name of the calling module. For
-            example, if you invoke staticjinja using ``python build.py`` in
-            directory ``/foo``, then *searchpath* will be ``/foo/templates``.
-
-            .. deprecated:: 2.1.0
-               In the future staticjinja will always use ``os.getcwd()`` when
-               resolving a relative path to absolute. See
-               https://github.com/staticjinja/staticjinja/issues/149
+            path using ``os.getcwd()``.
 
         :param outpath:
             A string representing the name of the directory that the Site

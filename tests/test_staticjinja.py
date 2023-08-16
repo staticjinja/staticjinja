@@ -1,26 +1,13 @@
 from __future__ import annotations
 
-import contextlib
 import os
 from pathlib import Path
 
 from jinja2 import Template
-from pytest import MonkeyPatch, mark, raises, warns
+from pytest import MonkeyPatch, mark, raises
 
-import staticjinja
 from staticjinja import Reloader, Site
 from staticjinja.types import Context, FilePath
-
-
-@contextlib.contextmanager
-def in_directory(new_dir):
-    old_dir = os.getcwd()
-    try:
-        os.chdir(new_dir)
-        assert Path.cwd() == Path(new_dir)
-        yield
-    finally:
-        os.chdir(old_dir)
 
 
 def test_template_names(site: Site) -> None:
@@ -190,42 +177,10 @@ def test_path_absolute(root_path: Path) -> None:
     assert Path(searchpath) == Path(expected)
 
 
-def test_path_relative_warning(root_path: Path) -> None:
-    """If a relative path is given to staticjinja, it will try to infer the root
-    of the project. If staticjinja was invoked from a python build script,
-    then SJ will infer the project root is the directory of that build script.
-    This is behavior is deprecated in #149, in the future pathlib.Path.cwd() will
-    always be used.
-
-    If someone *is* relying upon this deprecated behavior, (ie they are
-    supplying relative paths, and build_script_dir!=pathlib.Path.cwd(), then they
-    *should* get a warning.
-    """
-    entry_point_dir = staticjinja.staticjinja._depr_project_root()
-    print(f"entry_point_dir={entry_point_dir}")
-    print(f"CWD={Path.cwd()}")
-    # Sanity check that we are set up properly to actually test this behavior
-    assert Path.cwd() != entry_point_dir
-
+def test_path_relative(root_path: Path) -> None:
     searchpath = "relative/path/to/templates"
-    with warns(FutureWarning):
-        s = Site.make_site(searchpath=searchpath)
-    assert Path(s.searchpath) == entry_point_dir / searchpath
-
-
-def test_path_relative_no_warning(root_path: Path) -> None:
-    """See sibling test for more info.
-
-    If someone *is not* relying upon this deprecated behavior, (ie they are
-    supplying relative paths, but entry_point_dir==pathlib.Path.cwd(), then they
-    *should not* get a warning.
-    """
-    entry_point_dir = staticjinja.staticjinja._depr_project_root()
-    with in_directory(entry_point_dir):
-        # This should not give a warning or anything
-        searchpath = "relative/path/to/templates"
-        s = Site.make_site(searchpath=searchpath)
-        assert Path(s.searchpath) == Path.cwd() / searchpath
+    s = Site.make_site(searchpath=searchpath)
+    assert Path(s.searchpath) == Path.cwd() / searchpath
 
 
 def test_followlinks(root_path: Path) -> None:

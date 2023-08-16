@@ -7,7 +7,19 @@ Changelog
 Changed
 ^^^^^^^
 
-* Stop testing for Python 3.6, add testing for Python 3.10. See
+* As previously deprecated:
+  Always resolve relative paths to CWD, not a python build script. This was
+  deprecated in https://github.com/staticjinja/staticjinja/issues/149
+
+Removed
+^^^^^^^
+
+* Stop testing for Python 3.6. It still may work, just not officially supported.
+
+Added
+^^^^^
+
+* Add testing for Python 3.10. See
   https://github.com/staticjinja/staticjinja/pull/174
 
 * Add type hints throughout the project. See
@@ -38,7 +50,7 @@ Fixed
 ^^^^^
 
 *  Fix _ensure_dir() when a folder-less path is used
-    
+
    If a folder-less path, like "file.txt" is passed, then
    `os.path.dirname(Path(path))` results in `""`, instead
    of `"."`, like we want. This causes `mkdir()` to fail.
@@ -93,7 +105,7 @@ Changed
   ``staticjinja`` directly. If you were using ``python3 -m staticjinja``, this
   probably broke you, you now need to explicitly give the ``watch`` subcommand
   with ``python3 -m staticjinja watch``. For more info see
-  https://github.com/staticjinja/staticjinja/issues/152. 
+  https://github.com/staticjinja/staticjinja/issues/152.
 
 `2.1.0 <https://github.com/staticjinja/staticjinja/compare/2.0.1...2.1.0>`_ (2021-06-10)
 ----------------------------------------------------------------------------------------
