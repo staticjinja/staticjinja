@@ -8,6 +8,12 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    # Must match the PyPI trusted publisher:
+    # https://docs.pypi.org/trusted-publishers/using-a-publisher/
+    environment: publish
+    permissions:
+      # IMPORTANT: this permission is mandatory for trusted publishing
+      id-token: write
     steps:
       - uses: actions/checkout@v2
       - name: Set up latest Python 3
@@ -19,10 +25,7 @@ jobs:
       - name: Build package
         run: make build
       - name: Publish package to PyPI
-        uses: pypa/gh-action-pypi-publish@v1.4.1
-        with:
-          user: "__token__"
-          password: ${{ secrets.PYPI_API_TOKEN }}
+        uses: pypa/gh-action-pypi-publish@release/v1
       - name: Create GitHub Release
         uses: actions/create-release@v1
         env:
