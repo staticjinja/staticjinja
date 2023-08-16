@@ -25,7 +25,7 @@ Removed
 Added
 ^^^^^
 
-* Add testing for Python 3.10. See
+* Add testing for Python 3.10 and 3.11. See
   https://github.com/staticjinja/staticjinja/pull/174
 
 * Add type hints throughout the project. See
