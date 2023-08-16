@@ -4,6 +4,9 @@ Changelog
 `Unreleased <https://github.com/staticjinja/staticjinja/compare/main>`_
 -----------------------------------------------------------------------
 
+`5.0.0 <https://github.com/staticjinja/staticjinja/compare/4.1.3...5.0.0>`_ (2023-08-16)
+----------------------------------------------------------------------------------------
+
 Changed
 ^^^^^^^
 
