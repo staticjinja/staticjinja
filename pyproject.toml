@@ -28,7 +28,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.7"
 docopt-ng = ">=0.7.2"
-easywatch = "^0.0.5"
+watchdog = ">=1.0.0"
 jinja2 = ">=2.10.1"
 
 [tool.poetry.group.dev.dependencies]

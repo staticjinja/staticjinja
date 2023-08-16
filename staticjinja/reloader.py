@@ -62,8 +62,8 @@ class Reloader:
 
     def watch(self) -> None:
         """Watch and reload modified templates."""
-        import easywatch
+        from staticjinja import _easywatch
 
         logger.info("Watching '%s' for changes...", self.searchpath)
         logger.info("Press Ctrl+C to stop.")
-        easywatch.watch(self.searchpath, self.event_handler)
+        _easywatch.watch(self.searchpath, self.event_handler)
