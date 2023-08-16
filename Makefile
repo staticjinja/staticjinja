@@ -3,9 +3,9 @@
 init:
 	# Need a way to use python3 version of pip, but `python3 -m pip` doesn't
 	# work on windows, and just `python -m pip` or `pip` might use 2.7 on OSX
-	pip3 install poetry
-	# Install dependencies, including dev deps
-	poetry install -E dev
+	python -m pip install poetry
+	# Install dependencies
+	poetry install --sync
 	# Ignore bulk refactor/reformat changes when running `git blame`
 	git config blame.ignoreRevsFile .git-blame-ignore-revs
 
@@ -69,10 +69,10 @@ coverage-upload: coverage
 build:
 	poetry build
 	poetry run twine check dist/*
-	
+
 publish:
 	poetry publish
 
 update:
 	poetry update
-	poetry install -E dev
+	poetry install --sync
