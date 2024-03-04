@@ -29,3 +29,4 @@ Patches and Suggestions
 - Tim Best (timbest)
 - Fasih Ahmad Fakhri
 - zakx
+- Sol Bekic (s-ol)

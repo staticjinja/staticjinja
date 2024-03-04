@@ -14,19 +14,22 @@ FilePath: te.TypeAlias = "str | Path"
 PageMapping: te.TypeAlias = "list[tuple[str, _T]]"
 
 Context: te.TypeAlias = "dict[str, t.Any]"
+ContextMulti: te.TypeAlias = "list[tuple[str | None, Context]]"
 
 
 class ContextCallable(te.Protocol):
-    def __call__(self) -> Context:
+    def __call__(self) -> Context | ContextMulti:
         ...
 
 
 class ContextTemplateCallable(te.Protocol):
-    def __call__(self, __template: Template) -> Context:
+    def __call__(self, __template: Template) -> Context | ContextMulti:
         ...
 
 
-ContextLike: te.TypeAlias = "Context | ContextCallable | ContextTemplateCallable"
+ContextLike: te.TypeAlias = (
+    "Context | ContextMulti | ContextCallable | ContextTemplateCallable"
+)
 
 
 class Rule(te.Protocol):
