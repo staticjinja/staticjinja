@@ -22,6 +22,7 @@ if t.TYPE_CHECKING:
     from .types import (
         Context,
         ContextLike,
+        ContextMulti,
         ContextMapping,
         FilePath,
         Rule,
@@ -31,13 +32,16 @@ if t.TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def _compute_context(context_like: ContextLike, template: Template) -> Context:
-    if isinstance(context_like, dict):
-        return context_like
-
+def _compute_contexts(context_like: ContextLike, template: Template) -> ContextMulti:
     if callable(context_like):
         params = len(inspect.signature(context_like).parameters)
-        return context_like(*[template][:params])
+        context_like = context_like(*[template][:params])
+
+    if isinstance(context_like, dict):
+        return [(None, context_like)]
+
+    if isinstance(context_like, list):
+        return context_like
 
     raise TypeError(f"Unexpected type for context: {type(context_like)}")
 
@@ -76,10 +80,11 @@ class Site:
         templates.
 
     :param contexts:
-        A list of `regex, context` pairs. Each context is either a dictionary
-        or a function that takes either no argument or or the current template
-        as its sole argument and returns a dictionary. The regex, if matched
-        against a filename, will cause the context to be used.
+        A list of `regex, context` pairs. Each context is either a dictionary,
+        a list of `(out_name, dictionary)` tuples, or a function that takes
+        either no argument or or the current template as its sole argument and
+        returns one of the other two. The regex, if matched against a filename,
+        will cause the context to be used.
 
     :param rules:
         A list of *(regex, function)* pairs. The Site will delegate
@@ -99,7 +104,7 @@ class Site:
 
     :param mergecontexts:
         A boolean value. If set to ``True``, then all matching regex from the
-        contexts list will be merged (in order) to get the final context.
+        contexts list will be merged (in order) to get the final context(s).
         Otherwise, only the first matching regex is used. Defaults to
         ``False``.
     """
@@ -159,9 +164,11 @@ class Site:
         :param contexts:
             A list of *(regex, context)* pairs. The Site will render templates
             whose name match *regex* using *context*. *context* must be either
-            a dictionary-like object or a function that takes either no
-            arguments or a single :class:`jinja2.Template` as an argument and
-            returns a dictionary representing the context. Defaults to ``[]``.
+            a dictionary-like object, a list of *(out_name, dict)* pairs,
+            or a function that takes either no arguments or a single
+            :class:`jinja2.Template` as an argument and returns a
+            dictionary-like object or a list of *(out_name, dict)* pairs.
+            Defaults to ``[]``.
 
         :param rules:
             A list of *(regex, function)* pairs. The Site will delegate
@@ -255,29 +262,75 @@ class Site:
             raise UnicodeError("Unable to decode %s: %s" % (template_name, e))
 
     def get_context(self, template: Template) -> Context:
-        """Get the context for a template.
+        """Get the context for a single-output template.
 
-        If no matching value is found, an empty context is returned.
-        Otherwise, this returns either the matching value if the value is
-        dictionary-like or the dictionary returned by calling it with
-        *template* if the value is a function.
+        This works like :meth:`get_contexts`, but returns the template context
+        directly and throws if multiple outputs are specified for the template.
 
-        If several matching values are found, the resulting dictionaries will
-        be merged before being returned if mergecontexts is True. Otherwise,
-        only the first matching value is returned.
+        This method is deprecated, :meth:`get_contexts` should be used instead
+        to properly handle templates with multiple outputs.
 
         :param template: the template to get the context for
         """
-        context = {}
+        contexts = self.get_contexts(template)
+
+        if None not in contexts:
+            raise ValueError("get_context found multiple outputs for template")
+
+        return contexts[None]
+
+    def get_contexts(self, template: Template) -> dict[str | None, Context]:
+        """Get the contexts for a template.
+
+        In most cases, the template produces a single output without a specific
+        name and this will return a dictionary with a single key ``None`` mapped
+        to a template context.
+
+        If the matching context definition(s) specified a list of named outputs,
+        a dictionary mapping each output name to a specific template context is
+        returned. There is no ``None`` key in this case. If no matching context
+        definition is found, a single empty context is returned.
+
+        If mergecontexts is ``True`` and several context definitions are found,
+        the contexts they specified are merged. Otherwise only the first
+        matching context definition is considered.
+
+        If definitions with single outputs and multiple outputs are mixed, the
+        definitions with single outputs are applied to all outputs, whereas the
+        definitions with multiple outputs are merged where the output name
+        matches.
+
+        :param template: the template to get the contexts for
+        """
+
+        # TODO unlink name from the template
+        assert template.name is not None
+        contexts: dict[str | None, Context] = {None: {}}
+
         for regex, context_like in self.contexts:
-            # TODO unlink name from the template
-            assert template.name is not None
-            if re.match(regex, template.name):
-                new_context = _compute_context(context_like, template)
-                context.update(new_context)
-                if not self.mergecontexts:
-                    break
-        return context
+            if not re.match(regex, template.name):
+                continue
+
+            new_contexts = _compute_contexts(context_like, template)
+            if not self.mergecontexts:
+                return dict(new_contexts)
+
+            for name, ctx in new_contexts:
+                if name is None:
+                    # apply to all existing contexts
+                    for name in contexts:
+                        contexts[name].update(ctx)
+                else:
+                    # create or update named outputs
+                    context = contexts.get(name, contexts[None])
+                    contexts[name] = context.copy()
+                    contexts[name].update(ctx)
+
+        # ignore the default output if we found any named outputs
+        if len(contexts) > 1:
+            del contexts[None]
+
+        return contexts
 
     def get_rule(self, template_name: str) -> Rule:
         """Find a matching compilation rule for a function.
@@ -360,17 +413,33 @@ class Site:
 
         :param context:
             Optional. A dictionary representing the context to render
-            *template* with. If no context is provided, :meth:`get_context` is
+            *template* with. If no context is provided, :meth:`get_contexts` is
             used to provide a context.
 
         :param filepath:
             Optional. A PathLike representing the output location.
             Defaults to to ``os.path.join(self.outpath, template.name)``.
+            This parameter must not be specified if context is ``None`` and the
+            contex definition specifies multiple outputs for the template.
         """
-        logger.info("Rendering %s...", template.name)
-
         if context is None:
-            context = self.get_context(template)
+            contexts = self.get_contexts(template)
+
+            if filepath is not None:
+                raise ValueError(
+                    "can't override filepath for template with multiple outputs"
+                )
+
+            for out_name in contexts:
+                filepath = out_name and os.path.join(self.outpath, out_name)
+                self.render_template(template, contexts[out_name], filepath)
+
+            return
+
+        if filepath is not None and filepath != template.name:
+            logger.info("Rendering %s to %s...", template.name, filepath)
+        else:
+            logger.info("Rendering %s...", template.name)
 
         assert template.name is not None
         try:
