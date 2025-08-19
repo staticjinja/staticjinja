@@ -18,14 +18,11 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: [3.7, 3.8, 3.9, "3.10", "3.11"]
-        # exclude: #If you want to do this...
-        #  - os: macos-latest
-        #    python-version: 3.6:
+        python-version: [3.8, 3.9, "3.10", "3.11", "3.12"]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
       - name: Set up Python ${{ matrix.python-version }} on ${{ matrix.os }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
@@ -36,7 +33,7 @@ jobs:
       # Upload pytest's scratch space, which was set to .pytest/ in setup.cfg
       # Useful for debugging.
       - name: Upload pytest tmpdir
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         if: failure() # Only upload on failure of previous step.
         with:
           name: pytest-tmpdir ${{ matrix.python-version }} ${{ matrix.os }}
@@ -44,10 +41,10 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.x" # Latest python release
+          python-version: "3.12"
       - name: Install dependencies
         run: make init
       - name: black
@@ -63,11 +60,11 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python 3.x
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v5
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.x" # Latest python release
+          python-version: "3.12" # Latest python release
       - name: Install dependencies
         run: make init
       - name: Build docs
@@ -76,11 +73,11 @@ jobs:
     # Only run test coverage on a single python version on Ubuntu
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python 3.x
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v5
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.x" # Latest python release
+          python-version: "3.12" # Latest python release
       - name: Install dependencies
         run: make init
       - name: Measure test coverage and upload results

@@ -15,11 +15,11 @@ jobs:
       # IMPORTANT: this permission is mandatory for trusted publishing
       id-token: write
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up latest Python 3
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v5
+      - name: Set up latest Python 3.12
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.x"
+          python-version: "3.12"
       - name: Install dependencies
         run: make init
       - name: Build package
@@ -38,7 +38,7 @@ jobs:
           draft: false
           prerelease: false
       - name: Upload dist/ as workflow artifact (mostly for debugging)
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist
