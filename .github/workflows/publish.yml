@@ -38,7 +38,7 @@ jobs:
           draft: false
           prerelease: false
       - name: Upload dist/ as workflow artifact (mostly for debugging)
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist

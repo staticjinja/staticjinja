@@ -36,7 +36,7 @@ jobs:
       # Upload pytest's scratch space, which was set to .pytest/ in setup.cfg
       # Useful for debugging.
       - name: Upload pytest tmpdir
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         if: failure() # Only upload on failure of previous step.
         with:
           name: pytest-tmpdir ${{ matrix.python-version }} ${{ matrix.os }}
