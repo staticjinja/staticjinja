@@ -13,7 +13,9 @@ Get the Code
 ------------
 
 Fork the `staticjinja/staticjinja`_ repository on GitHub. Clone a copy of your
-fork and get set up:
+fork and get set up.
+
+You will need to `install uv`_ to run the development tools.
 
 .. code-block:: bash
 
@@ -22,17 +24,15 @@ fork and get set up:
     $ cd staticjinja
     $ make init
 
-The dev dependencies are installed in a virtual environment managed by poetry.
-To use the dev tools (such as the ``pytest`` or ``flake8`` commands),
-you need to either run them inside the poetry virtual environment with
-``poetry run pytest``, or enter a poetry shell with ``poetry shell`` and then
-you can run them directly such as ``pytest``. See the `Poetry docs`_ for more
-info.
+The dev dependencies are installed in a virtual environment managed by uv.
+To use the dev tools (such as the ``pytest`` or ``ruff`` commands),
+you need to either run them inside the uv virtual environment with
+``uv run pytest``.
 
 Making Changes
 --------------
 
-Start making edits! The ``poetry install`` command that was run in ``make init``
+Start making edits! The ``uv sync`` command that was run in ``make init``
 should have installed the local version of staticjinja in editable mode.
 Any other projects on your system should be using the local version, in case
 you want to test your changes.
@@ -84,5 +84,5 @@ Thanks for your help!
 
 .. _staticjinja/staticjinja : https://github.com/staticjinja/staticjinja
 .. _Issues: https://github.com/staticjinja/staticjinja/issues
-.. _Poetry docs: https://python-poetry.org/docs/basic-usage/#using-your-virtual-environment
 .. _good commit message style: https://cbea.ms/git-commit/
+.. _install uv: https://docs.astral.sh/uv/getting-started/installation
