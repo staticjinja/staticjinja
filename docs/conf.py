@@ -30,7 +30,7 @@ import staticjinja  # noqa: E402 (ignore that import is not at top of file)
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = ["sphinx.ext.autodoc", "sphinx.ext.intersphinx"]
 
-intersphinx_mapping = {"jinja2": ("https://jinja.palletsprojects.com/", None)}
+intersphinx_mapping = {"jinja2": ("https://jinja.palletsprojects.com/en/stable/", None)}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]

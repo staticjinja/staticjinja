@@ -81,8 +81,7 @@ warn_unused_ignores = true
 [tool.coverage.run]
 # Measure branch coverage in addition to statement coverage.
 branch = true
-# Measure coverage in the staticjinja directory/package
-source = "staticjinja"
+source = ["staticjinja"]
 
 # When `coverage html` is run, where the report html is placed.
 [tool.coverage.html]

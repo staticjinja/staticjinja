@@ -41,7 +41,7 @@ test:
 	uv run pytest
 
 coverage:
-	uv run pytest --cov=staticjinja --cov-report=xml --cov-config=setup.cfg
+	uv run pytest --cov=staticjinja --cov-report=xml
 	# Generate the html view of the coverage results, for local viewing.
 	uv run coverage html
 

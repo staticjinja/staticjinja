@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, cast
 
 import tomlkit
 
@@ -14,5 +13,4 @@ def test_versions_match() -> None:
     project_root = Path(__file__).parent.parent
     toml_path = project_root / "pyproject.toml"
     toml = tomlkit.parse(toml_path.read_text())
-    toml_dict = cast(dict[str, Any], toml)
-    assert toml_dict["project"]["version"] == staticjinja.__version__
+    assert toml["project"]["version"] == staticjinja.__version__  # type: ignore[index]
