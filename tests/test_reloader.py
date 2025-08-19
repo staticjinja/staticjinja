@@ -58,3 +58,18 @@ def test_event_handler_static(
     css_path = Path("static_css") / "hello.css"
     reloader.event_handler("modified", template_path / css_path)
     assert copied_paths == [css_path]
+
+
+def test_watch_template_render_error(
+    reloader: staticjinja.Reloader,
+    caplog: pytest.LogCaptureFixture,
+    template_path: Path,
+) -> None:
+    """Test that TemplateError during render_template is caught and logged by the watch method."""
+    bad_template_path = template_path / "bad.html"
+    bad_template_path.write_text("{% for x in %}")
+
+    reloader.event_handler("modified", str(bad_template_path))
+
+    assert "Template error in bad.html:" in caplog.text
+    assert "Expected an expression" in caplog.text

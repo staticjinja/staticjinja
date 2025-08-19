@@ -4,6 +4,8 @@ import logging
 import typing
 from pathlib import Path
 
+from jinja2 import TemplateError
+
 if typing.TYPE_CHECKING:
     # recursive imports
     from .staticjinja import Site
@@ -57,8 +59,11 @@ class Reloader:
             if self.site.is_static(f):
                 self.site.copy_static([f])
             elif self.site.is_template(f):
-                t = self.site.get_template(f)
-                self.site.render_template(t)
+                try:
+                    t = self.site.get_template(f)
+                    self.site.render_template(t)
+                except TemplateError as e:
+                    logger.error("Template error in %s: %s", f, e)
 
     def watch(self) -> None:
         """Watch and reload modified templates."""
