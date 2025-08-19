@@ -139,7 +139,7 @@ def test_nonexistent_srcpath(mock_make_site: mock.Mock) -> None:
     # medium.com/python-pandemonium/testing-sys-exit-with-pytest-10c6e5f7726f
     with pytest.raises(SystemExit) as pytest_wrapped_e:
         cli.main(["build", "--srcpath=/I/definitely/dont/exist"])
-    assert pytest_wrapped_e.type == SystemExit
+    assert pytest_wrapped_e.type is SystemExit
     assert pytest_wrapped_e.value.code == 1
     mock_make_site.assert_not_called()
 
@@ -165,9 +165,7 @@ def test_entrypoints_no_args(command: list[str]) -> None:
   staticjinja watch [options]
   staticjinja -h | --help
   staticjinja --version
-""".replace(
-        b"\n", os.linesep.encode("utf8")
-    )
+""".replace(b"\n", os.linesep.encode("utf8"))
     assert result.returncode == 1
     assert result.stdout == b""
     assert result.stderr == expected_help_message

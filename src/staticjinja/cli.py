@@ -20,6 +20,7 @@ Options:
   -h --help             Show this screen.
   --version             Show version.
 """
+
 from __future__ import annotations
 
 import logging

@@ -3,6 +3,7 @@ Simple static page generator.
 
 Uses Jinja2 to compile templates.
 """
+
 from __future__ import annotations
 
 import inspect

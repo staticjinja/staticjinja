@@ -1,56 +1,98 @@
-[tool.poetry]
+[project]
 name = "staticjinja"
-# This needs to match what is in the source code.
 version = "5.0.0"
 description = "jinja based static site generator"
-authors = ["Ceasar Bautista <cbautista2010@gmail.com>"]
-maintainers = ["Nick Crews <nicholas.b.crews@gmail.com>"]
-license = "MIT"
+requires-python = ">=3.8"
 readme = "README.rst"
-homepage = "https://github.com/staticjinja/staticjinja"
-repository = "https://github.com/staticjinja/staticjinja"
-documentation = "https://staticjinja.readthedocs.io"
-keywords = ["jinja", "static", "website"]
+license = "MIT"
+authors = [{ name = "Ceasar Bautista", email = "cbautista2010@gmail.com" }]
+maintainers = [{ name = "Nick Crews", email = "nicholas.b.crews@gmail.com" }]
+keywords = [
+    "jinja",
+    "static",
+    "website",
+]
 classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.6",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Development Status :: 5 - Production/Stable",
 ]
+dependencies = [
+    "docopt-ng>=0.7.2",
+    "watchdog>=1.0.0",
+    "jinja2>=2.10.1",
+]
 
-[tool.poetry.dependencies]
-python = "^3.7"
-docopt-ng = ">=0.7.2"
-watchdog = ">=1.0.0"
-jinja2 = ">=2.10.1"
+[project.urls]
+Homepage = "https://github.com/staticjinja/staticjinja"
+Repository = "https://github.com/staticjinja/staticjinja"
+Documentation = "https://staticjinja.readthedocs.io"
 
-[tool.poetry.group.dev.dependencies]
-black = "^22.3.0"
-flake8 = "^3.8.4"
-markdown = "^3.3.3"
-mypy = "^0.961"
-pytest = "^6.0.0"
-pytest-check = "^1.0.1"
-pytest-cov = "^2.5"
-sphinx = "^4.1.1"
-sphinx-rtd-theme = "^0.5.1"
-tomlkit = "^0.5.8"
-tox = "^3.0.0"
-twine = "^3.3.0"
-typing-extensions = "^4.2.0"
-
-[tool.poetry.scripts]
+[project.scripts]
 staticjinja = "staticjinja.cli:main"
 
+[dependency-groups]
+dev = [
+    "markdown>=3.3.3",
+    "mypy>=0.961",
+    "pytest>=6.0.0",
+    "pytest-check>=1.0.1",
+    "pytest-cov~=2.5",
+    "ruff>=0.12.9",
+    "sphinx>=4.1.1",
+    "sphinx-rtd-theme>=0.5.1,<0.6",
+    "tomlkit>=0.5.8",
+    "twine>=3.3.0",
+    "typing-extensions>=4.2.0",
+]
+
 [build-system]
-requires = ["poetry-core>=1.2.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.8.12,<0.9.0"]
+build-backend = "uv_build"
+
+
+[tool.pytest.ini_options]
+addopts = "-vv --doctest-modules --basetemp=.pytest"
+testpaths = ["tests"]
+
+[tool.mypy]
+python_version = "3.9"
+files = ["src/staticjinja", "tests"]
+ignore_missing_imports = true
+show_error_codes = true
+warn_no_return = true
+warn_redundant_casts = true
+warn_unreachable = true
+warn_unused_configs = true
+warn_unused_ignores = true
+
+# Settings for running test coverage, used by pytest coverage plugin
+# (in the `pytest-cov` package)
+[tool.coverage.run]
+# Measure branch coverage in addition to statement coverage.
+branch = true
+# Measure coverage in the staticjinja directory/package
+source = "staticjinja"
+
+# When `coverage html` is run, where the report html is placed.
+[tool.coverage.html]
+directory = ".htmlcov"
+
+[tool.coverage.report]
+exclude_lines = [
+    "class .*Protocol",
+    "def __repr__",
+    "if False:",
+    "if .*TYPE_CHECKING:",
+    "pragma: no cover",
+]

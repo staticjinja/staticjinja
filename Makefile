@@ -1,35 +1,24 @@
 .PHONY: docs
 
 init:
-	# Need a way to use python3 version of pip, but `python3 -m pip` doesn't
-	# work on windows, and just `python -m pip` or `pip` might use 2.7 on OSX
-	python -m pip install poetry
-	# Install dependencies
-	poetry install --sync
+	uv sync --all-groups
 	# Ignore bulk refactor/reformat changes when running `git blame`
 	git config blame.ignoreRevsFile .git-blame-ignore-revs
 
-black:
-	poetry run black .
+fix:
+	uv run ruff format .
+	uv run ruff check . --fix
 
-black-check:
-	@echo If you actually want to reformat, run make black instead
-	poetry run black . --check
-
-flake8:
-	poetry run flake8
+lint:
+	uv run ruff format . --check
+	uv run ruff check .
 
 mypy:
-	poetry run mypy
-
-tox:
-	# If a developer doesn't have all the python versions installed,
-	# It's OK just skip them. All versions will be tested in CI.
-	poetry run tox --skip-missing-interpreters=true
+	uv run mypy
 
 # Build the docs HTML
 docs-html:
-	poetry run sphinx-build -W \
+	uv run sphinx-build -W \
 	-b html \
 	-d docs/build/doctrees \
 	docs \
@@ -41,18 +30,20 @@ docs-view: docs-html
 
 # Build docs and verify all external links work
 docs: docs-html
-	poetry run sphinx-build -W \
+	uv run sphinx-build -W \
 	-b linkcheck \
 	-d docs/build/doctrees \
 	docs \
 	docs/build/html
 
-test: black-check mypy flake8 tox docs build
+# Run `uv run --python 3.13 pytest` to run against a specific Python version.
+test:
+	uv run pytest
 
 coverage:
-	poetry run pytest --cov=staticjinja --cov-report=xml --cov-config=setup.cfg
+	uv run pytest --cov=staticjinja --cov-report=xml --cov-config=setup.cfg
 	# Generate the html view of the coverage results, for local viewing.
-	poetry run coverage html
+	uv run coverage html
 
 # Make a coverage report and then view them
 coverage-view: coverage
@@ -67,12 +58,11 @@ coverage-upload: coverage
 	bash <(curl -s https://codecov.io/bash) -Z -f coverage.xml
 
 build:
-	poetry build
-	poetry run twine check dist/*
+	uv build
+	uv run twine check dist/*
 
 publish:
-	poetry publish
+	uv publish
 
 update:
-	poetry update
-	poetry install --sync
+	uv lock --upgrade

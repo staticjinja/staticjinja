@@ -16,12 +16,11 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v5
-      - name: Set up latest Python 3.12
-        uses: actions/setup-python@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
         with:
-          python-version: "3.12"
-      - name: Install dependencies
-        run: make init
+          version: "0.8.12"
+          python-version: "3.13"
       - name: Build package
         run: make build
       - name: Publish package to PyPI

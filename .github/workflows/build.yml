@@ -18,18 +18,18 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: [3.8, 3.9, "3.10", "3.11", "3.12"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v5
-      - name: Set up Python ${{ matrix.python-version }} on ${{ matrix.os }}
-        uses: actions/setup-python@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
         with:
+          version: "0.8.12"
           python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
-        run: make init
-      # Run tox using the version of Python in `PATH`
-      - name: Run tests in tox
-        run: poetry run tox -e py
+
+      - name: Run tests for this python version
+        run: make test
       # Upload pytest's scratch space, which was set to .pytest/ in setup.cfg
       # Useful for debugging.
       - name: Upload pytest tmpdir
@@ -42,18 +42,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-python@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
         with:
-          python-version: "3.12"
-      - name: Install dependencies
-        run: make init
-      - name: black
-        run: make black-check
-      - name: Check that we conform to black
-        run: make black-check
-      - name: flake8
+          version: "0.8.12"
+          python-version: "3.13"
+      - name: lint
         if: always()
-        run: make flake8
+        run: make lint
       - name: mypy
         if: always()
         run: make mypy
@@ -61,12 +57,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - name: Set up Python 3.12
-        uses: actions/setup-python@v5
+      
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
         with:
-          python-version: "3.12" # Latest python release
-      - name: Install dependencies
-        run: make init
+          version: "0.8.12"
+          python-version: "3.13"
       - name: Build docs
         run: make docs
   coverage:
@@ -74,11 +70,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - name: Set up Python 3.12
-        uses: actions/setup-python@v5
+      
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
         with:
-          python-version: "3.12" # Latest python release
-      - name: Install dependencies
-        run: make init
+          version: "0.8.12"
+          python-version: "3.13"
+      
       - name: Measure test coverage and upload results
         run: make coverage-upload

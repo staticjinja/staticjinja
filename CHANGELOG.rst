@@ -4,6 +4,23 @@ Changelog
 `Unreleased <https://github.com/staticjinja/staticjinja/compare/main>`_
 -----------------------------------------------------------------------
 
+Removed
+^^^^^^^
+
+* Removed support for python 3.7. None of our tooling can support python versions this
+  old, and the maintenance isn't worth it.
+
+Changed
+^^^^^^^
+
+* (internal) Switch to uv as our package manager from poetry. Switch to ruff from black
+  and flake8. Use uv to manage python versions instead of tox.
+
+Added
+^^^^^
+
+* Add testing up to python 3.13
+
 `5.0.0 <https://github.com/staticjinja/staticjinja/compare/4.1.3...5.0.0>`_ (2023-08-16)
 ----------------------------------------------------------------------------------------
 

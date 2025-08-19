@@ -2,6 +2,7 @@
 Copied from
 https://github.com/Ceasar/easywatch/blob/1dd464d2acca5932473759b187dec4eb63dab2d9/easywatch/easywatch.py
 """
+
 from __future__ import annotations
 
 import functools
@@ -30,7 +31,7 @@ def watch(path: str | Path, handler) -> None:
     attrs = {"on_any_event": wrapper}
     EventHandler = type("EventHandler", (FileSystemEventHandler,), attrs)
     observer = Observer()
-    observer.schedule(EventHandler(), path=path, recursive=True)
+    observer.schedule(EventHandler(), path=str(path), recursive=True)
     observer.start()
     try:
         while True:

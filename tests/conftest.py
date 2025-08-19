@@ -1,4 +1,5 @@
 """Fixtures and code common to many tests."""
+
 from __future__ import annotations
 
 import os

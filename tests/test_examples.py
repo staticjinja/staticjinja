@@ -1,4 +1,5 @@
 """Runs integration tests on the examples."""
+
 from __future__ import annotations
 
 import difflib
