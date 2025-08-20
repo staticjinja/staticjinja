@@ -1,0 +1,423 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advanced Usage &mdash; staticjinja 5.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=ce74c6a2"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Developer Interface" href="../api.html" />
+    <link rel="prev" title="Quickstart" href="quickstart.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            staticjinja
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Advanced Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#partials-and-ignored-files">Partials and ignored files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-custom-build-scripts">Using Custom Build Scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#loading-data">Loading data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#filters">Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rendering-rules">Rendering rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#logging-and-debugging">Logging and Debugging</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">Developer Interface</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">staticjinja</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Advanced Usage</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/user/advanced.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="advanced-usage">
+<span id="id1"></span><h1>Advanced Usage<a class="headerlink" href="#advanced-usage" title="Link to this heading"></a></h1>
+<p>This document covers some of staticjinja’s more advanced features.</p>
+<section id="partials-and-ignored-files">
+<span id="id2"></span><h2>Partials and ignored files<a class="headerlink" href="#partials-and-ignored-files" title="Link to this heading"></a></h2>
+<p>A <strong>partial file</strong> is a file whose name begins with a <code class="docutils literal notranslate"><span class="pre">_</span></code>. Partial files are
+intended to be included in other files and are not rendered. If a partial file
+changes, it will trigger a rebuild if you are running <code class="docutils literal notranslate"><span class="pre">staticjinja</span> <span class="pre">watch</span></code>.</p>
+<p>An <strong>ignored file</strong> is a file whose name begins with a <code class="docutils literal notranslate"><span class="pre">.</span></code>. Ignored files are
+neither rendered nor used in rendering templates.</p>
+<p>If you want to configure what is considered a partial or ignored file, subclass
+<code class="docutils literal notranslate"><span class="pre">Site</span></code> and override <code class="docutils literal notranslate"><span class="pre">is_partial</span></code> or <code class="docutils literal notranslate"><span class="pre">is_ignored</span></code>.</p>
+</section>
+<section id="using-custom-build-scripts">
+<h2>Using Custom Build Scripts<a class="headerlink" href="#using-custom-build-scripts" title="Link to this heading"></a></h2>
+<p>The command line shortcut is convenient, but sometimes your project
+needs something different than the defaults. To change them, you can
+use a build script.</p>
+<p>A minimal build script looks something like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">staticjinja</span><span class="w"> </span><span class="kn">import</span> <span class="n">Site</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">site</span> <span class="o">=</span> <span class="n">Site</span><span class="o">.</span><span class="n">make_site</span><span class="p">()</span>
+    <span class="c1"># enable automatic reloading</span>
+    <span class="n">site</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">use_reloader</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To change behavior, pass the appropriate keyword arguments to
+<code class="docutils literal notranslate"><span class="pre">Site.make_site</span></code>.</p>
+<ul class="simple">
+<li><p>To change which directory to search for templates, set
+<code class="docutils literal notranslate"><span class="pre">searchpath=&quot;searchpath_name&quot;</span></code> (default is <code class="docutils literal notranslate"><span class="pre">./templates</span></code>).</p></li>
+<li><p>To change the output directory, pass in <code class="docutils literal notranslate"><span class="pre">outpath=&quot;output_dir&quot;</span></code>
+(default is <code class="docutils literal notranslate"><span class="pre">.</span></code>).</p></li>
+<li><p>To add Jinja extensions, pass in <code class="docutils literal notranslate"><span class="pre">extensions=[extension1,</span>
+<span class="pre">extension2,</span> <span class="pre">...]</span></code>.</p></li>
+<li><p>To change which files are considered templates, subclass the
+<code class="docutils literal notranslate"><span class="pre">Site</span></code> object and override <code class="docutils literal notranslate"><span class="pre">is_template</span></code>.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 0.3.4: </span>Use <code class="docutils literal notranslate"><span class="pre">Make</span></code> or similar to copy static files. See <a class="reference external" href="https://github.com/staticjinja/staticjinja/issues/58">Issue #58</a></p>
+</div>
+<p>To change where static files (such as CSS or JavaScript) are stored,
+set <code class="docutils literal notranslate"><span class="pre">staticpaths=[&quot;mystaticfiles/&quot;]</span></code> (the default is <code class="docutils literal notranslate"><span class="pre">None</span></code>, which
+means no files are considered to be static files). You can pass
+multiple directories in the list: <code class="docutils literal notranslate"><span class="pre">staticpaths=[&quot;foo/&quot;,</span> <span class="pre">&quot;bar/&quot;]</span></code>.
+You can also specify singly files to be considered as static:
+<code class="docutils literal notranslate"><span class="pre">staticpaths=[&quot;favicon.ico&quot;]</span></code>.</p>
+</div>
+<p>Finally, just save the script as <code class="docutils literal notranslate"><span class="pre">build.py</span></code> (or something similar)
+and run it with your Python interpreter.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>build.py
+Building<span class="w"> </span>index.html...
+Templates<span class="w"> </span>built.
+Watching<span class="w"> </span><span class="s1">&#39;templates&#39;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span>changes...
+Press<span class="w"> </span>Ctrl+C<span class="w"> </span>to<span class="w"> </span>stop.
+</pre></div>
+</div>
+</section>
+<section id="loading-data">
+<h2>Loading data<a class="headerlink" href="#loading-data" title="Link to this heading"></a></h2>
+<p>Some applications render templates based on data sources (e.g. CSVs or
+JSON files).</p>
+<p>The simplest way to supply data to templates is to pass <code class="docutils literal notranslate"><span class="pre">Site.make_site()</span></code> a
+mapping from variable names to their values (a “context”) as the <code class="docutils literal notranslate"><span class="pre">env_globals</span></code>
+keyword argument.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">site</span> <span class="o">=</span> <span class="n">Site</span><span class="o">.</span><span class="n">make_site</span><span class="p">(</span><span class="n">env_globals</span><span class="o">=</span><span class="p">{</span>
+        <span class="s1">&#39;greeting&#39;</span><span class="p">:</span><span class="s1">&#39;Hello world!&#39;</span><span class="p">,</span>
+    <span class="p">})</span>
+    <span class="n">site</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Anything added to this dictionary will be available in all templates:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cm">&lt;!-- templates/index.html --&gt;</span>
+<span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>{{greeting}}<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>If the context needs to be different for each template, you can restrict
+contexts to certain templates by supplying <code class="docutils literal notranslate"><span class="pre">Site.make_site()</span></code> a sequence of
+regex-context pairs as the <code class="docutils literal notranslate"><span class="pre">contexts</span></code> keyword argument. When rendering a
+template, staticjinja will search this sequence for the first regex that matches
+the template’s name, and use that context to interpolate variables. For example,
+the following code block supplies a context to the template named “index.html”:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">staticjinja</span><span class="w"> </span><span class="kn">import</span> <span class="n">Site</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;knights&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;sir arthur&#39;</span><span class="p">,</span> <span class="s1">&#39;sir lancelot&#39;</span><span class="p">,</span> <span class="s1">&#39;sir galahad&#39;</span><span class="p">]}</span>
+    <span class="n">site</span> <span class="o">=</span> <span class="n">Site</span><span class="o">.</span><span class="n">make_site</span><span class="p">(</span><span class="n">contexts</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;index.html&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">)])</span>
+    <span class="n">site</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cm">&lt;!-- templates/index.html --&gt;</span>
+<span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Knights of the Round Table<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">ul</span><span class="p">&gt;</span>
+{% for knight in knights %}
+    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>{{ knight }}<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+{% endfor %}
+<span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>If contexts needs to be generated dynamically, you can associate filenames with
+functions that return a context (“context generators”). Context generators may
+either take no arguments or the current template as its sole argument. For
+example, the following code creates a context with the last modification time of
+the template file for any templates with an HTML extension:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">staticjinja</span><span class="w"> </span><span class="kn">import</span> <span class="n">Site</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">date</span><span class="p">(</span><span class="n">template</span><span class="p">):</span>
+    <span class="n">template_mtime</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">template_mtime</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;template_date&#39;</span><span class="p">:</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1"> %B %Y&#39;</span><span class="p">)}</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">site</span> <span class="o">=</span> <span class="n">Site</span><span class="o">.</span><span class="n">make_site</span><span class="p">(</span>
+        <span class="n">contexts</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;.*.html&#39;</span><span class="p">,</span> <span class="n">date</span><span class="p">)],</span>
+    <span class="p">)</span>
+    <span class="n">site</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>By default, staticjinja uses the context of the first matching regex if multiple
+regexes match the name of a template. You can change this so that staticjinja
+combines the contexts by passing <code class="docutils literal notranslate"><span class="pre">mergecontexts=True</span></code> as an argument to
+<code class="docutils literal notranslate"><span class="pre">Site.make_site()</span></code>. Note the order is still important if several matching
+regex define the same key, in which case the last regex wins. For example,
+given a build script that looks like the following code block, the context of
+the <code class="docutils literal notranslate"><span class="pre">index.html</span></code> template will be <code class="docutils literal notranslate"><span class="pre">{'title':</span> <span class="pre">'MySite</span> <span class="pre">-</span> <span class="pre">Index',</span> <span class="pre">'date':</span> <span class="pre">'05</span>
+<span class="pre">January</span> <span class="pre">2016'}</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">staticjinja</span><span class="w"> </span><span class="kn">import</span> <span class="n">Site</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">base</span><span class="p">(</span><span class="n">template</span><span class="p">):</span>
+    <span class="n">template_mtime</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">template_mtime</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;template_date&#39;</span><span class="p">:</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1"> %B %Y&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;MySite&#39;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span><span class="n">template</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;MySite - Index&#39;</span><span class="p">}</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">site</span> <span class="o">=</span> <span class="n">Site</span><span class="o">.</span><span class="n">make_site</span><span class="p">(</span>
+        <span class="n">contexts</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;.*.html&#39;</span><span class="p">,</span> <span class="n">base</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;index.html&#39;</span><span class="p">,</span> <span class="n">index</span><span class="p">)],</span>
+        <span class="n">mergecontexts</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">site</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="filters">
+<h2>Filters<a class="headerlink" href="#filters" title="Link to this heading"></a></h2>
+<p>Filters modify variables. staticjinja uses Jinja2 to process templates, so all
+the <a class="reference external" href="https://jinja.palletsprojects.com/templates/#builtin-filters">standard Jinja2 filters</a> are supported. To add your own filters, simply
+pass <code class="docutils literal notranslate"><span class="pre">filters</span></code> as an argument to <code class="docutils literal notranslate"><span class="pre">Site.make_site()</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">filters</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;hello_world&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;Hello world!&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;my_lower&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+<span class="p">}</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">site</span> <span class="o">=</span> <span class="n">Site</span><span class="o">.</span><span class="n">make_site</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="n">filters</span><span class="p">)</span>
+    <span class="n">site</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Then you can use them in your templates as you would expect:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cm">&lt;!-- templates/index.html --&gt;</span>
+{% extends &quot;_base.html&quot; %}
+{% block body %}
+<span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>{{&#39;&#39; | hello_world}}<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>{{&#39;THIS IS AN EXAMPLE WEB PAGE.&#39; | my_lower}}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+{% endblock %}
+</pre></div>
+</div>
+</section>
+<section id="rendering-rules">
+<h2>Rendering rules<a class="headerlink" href="#rendering-rules" title="Link to this heading"></a></h2>
+<p>Rendering is the step in the build process where templates are evaluated to
+their final values using contexts, and the output files are written to disk.</p>
+<p>Sometimes you’ll find yourself needing to change how a template is
+rendering. For instance, you might want to render files with a <code class="docutils literal notranslate"><span class="pre">.md</span></code>
+from Markdown to HTML, without needing to put jinja syntax in your
+Markdown files. The following walkthrough is an explanation of the example
+that you can find and run yourself at <code class="docutils literal notranslate"><span class="pre">examples/markdown/</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you want to run the example, you will need to install the <code class="docutils literal notranslate"><span class="pre">markdown</span></code>
+library from <a class="reference external" href="https://pypi.org/project/Markdown/">https://pypi.org/project/Markdown/</a></p>
+</div>
+<p>The structure of the project after running will be:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>markdown
+├── build.py
+├── src
+│   ├── _post.html
+│   └── posts
+│       ├── post1.md
+│       └── post2.md
+└── build
+    └── posts
+        ├── post1.html
+        └── post2.html
+</pre></div>
+</div>
+<p>First, look at <code class="docutils literal notranslate"><span class="pre">src/_post.html</span></code>…</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cm">&lt;!-- src/_post.html --&gt;</span>
+<span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;en&quot;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>My Blog<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+        {{ post_content_html }}
+    <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>This template will be used for each of our markdown files, each of which might
+represent a blog post. This template expects a context with a
+<code class="docutils literal notranslate"><span class="pre">post_content_html</span></code> entry, which will get generated from each markdown file.</p>
+<p>Now let’s look at our build script. It does two things:</p>
+<ol class="arabic simple">
+<li><p>For every markdown template, use a context generator function (see above) to
+translate the markdown contents into html using the <code class="docutils literal notranslate"><span class="pre">markdown</span></code> library.</p></li>
+<li><p>For each markdown template, compile that context into the <code class="docutils literal notranslate"><span class="pre">src/_post.html</span></code>
+template, and then write that to disk. The output <code class="docutils literal notranslate"><span class="pre">post1.html</span></code> should be
+placed in the same location relative to <code class="docutils literal notranslate"><span class="pre">out/</span></code> as the input <code class="docutils literal notranslate"><span class="pre">post1.md</span></code>
+was relative to <code class="docutils literal notranslate"><span class="pre">src/</span></code>.</p></li>
+</ol>
+<p>The first step is accomplished in <code class="docutils literal notranslate"><span class="pre">md_context()</span></code>, and the second step is done
+in <code class="docutils literal notranslate"><span class="pre">render_md()</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># build.py</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">markdown</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">staticjinja</span><span class="w"> </span><span class="kn">import</span> <span class="n">Site</span>
+
+<span class="n">markdowner</span> <span class="o">=</span> <span class="n">markdown</span><span class="o">.</span><span class="n">Markdown</span><span class="p">(</span><span class="n">output_format</span><span class="o">=</span><span class="s2">&quot;html5&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">md_context</span><span class="p">(</span><span class="n">template</span><span class="p">):</span>
+    <span class="n">markdown_content</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;post_content_html&quot;</span><span class="p">:</span> <span class="n">markdowner</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">markdown_content</span><span class="p">)}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">render_md</span><span class="p">(</span><span class="n">site</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="c1"># i.e. posts/post1.md -&gt; build/posts/post1.html</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">outpath</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.html&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Compile and stream the result</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">site</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;_post.html&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">out</span><span class="p">),</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+
+
+<span class="n">site</span> <span class="o">=</span> <span class="n">Site</span><span class="o">.</span><span class="n">make_site</span><span class="p">(</span>
+    <span class="n">searchpath</span><span class="o">=</span><span class="s2">&quot;src&quot;</span><span class="p">,</span>
+    <span class="n">outpath</span><span class="o">=</span><span class="s2">&quot;build&quot;</span><span class="p">,</span>
+    <span class="n">contexts</span><span class="o">=</span><span class="p">[(</span><span class="sa">r</span><span class="s2">&quot;.*\.md&quot;</span><span class="p">,</span> <span class="n">md_context</span><span class="p">)],</span>
+    <span class="n">rules</span><span class="o">=</span><span class="p">[(</span><span class="sa">r</span><span class="s2">&quot;.*\.md&quot;</span><span class="p">,</span> <span class="n">render_md</span><span class="p">)],</span>
+<span class="p">)</span>
+
+<span class="n">site</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Note the rule we defined at the bottom. It tells staticjinja to check
+if the filename matches the <code class="docutils literal notranslate"><span class="pre">.*\.md</span></code> regex, and if it does, to
+render the file using <code class="docutils literal notranslate"><span class="pre">render_md()</span></code>.</p>
+<p>There are other, more complicated things you could do in a custom render
+function as well, such as not write the output to disk at all, but instead
+pass it somewhere else.</p>
+</section>
+<section id="logging-and-debugging">
+<h2>Logging and Debugging<a class="headerlink" href="#logging-and-debugging" title="Link to this heading"></a></h2>
+<p>By default <code class="docutils literal notranslate"><span class="pre">staticjinja</span></code> logs all messages at level INFO and higher to stderr
+via a <code class="docutils literal notranslate"><span class="pre">logging.StreamHandler()</span></code>. You can modify staticjinja’s logging behavior
+fairly easily by modifying <code class="docutils literal notranslate"><span class="pre">staticjinja.logger</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">staticjinja</span>
+<span class="c1"># Debug staticjinja by printing all debug messages...</span>
+<span class="n">staticjinja</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+<span class="c1"># Or do whatever else you want, such as logging to a file instead of stderr</span>
+<span class="n">staticjinja</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">loggers</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">staticjinja</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="s1">&#39;site.log&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="quickstart.html" class="btn btn-neutral float-left" title="Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../api.html" class="btn btn-neutral float-right" title="Developer Interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2014, Ceasar Bautista.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,183 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quickstart &mdash; staticjinja 5.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=ce74c6a2"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Advanced Usage" href="advanced.html" />
+    <link rel="prev" title="staticjinja" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            staticjinja
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rendering-templates-with-cli">Rendering templates with CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cli-configuration">CLI Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">Developer Interface</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">staticjinja</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Quickstart</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/user/quickstart.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="quickstart">
+<h1>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading"></a></h1>
+<p>Eager to get started? This page gives a good introduction for getting
+started with staticjinja.</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<p>Installing staticjinja is simple:</p>
+<blockquote>
+<div><p>$ pip install staticjinja</p>
+</div></blockquote>
+<p>This installs two things:</p>
+<ul class="simple">
+<li><p>A command line interface (CLI) to staticjinja for basic needs.</p></li>
+<li><p>A python library, accessible via the <a class="reference internal" href="../api.html#developer-interface"><span class="std std-ref">Developer Interface</span></a>, to be used with a custom
+python build script for advanced needs.</p></li>
+</ul>
+</section>
+<section id="rendering-templates-with-cli">
+<h2>Rendering templates with CLI<a class="headerlink" href="#rendering-templates-with-cli" title="Link to this heading"></a></h2>
+<p>If you’re just looking to render simple data-less templates, you can
+get up and running with the command line interface:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>staticjinja<span class="w"> </span>build
+<span class="w"> </span>Rendering<span class="w"> </span>index.html...
+</pre></div>
+</div>
+<p>This will recursively search <code class="docutils literal notranslate"><span class="pre">./templates</span></code> for templates (any file
+whose name does not start with <code class="docutils literal notranslate"><span class="pre">.</span></code> or <code class="docutils literal notranslate"><span class="pre">_</span></code>) and build them to
+<code class="docutils literal notranslate"><span class="pre">.</span></code>.</p>
+<p>To monitor your source directory for changes, and recompile files if
+they change, use <code class="docutils literal notranslate"><span class="pre">watch</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>staticjinja<span class="w"> </span>watch
+<span class="w"> </span>Rendering<span class="w"> </span>index.html...
+<span class="w"> </span>Watching<span class="w"> </span><span class="s1">&#39;templates&#39;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span>changes...
+<span class="w"> </span>Press<span class="w"> </span>Ctrl+C<span class="w"> </span>to<span class="w"> </span>stop.
+</pre></div>
+</div>
+</section>
+<section id="cli-configuration">
+<h2>CLI Configuration<a class="headerlink" href="#cli-configuration" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">build</span></code> and <code class="docutils literal notranslate"><span class="pre">watch</span></code> each take 3 options:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--srcpath</span></code> - the directory to look in for templates (defaults to
+<code class="docutils literal notranslate"><span class="pre">./templates</span></code>);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--outpath</span></code> - the directory to place rendered files in (defaults
+to <code class="docutils literal notranslate"><span class="pre">.</span></code>);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--static</span></code> - the directory (or directories) within <code class="docutils literal notranslate"><span class="pre">srcpath</span></code>
+where static files (such as CSS and JavaScript) are stored. Static
+files are copied to the output directory without any template
+compilation, maintaining any directory structure. This defaults to
+<code class="docutils literal notranslate"><span class="pre">None</span></code>, meaning no files are considered to be static files. You
+can pass multiple directories separating them by commas:
+<code class="docutils literal notranslate"><span class="pre">--static=&quot;foo,bar/baz,lorem&quot;</span></code>.</p></li>
+</ul>
+<p>Additionally, you can specify the logging level with
+<code class="docutils literal notranslate"><span class="pre">--log={debug,info,warning,error,critical}</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">info</span></code>.</p>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<p>If the CLI does not satisfy your needs, more advanced configuration can be
+done with custom python build scripts using the staticjinja API.
+See <a class="reference internal" href="advanced.html#advanced-usage"><span class="std std-ref">Advanced Usage</span></a> for details.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="staticjinja" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="advanced.html" class="btn btn-neutral float-right" title="Advanced Usage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2014, Ceasar Bautista.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,2 @@
+index.rst:4: [redirected with Found] https://jinja.palletsprojects.com to https://jinja.palletsprojects.com/en/stable/
+user/advanced.rst:197: [redirected with Found] https://jinja.palletsprojects.com/templates/#builtin-filters to https://jinja.palletsprojects.com/en/stable/templates/

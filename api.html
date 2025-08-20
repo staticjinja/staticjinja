@@ -1,0 +1,457 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Developer Interface &mdash; staticjinja 5.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=ce74c6a2"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributing" href="dev/contributing.html" />
+    <link rel="prev" title="Advanced Usage" href="user/advanced.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            staticjinja
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user/advanced.html">Advanced Usage</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Developer Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#staticjinja.Site"><code class="docutils literal notranslate"><span class="pre">Site</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#staticjinja.Site.get_context"><code class="docutils literal notranslate"><span class="pre">Site.get_context()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#staticjinja.Site.get_dependents"><code class="docutils literal notranslate"><span class="pre">Site.get_dependents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#staticjinja.Site.get_rule"><code class="docutils literal notranslate"><span class="pre">Site.get_rule()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#staticjinja.Site.get_template"><code class="docutils literal notranslate"><span class="pre">Site.get_template()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#staticjinja.Site.is_ignored"><code class="docutils literal notranslate"><span class="pre">Site.is_ignored()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#staticjinja.Site.is_partial"><code class="docutils literal notranslate"><span class="pre">Site.is_partial()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#staticjinja.Site.is_static"><code class="docutils literal notranslate"><span class="pre">Site.is_static()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#staticjinja.Site.is_template"><code class="docutils literal notranslate"><span class="pre">Site.is_template()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#staticjinja.Site.make_site"><code class="docutils literal notranslate"><span class="pre">Site.make_site()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#staticjinja.Site.render"><code class="docutils literal notranslate"><span class="pre">Site.render()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#staticjinja.Site.render_template"><code class="docutils literal notranslate"><span class="pre">Site.render_template()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#staticjinja.Site.render_templates"><code class="docutils literal notranslate"><span class="pre">Site.render_templates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#staticjinja.Site.templates"><code class="docutils literal notranslate"><span class="pre">Site.templates</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#staticjinja.Reloader"><code class="docutils literal notranslate"><span class="pre">Reloader</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#staticjinja.Reloader.event_handler"><code class="docutils literal notranslate"><span class="pre">Reloader.event_handler()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#staticjinja.Reloader.should_handle"><code class="docutils literal notranslate"><span class="pre">Reloader.should_handle()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#staticjinja.Reloader.watch"><code class="docutils literal notranslate"><span class="pre">Reloader.watch()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dev/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">staticjinja</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Developer Interface</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="developer-interface">
+<span id="id1"></span><h1>Developer Interface<a class="headerlink" href="#developer-interface" title="Link to this heading"></a></h1>
+<p id="module-staticjinja">This part of the documentation covers staticjinja’s API.</p>
+<p>Most of staticjinja’s functionality can be accessed with
+<a class="reference internal" href="#staticjinja.Site.make_site" title="staticjinja.Site.make_site"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Site.make_site()</span></code></a>, so pay particular attention to that.</p>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="staticjinja.Site">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">staticjinja.</span></span><span class="sig-name descname"><span class="pre">Site</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">environment</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Environment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">searchpath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FilePath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outpath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FilePath</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'utf8'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contexts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ContextMapping</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rules</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">RuleMapping</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">staticpaths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mergecontexts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#staticjinja.Site" title="Link to this definition"></a></dt>
+<dd><p>The Site object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>environment</strong> – A <a class="reference external" href="https://jinja.palletsprojects.com/en/stable/api/#jinja2.Environment" title="(in Jinja v3.1.x)"><code class="xref py py-class docutils literal notranslate"><span class="pre">jinja2.Environment</span></code></a>.</p></li>
+<li><p><strong>searchpath</strong> – A string representing the name of the directory to search for
+templates.</p></li>
+<li><p><strong>contexts</strong> – A list of <cite>regex, context</cite> pairs. Each context is either a dictionary
+or a function that takes either no argument or or the current template
+as its sole argument and returns a dictionary. The regex, if matched
+against a filename, will cause the context to be used.</p></li>
+<li><p><strong>rules</strong> – A list of <em>(regex, function)</em> pairs. The Site will delegate
+rendering to <em>function</em> if <em>regex</em> matches the name of a template
+during rendering. <em>function</em> must take a <a class="reference internal" href="#staticjinja.Site" title="staticjinja.Site"><code class="xref py py-class docutils literal notranslate"><span class="pre">staticjinja.Site</span></code></a>
+object, a <a class="reference external" href="https://jinja.palletsprojects.com/en/stable/api/#jinja2.Template" title="(in Jinja v3.1.x)"><code class="xref py py-class docutils literal notranslate"><span class="pre">jinja2.Template</span></code></a>, and a context dictionary as
+parameters and render the template. Defaults to <code class="docutils literal notranslate"><span class="pre">[]</span></code>.</p></li>
+<li><p><strong>encoding</strong> – The encoding of templates to use.</p></li>
+<li><p><strong>staticpaths</strong> – <div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 0.3.4.</span></p>
+</div>
+<p>List of directory names to get static files from (relative to
+searchpath).</p>
+</p></li>
+<li><p><strong>mergecontexts</strong> – A boolean value. If set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, then all matching regex from the
+contexts list will be merged (in order) to get the final context.
+Otherwise, only the first matching regex is used. Defaults to
+<code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="staticjinja.Site.get_context">
+<span class="sig-name descname"><span class="pre">get_context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Template</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Context</span></span></span><a class="headerlink" href="#staticjinja.Site.get_context" title="Link to this definition"></a></dt>
+<dd><p>Get the context for a template.</p>
+<p>If no matching value is found, an empty context is returned.
+Otherwise, this returns either the matching value if the value is
+dictionary-like or the dictionary returned by calling it with
+<em>template</em> if the value is a function.</p>
+<p>If several matching values are found, the resulting dictionaries will
+be merged before being returned if mergecontexts is True. Otherwise,
+only the first matching value is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>template</strong> – the template to get the context for</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="staticjinja.Site.get_dependents">
+<span class="sig-name descname"><span class="pre">get_dependents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FilePath</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">t.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">FilePath</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#staticjinja.Site.get_dependents" title="Link to this definition"></a></dt>
+<dd><p>Get a list of files that depends on <em>filename</em>. Useful to decide
+what to re-render when <em>filename</em> changes.</p>
+<ul class="simple">
+<li><p>Ignored files have no dependents.</p></li>
+<li><p>Static and template files just have themselves as dependents.</p></li>
+<li><p>Partial files have all the templates as dependents, since any template
+may rely upon a partial.</p></li>
+</ul>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.0.0: </span>Now always returns list of filenames. Before the return type
+was either a list of templates or list of filenames.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> – the name of the file to find dependents of</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of filenames of dependents.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="staticjinja.Site.get_rule">
+<span class="sig-name descname"><span class="pre">get_rule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Rule</span></span></span><a class="headerlink" href="#staticjinja.Site.get_rule" title="Link to this definition"></a></dt>
+<dd><p>Find a matching compilation rule for a function.</p>
+<p>Raises a <code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> if no matching rule can be found.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>template_name</strong> – the name of the template</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="staticjinja.Site.get_template">
+<span class="sig-name descname"><span class="pre">get_template</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FilePath</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Template</span></span></span><a class="headerlink" href="#staticjinja.Site.get_template" title="Link to this definition"></a></dt>
+<dd><p>Get a <a class="reference external" href="https://jinja.palletsprojects.com/en/stable/api/#jinja2.Template" title="(in Jinja v3.1.x)"><code class="xref py py-class docutils literal notranslate"><span class="pre">jinja2.Template</span></code></a> from the environment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>template_name</strong> – A string representing the name of the template.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="staticjinja.Site.is_ignored">
+<span class="sig-name descname"><span class="pre">is_ignored</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FilePath</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#staticjinja.Site.is_ignored" title="Link to this definition"></a></dt>
+<dd><p>Check if a file is an ignored. Ignored files are
+neither rendered nor used in rendering templates.</p>
+<p>A file is considered ignored if it or any of its parent directories
+are prefixed with an <code class="docutils literal notranslate"><span class="pre">'.'</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> – A PathLike name of the file to check</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="staticjinja.Site.is_partial">
+<span class="sig-name descname"><span class="pre">is_partial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FilePath</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#staticjinja.Site.is_partial" title="Link to this definition"></a></dt>
+<dd><p>Check if a file is partial. Partial files are not
+rendered, but they are used in rendering templates.</p>
+<p>A file is considered a partial if it or any of its parent
+directories are prefixed with an <code class="docutils literal notranslate"><span class="pre">'_'</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> – A PathLike name of the file to check</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="staticjinja.Site.is_static">
+<span class="sig-name descname"><span class="pre">is_static</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FilePath</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#staticjinja.Site.is_static" title="Link to this definition"></a></dt>
+<dd><p>Check if a file is static. Static files are copied, rather than
+compiled using Jinja2.</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 0.3.4.</span></p>
+</div>
+<p>A template is considered static if it lives in any of the directories
+specified in <code class="docutils literal notranslate"><span class="pre">staticpaths</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> – A PathLike name of the file to check.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="staticjinja.Site.is_template">
+<span class="sig-name descname"><span class="pre">is_template</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FilePath</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#staticjinja.Site.is_template" title="Link to this definition"></a></dt>
+<dd><p>Check if a file is a template.</p>
+<p>A file is a considered a template if it is not partial, ignored, or
+static.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> – A PathLike name of the file to check</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="staticjinja.Site.make_site">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_site</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">searchpath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FilePath</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'templates'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outpath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FilePath</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contexts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ContextMapping</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rules</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">RuleMapping</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'utf8'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">followlinks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extensions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">staticpaths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">t.Any</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_globals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">t.Any</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">t.Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mergecontexts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TSite</span></span></span><a class="headerlink" href="#staticjinja.Site.make_site" title="Link to this definition"></a></dt>
+<dd><p>Create a <a class="reference internal" href="#staticjinja.Site" title="staticjinja.Site"><code class="xref py py-class docutils literal notranslate"><span class="pre">Site</span></code></a> object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>searchpath</strong> – <p>A string or Path representing the path to the directory that the
+Site should search to discover templates. Defaults to
+<code class="docutils literal notranslate"><span class="pre">'templates'</span></code>.</p>
+<p>If a relative path is provided, it will be coerced to an absolute
+path using <code class="docutils literal notranslate"><span class="pre">os.getcwd()</span></code>.</p>
+</p></li>
+<li><p><strong>outpath</strong> – A string representing the name of the directory that the Site
+should store rendered files in. Defaults to <code class="docutils literal notranslate"><span class="pre">'.'</span></code>.</p></li>
+<li><p><strong>contexts</strong> – A list of <em>(regex, context)</em> pairs. The Site will render templates
+whose name match <em>regex</em> using <em>context</em>. <em>context</em> must be either
+a dictionary-like object or a function that takes either no
+arguments or a single <a class="reference external" href="https://jinja.palletsprojects.com/en/stable/api/#jinja2.Template" title="(in Jinja v3.1.x)"><code class="xref py py-class docutils literal notranslate"><span class="pre">jinja2.Template</span></code></a> as an argument and
+returns a dictionary representing the context. Defaults to <code class="docutils literal notranslate"><span class="pre">[]</span></code>.</p></li>
+<li><p><strong>rules</strong> – A list of <em>(regex, function)</em> pairs. The Site will delegate
+rendering to <em>function</em> if <em>regex</em> matches the name of a template
+during rendering. <em>function</em> must take a <a class="reference internal" href="#staticjinja.Site" title="staticjinja.Site"><code class="xref py py-class docutils literal notranslate"><span class="pre">staticjinja.Site</span></code></a>
+object, a <a class="reference external" href="https://jinja.palletsprojects.com/en/stable/api/#jinja2.Template" title="(in Jinja v3.1.x)"><code class="xref py py-class docutils literal notranslate"><span class="pre">jinja2.Template</span></code></a>, and a context dictionary as
+parameters and render the template. Defaults to <code class="docutils literal notranslate"><span class="pre">[]</span></code>.</p></li>
+<li><p><strong>encoding</strong> – A string representing the encoding that the Site should use when
+rendering templates. Defaults to <code class="docutils literal notranslate"><span class="pre">'utf8'</span></code>.</p></li>
+<li><p><strong>followlinks</strong> – A boolean describing whether symlinks in searchpath should be
+followed or not. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><strong>extensions</strong> – A list of <a class="reference external" href="https://jinja.palletsprojects.com/en/stable/extensions/#jinja-extensions" title="(in Jinja v3.1.x)"><span class="xref std std-ref">Jinja extensions</span></a> that the
+<a class="reference external" href="https://jinja.palletsprojects.com/en/stable/api/#jinja2.Environment" title="(in Jinja v3.1.x)"><code class="xref py py-class docutils literal notranslate"><span class="pre">jinja2.Environment</span></code></a> should use. Defaults to <code class="docutils literal notranslate"><span class="pre">[]</span></code>.</p></li>
+<li><p><strong>staticpaths</strong> – <div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 0.3.4.</span></p>
+</div>
+<p>List of directories to get static files from (relative to
+searchpath).  Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</p></li>
+<li><p><strong>filters</strong> – A dictionary of Jinja2 filters to add to the Environment.  Defaults
+to <code class="docutils literal notranslate"><span class="pre">{}</span></code>.</p></li>
+<li><p><strong>env_globals</strong> – A mapping from variable names that should be available all the time
+to their values. Defaults to <code class="docutils literal notranslate"><span class="pre">{}</span></code>.</p></li>
+<li><p><strong>env_kwargs</strong> – A dictionary that will be passed as keyword arguments to the
+jinja2 Environment. Defaults to <code class="docutils literal notranslate"><span class="pre">{}</span></code>.</p></li>
+<li><p><strong>mergecontexts</strong> – A boolean value. If set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, then all matching regex from
+the contexts list will be merged (in order) to get the final
+context.  Otherwise, only the first matching regex is used.
+Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="staticjinja.Site.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">use_reloader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#staticjinja.Site.render" title="Link to this definition"></a></dt>
+<dd><p>Generate the site.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>use_reloader</strong> – if given, reload templates on modification</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="staticjinja.Site.render_template">
+<span class="sig-name descname"><span class="pre">render_template</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Template</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Context</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#staticjinja.Site.render_template" title="Link to this definition"></a></dt>
+<dd><p>Render a single <a class="reference external" href="https://jinja.palletsprojects.com/en/stable/api/#jinja2.Template" title="(in Jinja v3.1.x)"><code class="xref py py-class docutils literal notranslate"><span class="pre">jinja2.Template</span></code></a> object.</p>
+<p>If a Rule matching the template is found, the rendering task is
+delegated to the rule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>template</strong> – A <a class="reference external" href="https://jinja.palletsprojects.com/en/stable/api/#jinja2.Template" title="(in Jinja v3.1.x)"><code class="xref py py-class docutils literal notranslate"><span class="pre">jinja2.Template</span></code></a> to render.</p></li>
+<li><p><strong>context</strong> – Optional. A dictionary representing the context to render
+<em>template</em> with. If no context is provided, <a class="reference internal" href="#staticjinja.Site.get_context" title="staticjinja.Site.get_context"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_context()</span></code></a> is
+used to provide a context.</p></li>
+<li><p><strong>filepath</strong> – Optional. A PathLike representing the output location.
+Defaults to to <code class="docutils literal notranslate"><span class="pre">os.path.join(self.outpath,</span> <span class="pre">template.name)</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="staticjinja.Site.render_templates">
+<span class="sig-name descname"><span class="pre">render_templates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">templates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://jinja.palletsprojects.com/en/stable/api/#jinja2.Template" title="(in Jinja v3.1.x)"><span class="pre">Template</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#staticjinja.Site.render_templates" title="Link to this definition"></a></dt>
+<dd><p>Render a collection of <a class="reference external" href="https://jinja.palletsprojects.com/en/stable/api/#jinja2.Template" title="(in Jinja v3.1.x)"><code class="xref py py-class docutils literal notranslate"><span class="pre">jinja2.Template</span></code></a> objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>templates</strong> – A collection of <a class="reference external" href="https://jinja.palletsprojects.com/en/stable/api/#jinja2.Template" title="(in Jinja v3.1.x)"><code class="xref py py-class docutils literal notranslate"><span class="pre">jinja2.Template</span></code></a> objects to render.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="staticjinja.Site.templates">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">templates</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://jinja.palletsprojects.com/en/stable/api/#jinja2.Template" title="(in Jinja v3.1.x)"><span class="pre">Template</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#staticjinja.Site.templates" title="Link to this definition"></a></dt>
+<dd><p>Generator for templates.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="staticjinja.Reloader">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">staticjinja.</span></span><span class="sig-name descname"><span class="pre">Reloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">site</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#staticjinja.Site" title="staticjinja.Site"><span class="pre">Site</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#staticjinja.Reloader" title="Link to this definition"></a></dt>
+<dd><p>Watches <code class="docutils literal notranslate"><span class="pre">site.searchpath</span></code> for changes and re-renders any changed
+Templates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>site</strong> – A <a class="reference internal" href="#staticjinja.Site" title="staticjinja.Site"><code class="xref py py-class docutils literal notranslate"><span class="pre">Site</span></code></a> object.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="staticjinja.Reloader.event_handler">
+<span class="sig-name descname"><span class="pre">event_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FilePath</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#staticjinja.Reloader.event_handler" title="Link to this definition"></a></dt>
+<dd><p>Re-render templates if they are modified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event_type</strong> – a string, representing the type of event</p></li>
+<li><p><strong>src_path</strong> – the absolute path to the file that triggered the event.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="staticjinja.Reloader.should_handle">
+<span class="sig-name descname"><span class="pre">should_handle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FilePath</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#staticjinja.Reloader.should_handle" title="Link to this definition"></a></dt>
+<dd><p>Check if an event should be handled.</p>
+<p>An event should be handled if a file was created or modified, and
+still exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event_type</strong> – a string, representing the type of event</p></li>
+<li><p><strong>filename</strong> – the path to the file that triggered the event.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="staticjinja.Reloader.watch">
+<span class="sig-name descname"><span class="pre">watch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#staticjinja.Reloader.watch" title="Link to this definition"></a></dt>
+<dd><p>Watch and reload modified templates.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="user/advanced.html" class="btn btn-neutral float-left" title="Advanced Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="dev/contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2014, Ceasar Bautista.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

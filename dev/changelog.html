@@ -1,0 +1,650 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Changelog &mdash; staticjinja 5.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=ce74c6a2"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Authors" href="authors.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            staticjinja
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user/advanced.html">Advanced Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">Developer Interface</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Unreleased</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#removed">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#added">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">5.0.0 (2023-08-16)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id8">4.1.3 (2022-06-03)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fixed">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id10">4.1.2 (2021-12-18)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id11">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id13">4.1.1 (2021-11-02)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id14">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id16">4.1.0 (2021-07-31)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id17">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id19">4.0.0 (2021-07-18)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id20">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id21">Removed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id23">3.0.1 (2021-07-02)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id24">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id26">3.0.0 (2021-07-02)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id27">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id29">2.1.0 (2021-06-10)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#deprecated">Deprecated</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id31">2.0.1 (2021-05-21)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id32">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id34">2.0.0 (2021-05-21)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id35">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id36">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id38">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id39">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id42">1.0.4 (2021-02-02)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id43">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id45">1.0.3 (2021-01-24)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id46">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id48">1.0.2 (2021-01-22)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id49">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id51">1.0.1 (2021-01-22)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id52">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id54">1.0.0 (2021-01-19)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id55">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id56">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id57">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id58">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id59">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id61">0.4.0 (2020-11-14)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id63">0.3.5 (2018-08-16)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id65">0.3.4 (2018-08-14)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id67">0.3.3 (2016-03-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id69">0.3.2 (2015-11-23)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id71">0.3.1 (2015-01-21)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id72">0.3.0 (2014-06-04)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id73">0.2.0 (2014-01-04)</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">staticjinja</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Changelog</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/dev/changelog.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading"></a></h1>
+<section id="id1">
+<h2><a class="reference external" href="https://github.com/staticjinja/staticjinja/compare/main">Unreleased</a><a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<section id="removed">
+<h3>Removed<a class="headerlink" href="#removed" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Removed support for python 3.7. None of our tooling can support python versions this
+old, and the maintenance isn’t worth it.</p></li>
+</ul>
+</section>
+<section id="changed">
+<h3>Changed<a class="headerlink" href="#changed" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>(internal) Switch to uv as our package manager from poetry. Switch to ruff from black
+and flake8. Use uv to manage python versions instead of tox.</p></li>
+</ul>
+</section>
+<section id="added">
+<h3>Added<a class="headerlink" href="#added" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Add testing up to python 3.13</p></li>
+</ul>
+</section>
+</section>
+<section id="id3">
+<h2><a class="reference external" href="https://github.com/staticjinja/staticjinja/compare/4.1.3...5.0.0">5.0.0</a> (2023-08-16)<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<section id="id4">
+<h3>Changed<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>As previously deprecated:
+Always resolve relative paths to CWD, not a python build script. This was
+deprecated in <a class="reference external" href="https://github.com/staticjinja/staticjinja/issues/149">https://github.com/staticjinja/staticjinja/issues/149</a></p></li>
+</ul>
+</section>
+<section id="id5">
+<h3>Removed<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Remove previously deprecated <code class="docutils literal notranslate"><span class="pre">Site.get_dependencies()</span></code>.
+Use <code class="docutils literal notranslate"><span class="pre">Site.get_dependents()</span></code> instead. See
+<a class="reference external" href="https://github.com/staticjinja/staticjinja/commit/170b027a4fff86790bc69a1222d7b0a36c1080bc">https://github.com/staticjinja/staticjinja/commit/170b027a4fff86790bc69a1222d7b0a36c1080bc</a></p></li>
+<li><p>Removed previously deprecated <code class="docutils literal notranslate"><span class="pre">logger</span></code> argument to Site.__init__().
+Use <code class="docutils literal notranslate"><span class="pre">staticjinja.logger</span></code> for the staticjinja-wide logger instead. See
+<a class="reference external" href="https://github.com/staticjinja/staticjinja/issues/144">https://github.com/staticjinja/staticjinja/issues/144</a></p></li>
+<li><p>Stop testing for Python 3.6. It still may work, just not officially supported.</p></li>
+</ul>
+</section>
+<section id="id6">
+<h3>Added<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Add testing for Python 3.10 and 3.11. See
+<a class="reference external" href="https://github.com/staticjinja/staticjinja/pull/174">https://github.com/staticjinja/staticjinja/pull/174</a></p></li>
+<li><p>Add type hints throughout the project. See
+<a class="reference external" href="https://github.com/staticjinja/staticjinja/pull/175">https://github.com/staticjinja/staticjinja/pull/175</a></p></li>
+</ul>
+</section>
+</section>
+<section id="id8">
+<h2><a class="reference external" href="https://github.com/staticjinja/staticjinja/compare/4.1.2...4.1.3">4.1.3</a> (2022-06-03)<a class="headerlink" href="#id8" title="Link to this heading"></a></h2>
+<section id="fixed">
+<h3>Fixed<a class="headerlink" href="#fixed" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Removed upper limits on dependencies. See
+<a class="reference external" href="https://github.com/staticjinja/staticjinja/pull/171">https://github.com/staticjinja/staticjinja/pull/171</a></p></li>
+</ul>
+</section>
+</section>
+<section id="id10">
+<h2><a class="reference external" href="https://github.com/staticjinja/staticjinja/compare/4.1.1...4.1.2">4.1.2</a> (2021-12-18)<a class="headerlink" href="#id10" title="Link to this heading"></a></h2>
+<section id="id11">
+<h3>Fixed<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Allow nested directories to be created. Thanks &#64;zakx! See
+<a class="reference external" href="https://github.com/staticjinja/staticjinja/pull/167">https://github.com/staticjinja/staticjinja/pull/167</a></p></li>
+</ul>
+</section>
+</section>
+<section id="id13">
+<h2><a class="reference external" href="https://github.com/staticjinja/staticjinja/compare/4.1.0...4.1.1">4.1.1</a> (2021-11-02)<a class="headerlink" href="#id13" title="Link to this heading"></a></h2>
+<section id="id14">
+<h3>Fixed<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
+<ul>
+<li><p>Fix _ensure_dir() when a folder-less path is used</p>
+<p>If a folder-less path, like “file.txt” is passed, then
+<cite>os.path.dirname(Path(path))</cite> results in <cite>“”</cite>, instead
+of <cite>“.”</cite>, like we want. This causes <cite>mkdir()</cite> to fail.
+This fixes it, and adds a test for it. The test fails without the change.</p>
+<p>Fixes <a class="reference external" href="https://github.com/staticjinja/staticjinja/issues/160">https://github.com/staticjinja/staticjinja/issues/160</a></p>
+</li>
+</ul>
+</section>
+</section>
+<section id="id16">
+<h2><a class="reference external" href="https://github.com/staticjinja/staticjinja/compare/4.0.0...4.1.0">4.1.0</a> (2021-07-31)<a class="headerlink" href="#id16" title="Link to this heading"></a></h2>
+<section id="id17">
+<h3>Added<a class="headerlink" href="#id17" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Allow jinja version 3.x.
+See <a class="reference external" href="https://github.com/staticjinja/staticjinja/issues/158">https://github.com/staticjinja/staticjinja/issues/158</a></p></li>
+</ul>
+</section>
+</section>
+<section id="id19">
+<h2><a class="reference external" href="https://github.com/staticjinja/staticjinja/compare/3.0.1...4.0.0">4.0.0</a> (2021-07-18)<a class="headerlink" href="#id19" title="Link to this heading"></a></h2>
+<section id="id20">
+<h3>Added<a class="headerlink" href="#id20" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--log</span></code> argument to CLI to set log level.</p></li>
+</ul>
+</section>
+<section id="id21">
+<h3>Removed<a class="headerlink" href="#id21" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Removed <code class="docutils literal notranslate"><span class="pre">logger</span></code> argument to Site(). Use <code class="docutils literal notranslate"><span class="pre">staticjinja.logger</span></code> for the
+staticjinja-wide logger instead. See
+<a class="reference external" href="https://github.com/staticjinja/staticjinja/issues/144">https://github.com/staticjinja/staticjinja/issues/144</a></p></li>
+<li><p>Removed <code class="docutils literal notranslate"><span class="pre">Renderer</span></code> class and <code class="docutils literal notranslate"><span class="pre">make_renderer</span></code> function. Remove the bare
+<code class="docutils literal notranslate"><span class="pre">make_site</span></code> function, use <code class="docutils literal notranslate"><span class="pre">Site.make_site</span></code> instead. All of this was deprecated 6
+years ago, no one should still be using them.</p></li>
+</ul>
+</section>
+</section>
+<section id="id23">
+<h2><a class="reference external" href="https://github.com/staticjinja/staticjinja/compare/3.0.0...3.0.1">3.0.1</a> (2021-07-02)<a class="headerlink" href="#id23" title="Link to this heading"></a></h2>
+<section id="id24">
+<h3>Fixed<a class="headerlink" href="#id24" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Formatting error in this changelog.</p></li>
+</ul>
+</section>
+</section>
+<section id="id26">
+<h2><a class="reference external" href="https://github.com/staticjinja/staticjinja/compare/2.1.0...3.0.0">3.0.0</a> (2021-07-02)<a class="headerlink" href="#id26" title="Link to this heading"></a></h2>
+<section id="id27">
+<h3>Changed<a class="headerlink" href="#id27" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Calling <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">-m</span> <span class="pre">staticjinja</span></code> now works exactly the same as calling
+<code class="docutils literal notranslate"><span class="pre">staticjinja</span></code> directly. If you were using <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">-m</span> <span class="pre">staticjinja</span></code>, this
+probably broke you, you now need to explicitly give the <code class="docutils literal notranslate"><span class="pre">watch</span></code> subcommand
+with <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">-m</span> <span class="pre">staticjinja</span> <span class="pre">watch</span></code>. For more info see
+<a class="reference external" href="https://github.com/staticjinja/staticjinja/issues/152">https://github.com/staticjinja/staticjinja/issues/152</a>.</p></li>
+</ul>
+</section>
+</section>
+<section id="id29">
+<h2><a class="reference external" href="https://github.com/staticjinja/staticjinja/compare/2.0.1...2.1.0">2.1.0</a> (2021-06-10)<a class="headerlink" href="#id29" title="Link to this heading"></a></h2>
+<section id="deprecated">
+<h3>Deprecated<a class="headerlink" href="#deprecated" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Deprecate inferring project root directory from build script directory.
+In the future, if staticjinja ever receives a relative path, it will use
+the CWD as the root. If you rely upon the location of your build script
+that uses the staticjinja API, then you may need to change. If you’re just
+using the CLI, then you don’t need to change anything.
+See <a class="reference external" href="https://github.com/staticjinja/staticjinja/issues/149">https://github.com/staticjinja/staticjinja/issues/149</a> for more info.</p></li>
+</ul>
+</section>
+</section>
+<section id="id31">
+<h2><a class="reference external" href="https://github.com/staticjinja/staticjinja/compare/2.0.0...2.0.1">2.0.1</a> (2021-05-21)<a class="headerlink" href="#id31" title="Link to this heading"></a></h2>
+<section id="id32">
+<h3>Added<a class="headerlink" href="#id32" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>A failed attempt at auto release when the version number is bumped. Nothing
+actually changed here.</p></li>
+</ul>
+</section>
+</section>
+<section id="id34">
+<h2><a class="reference external" href="https://github.com/staticjinja/staticjinja/compare/1.0.4...2.0.0">2.0.0</a> (2021-05-21)<a class="headerlink" href="#id34" title="Link to this heading"></a></h2>
+<section id="id35">
+<h3>Deprecated<a class="headerlink" href="#id35" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Renamed <code class="docutils literal notranslate"><span class="pre">Site.get_dependencies()</span></code> to <code class="docutils literal notranslate"><span class="pre">Site.get_dependents()</span></code>.
+See <a class="reference external" href="https://github.com/staticjinja/staticjinja/commit/170b027a4fff86790bc69a1222d7b0a36c1080bc">https://github.com/staticjinja/staticjinja/commit/170b027a4fff86790bc69a1222d7b0a36c1080bc</a></p></li>
+</ul>
+</section>
+<section id="id36">
+<h3>Changed<a class="headerlink" href="#id36" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Improved CLI help message formatting</p></li>
+<li><p>Revert the change made in #71_. Ensuring output locations exist should be the
+responsibility of the custom render function, since there’s no guarantee
+what output locations the custom render function might use. This might only
+affect those using custom render functions.</p></li>
+<li><p>Slightly changed the return type of <code class="docutils literal notranslate"><span class="pre">Site.get_dependencies()</span></code>.
+See <a class="reference external" href="https://github.com/staticjinja/staticjinja/commit/170b027a4fff86790bc69a1222d7b0a36c1080bc">https://github.com/staticjinja/staticjinja/commit/170b027a4fff86790bc69a1222d7b0a36c1080bc</a></p></li>
+<li><p>Make Reloader piggyback off of Site’s logger, so we don’t have any bare print statements
+dangling about.</p></li>
+</ul>
+</section>
+<section id="id38">
+<h3>Added<a class="headerlink" href="#id38" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Many <code class="docutils literal notranslate"><span class="pre">Site</span></code> functions now accept PathLike args, not just str’s or template names.
+See <a class="reference external" href="https://github.com/staticjinja/staticjinja/commit/a662a37994ccd1e6b5d37c1bd4666ac30c74899d">https://github.com/staticjinja/staticjinja/commit/a662a37994ccd1e6b5d37c1bd4666ac30c74899d</a></p></li>
+</ul>
+</section>
+<section id="id39">
+<h3>Fixed<a class="headerlink" href="#id39" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Fix and improve the <code class="docutils literal notranslate"><span class="pre">markdown</span></code> example.</p></li>
+<li><p>Change from inspect.isfunction() -&gt; callable(), per #143_.
+Now you should be able to use methods which are instance members of classes.</p></li>
+<li><p>Docs: Fix docstring for <code class="docutils literal notranslate"><span class="pre">Site.render_template</span></code>.</p></li>
+<li><p>Make Renderer call super() correctly. It’s deprecated, so probably no point, but
+might as well fix it.</p></li>
+<li><p>Internal: Made flake8 check actually runs against files, other small fixups</p></li>
+</ul>
+</section>
+</section>
+<section id="id42">
+<h2><a class="reference external" href="https://github.com/staticjinja/staticjinja/compare/1.0.3...1.0.4">1.0.4</a> (2021-02-02)<a class="headerlink" href="#id42" title="Link to this heading"></a></h2>
+<section id="id43">
+<h3>Changed<a class="headerlink" href="#id43" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Contributing info is updated/improved.</p></li>
+<li><p>CLI help message is better formatted and more useful. How it works shouldn’t
+have changed.</p></li>
+<li><p>Internal: Use <code class="docutils literal notranslate"><span class="pre">poetry</span></code> as our package manager. This should change the
+development workflow but not the user experience.</p></li>
+<li><p>Internal: Moved many tests/checks out of tox and into Makefile.</p></li>
+<li><p>Internal: Use black as our formatter.</p></li>
+<li><p>Improve some tests and add some more CLI tests.</p></li>
+</ul>
+</section>
+</section>
+<section id="id45">
+<h2><a class="reference external" href="https://github.com/staticjinja/staticjinja/compare/1.0.2...1.0.3">1.0.3</a> (2021-01-24)<a class="headerlink" href="#id45" title="Link to this heading"></a></h2>
+<section id="id46">
+<h3>Fixed<a class="headerlink" href="#id46" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Fix links to external APIs in docs.</p></li>
+<li><p>Use the real readthedocs html theme when building docs locally.</p></li>
+</ul>
+</section>
+</section>
+<section id="id48">
+<h2><a class="reference external" href="https://github.com/staticjinja/staticjinja/compare/1.0.1...1.0.2">1.0.2</a> (2021-01-22)<a class="headerlink" href="#id48" title="Link to this heading"></a></h2>
+<section id="id49">
+<h3>Fixed<a class="headerlink" href="#id49" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Fix token to <cite>actions/create-release&#64;v1</cite> in publish workflow</p></li>
+<li><p>Fix links throughout project.</p></li>
+</ul>
+</section>
+</section>
+<section id="id51">
+<h2><a class="reference external" href="https://github.com/staticjinja/staticjinja/compare/1.0.0...1.0.1">1.0.1</a> (2021-01-22)<a class="headerlink" href="#id51" title="Link to this heading"></a></h2>
+<section id="id52">
+<h3>Fixed<a class="headerlink" href="#id52" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Pin upload to PyPI action (<cite>pypa/gh-action-pypi-publish</cite>, used in the publish
+workflow) to &#64;v1.4.1, instead of just &#64;master. Less prone to breakage.</p></li>
+</ul>
+</section>
+</section>
+<section id="id54">
+<h2><a class="reference external" href="https://github.com/staticjinja/staticjinja/compare/0.4.0...1.0.0">1.0.0</a> (2021-01-19)<a class="headerlink" href="#id54" title="Link to this heading"></a></h2>
+<section id="id55">
+<h3>Added<a class="headerlink" href="#id55" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Runnable and testable examples in <code class="docutils literal notranslate"><span class="pre">examples/</span></code>. See <code class="docutils literal notranslate"><span class="pre">examples/README.rst</span></code>
+for more info.</p></li>
+<li><p>Code coverage at <a class="reference external" href="https://app.codecov.io/gh/staticjinja/staticjinja">https://app.codecov.io/gh/staticjinja/staticjinja</a>.</p></li>
+</ul>
+</section>
+<section id="id56">
+<h3>Changed<a class="headerlink" href="#id56" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Use GitHub Actions instead of Travis CI for CI testing.</p></li>
+<li><p><cite>Out</cite> directory no longer needs to exist in CLI.</p></li>
+<li><p>Add more default arguments (logger, outpath, and encoding) to
+<code class="docutils literal notranslate"><span class="pre">Site.__init__()</span></code> so that <code class="docutils literal notranslate"><span class="pre">Site.make_site()</span></code> doesn’t have to make them.</p></li>
+<li><p>Update requirements using <code class="docutils literal notranslate"><span class="pre">piptools</span></code>. This dropped a dependency on
+<code class="docutils literal notranslate"><span class="pre">pathtools</span></code>.</p></li>
+<li><p>Upload test results as artifacts to better diagnose failures in
+GitHub Actions.</p></li>
+</ul>
+</section>
+<section id="id57">
+<h3>Deprecated<a class="headerlink" href="#id57" title="Link to this heading"></a></h3>
+</section>
+<section id="id58">
+<h3>Removed<a class="headerlink" href="#id58" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Python 2, 3.4, and 3.5 support. Now only Python 3.6 to 3.9 is supported.</p></li>
+<li><p>Remove broken <code class="docutils literal notranslate"><span class="pre">filepath</span></code> arg from <code class="docutils literal notranslate"><span class="pre">Site.render_templates()</span></code>.
+You shouldn’t notice this though, since it crashed if was used :)</p></li>
+</ul>
+</section>
+<section id="id59">
+<h3>Fixed<a class="headerlink" href="#id59" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Fix tests and <code class="docutils literal notranslate"><span class="pre">__main__.py</span></code> to use <code class="docutils literal notranslate"><span class="pre">Site.make_site()</span></code>, not deprecated
+<code class="docutils literal notranslate"><span class="pre">staticjinja.make_site()</span></code>.</p></li>
+<li><p>Tests are now split up into separate files in the <code class="docutils literal notranslate"><span class="pre">tests/</span></code> directory.
+The one monolithic file was intimidating. Some repeated boilerplate tests
+were parameterized as well. The tests could still use some more cleanup in
+general.</p></li>
+<li><p>Overhaul contributing info. Port CONTRIBUTING.md over to CONTRIBUTING.rst,
+edit it, and then import this version in docs.</p></li>
+<li><p>Fix CWD logic loophole if <code class="docutils literal notranslate"><span class="pre">Site.make_site()</span></code> is called from an interpreter.</p></li>
+<li><p>Update use of deprecated <code class="docutils literal notranslate"><span class="pre">inspect.getargspec()</span></code>.</p></li>
+<li><p>A few other trivial fixes.</p></li>
+</ul>
+</section>
+</section>
+<section id="id61">
+<h2><a class="reference external" href="https://github.com/staticjinja/staticjinja/compare/0.3.5...0.4.0">0.4.0</a> (2020-11-14)<a class="headerlink" href="#id61" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Improve Travis CI testing: Add Windows and OSX, stop testing python2,
+add newer python3 versions, update tox.ini.</p></li>
+<li><p>Convert all print()s to logger.logs().</p></li>
+<li><p>Make CLI interface use Site.make_site() instead of deprecated make_site().</p></li>
+<li><p>Simplify style and how kwargs are passed around.</p></li>
+<li><p>Single-source the version info so it’s always consistent.</p></li>
+<li><p>Minor fixes, updates, improvements to README, AUTHORS, CONTRIBUTING,
+setup.py, __init__.py docstring,</p></li>
+<li><p>Rename Site._env to Site.env, making it publicly accessible, for instance
+in custom rendering functions.</p></li>
+<li><p>Fix docstring for the expected signature of custom rendering rules so they
+expect a staticjinja.Site as opposed to a jinja2.Environment</p></li>
+<li><p>Make is_{template,static,ignored,partial} functions be consistent with
+taking template names(always use <cite>/</cite>), not file names (use os.path.sep),
+making them consistent between OSs.
+<a class="reference external" href="https://github.com/staticjinja/staticjinja/issues/88">https://github.com/staticjinja/staticjinja/issues/88</a></p></li>
+<li><p>Update and improve docs, add .readthedocs.yml so that ReadTheDocs.org can
+automatically pull from the repo and build docs on changes. Add a badge
+for if the doc build passes. Add readthedocs build task as a GitHub check,
+so new PRs and branches will automatically get this check.</p></li>
+<li><p>Change single example/ directory to a collection of examples in examples/,
+and add in an example for using custom rendering rules to generate HTML from
+markdown. This also fixes the totally wrong tutorial on the docs for how to
+use custom rendering rules. See <a class="reference external" href="https://github.com/staticjinja/staticjinja/pull/102">https://github.com/staticjinja/staticjinja/pull/102</a></p></li>
+<li><p>Update dependencies using pip-tools to automatically generate indirect
+dependencies from direct dependencies:</p>
+<ul>
+<li><p>jinja2==2.6      -&gt; jinja2==2.11.2</p></li>
+<li><p>argh==0.21.0     -&gt; REMOVED</p></li>
+<li><p>argparse==1.2.1  -&gt; REMOVED</p></li>
+<li><p>docopt==0.6.1    -&gt; docopt==0.6.2</p></li>
+<li><p>easywatch==0.0.5 -&gt; easywatch==0.0.5</p></li>
+<li><p>pathtools==0.1.2 -&gt; pathtools==0.1.2</p></li>
+<li><p>watchdog==0.6.0  -&gt; watchdog==0.10.3</p></li>
+<li><p>wsgiref==0.1.2   -&gt; REMOVED</p></li>
+<li><p>NONE             -&gt; markupsafe==1.1.1</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id63">
+<h2><a class="reference external" href="https://github.com/staticjinja/staticjinja/compare/0.3.4...0.3.5">0.3.5</a> (2018-08-16)<a class="headerlink" href="#id63" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Make README less verbose.</p></li>
+<li><p>Only warn about using deprecated <code class="docutils literal notranslate"><span class="pre">staticpaths</span></code> if <code class="docutils literal notranslate"><span class="pre">staticpaths</span></code> is
+actually used.</p></li>
+<li><p>Updated easywatch to 0.0.5</p></li>
+</ul>
+</section>
+<section id="id65">
+<h2><a class="reference external" href="https://github.com/staticjinja/staticjinja/compare/0.3.3...0.3.4">0.3.4</a> (2018-08-14)<a class="headerlink" href="#id65" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Move <code class="docutils literal notranslate"><span class="pre">make_site()</span></code> to <code class="docutils literal notranslate"><span class="pre">Site.make_site()</span></code>.</p></li>
+<li><p>Deprecate <code class="docutils literal notranslate"><span class="pre">staticpaths</span></code> argument to <code class="docutils literal notranslate"><span class="pre">Site()</span></code> and <code class="docutils literal notranslate"><span class="pre">Site.make_site()</span></code>.
+See <a class="reference external" href="https://github.com/staticjinja/staticjinja/issues/58">Issue #58</a>.</p></li>
+<li><p>Add an option (default <code class="docutils literal notranslate"><span class="pre">True</span></code>) for Jinja’s <code class="docutils literal notranslate"><span class="pre">FileSystemLoader</span></code>
+follow to symlinks when loading templates.</p></li>
+<li><p>Ensure that the output directory exists, regardless of whether custom
+rendering rules were supplied. Before that was only ensured if custom
+rendering rules were not given.</p></li>
+<li><p>License file is included now in distributions.</p></li>
+<li><p>Add documentation for partial and ignored files.</p></li>
+<li><p>Updated easywatch to 0.0.4.</p></li>
+<li><p>Fix a few style errors.</p></li>
+</ul>
+</section>
+<section id="id67">
+<h2><a class="reference external" href="https://github.com/staticjinja/staticjinja/compare/0.3.2...0.3.3">0.3.3</a> (2016-03-08)<a class="headerlink" href="#id67" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Enable users to direct pass dictionaries instead of context generator in Site
+and make_site() for contexts that don’t require any logic.</p></li>
+<li><p>Introduces a <code class="docutils literal notranslate"><span class="pre">mergecontexts</span></code> parameter to Site and make_site() to direct
+staticjinja to either use all matching context generator or only the first
+one when rendering templates.</p></li>
+</ul>
+</section>
+<section id="id69">
+<h2><a class="reference external" href="https://github.com/staticjinja/staticjinja/compare/0.3.1...0.3.2">0.3.2</a> (2015-11-23)<a class="headerlink" href="#id69" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Allow passing keyword arguments to jinja2 Environment.</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">shutil.copy2</span></code> instead of <code class="docutils literal notranslate"><span class="pre">shutil.copyfile</span></code> when copying static
+resources to preserve the modified time of files which haven’t been modified.</p></li>
+<li><p>Make the Reloader handle “created” events to support editors like Pycharm
+which save by first deleting then creating, rather than modifying.</p></li>
+<li><p>Update easywatch dependency to 0.0.3 to fix an issue that occurs when
+installing easywatch 0.0.2.</p></li>
+<li><p>Make <code class="docutils literal notranslate"><span class="pre">--srcpath</span></code> accept both absolute paths and relative paths.</p></li>
+<li><p>Allow directories to be marked partial or ignored, so that all files inside
+them can be considered partial or ignored. Without this, developers would need
+to rename the contents of these directories manually.</p></li>
+<li><p>Allow users to mark a single file as static, instead of just directories.</p></li>
+</ul>
+</section>
+<section id="id71">
+<h2><a class="reference external" href="https://github.com/staticjinja/staticjinja/compare/0.3.0...0.3.1">0.3.1</a> (2015-01-21)<a class="headerlink" href="#id71" title="Link to this heading"></a></h2>
+<ul>
+<li><p>Add support for filters so that users can define their own Jinja2 filters and
+use them in templates:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">filters</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;filter1&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s2">&quot;hello world!&quot;</span><span class="p">,</span>
+    <span class="s1">&#39;filter2&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="n">site</span> <span class="o">=</span> <span class="n">staticjinja</span><span class="o">.</span><span class="n">make_site</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="n">filters</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>Add support for multiple static directories. They can be passed as a string
+of comma-separated names to the CLI or as a list to the Renderer.</p></li>
+<li><p>“Renderer” was renamed to “Site” and the Reloader was moved
+staticjinja.reloader.</p></li>
+</ul>
+</section>
+<section id="id72">
+<h2>0.3.0 (2014-06-04)<a class="headerlink" href="#id72" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Add a command, <code class="docutils literal notranslate"><span class="pre">staticjinja</span></code>, to handle the simple case of
+building context-less templates.</p></li>
+<li><p>Add support for copying static files from the template directory to
+the output directory.</p></li>
+<li><p>Add support for testing, linting and checking the documentation
+using <code class="docutils literal notranslate"><span class="pre">tox</span></code>.</p></li>
+</ul>
+</section>
+<section id="id73">
+<h2>0.2.0 (2014-01-04)<a class="headerlink" href="#id73" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Add a <code class="docutils literal notranslate"><span class="pre">Reloader</span></code> class.</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Renderer.templates</span></code>, which refers to the lists of templates available
+to the <code class="docutils literal notranslate"><span class="pre">Renderer</span></code>.</p></li>
+<li><p>Make <code class="docutils literal notranslate"><span class="pre">Renderer.get_context_generator()</span></code> private.</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Renderer.get_dependencies(filename)</span></code>, which gets every file that
+depends on the given file.</p></li>
+<li><p>Make <code class="docutils literal notranslate"><span class="pre">Renderer.render_templates()</span></code> require a list of templates to render,
+<em>templates</em>.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="authors.html" class="btn btn-neutral float-left" title="Authors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2014, Ceasar Bautista.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
