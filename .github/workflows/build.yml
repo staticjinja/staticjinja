@@ -87,6 +87,11 @@ jobs:
         uses: astral-sh/setup-uv@v6
         with:
           version: "0.8.12"
-      
-      - name: Measure test coverage and upload results
-        run: make coverage-upload
+
+      - name: Run coverage
+        run: make coverage
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
