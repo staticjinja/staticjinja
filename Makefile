@@ -6,19 +6,19 @@ init:
 	git config blame.ignoreRevsFile .git-blame-ignore-revs
 
 fix:
-	uv run ruff format .
-	uv run ruff check . --fix
+	uv run --python 3.13 ruff format .
+	uv run --python 3.13 ruff check . --fix
 
 lint:
-	uv run ruff format . --check
-	uv run ruff check .
+	uv run --python 3.13 ruff format . --check
+	uv run --python 3.13 ruff check .
 
 mypy:
-	uv run mypy
+	uv run --python 3.13 mypy
 
 # Build the docs HTML
 docs-html:
-	uv run sphinx-build -W \
+	uv run --python 3.13 sphinx-build -W \
 	-b html \
 	-d docs/build/doctrees \
 	docs \
@@ -30,18 +30,18 @@ docs-view: docs-html
 
 # Build docs and verify all external links work
 docs: docs-html
-	uv run sphinx-build -W \
+	uv run --python 3.13 sphinx-build -W \
 	-b linkcheck \
 	-d docs/build/doctrees \
 	docs \
 	docs/build/html
 
-# Run `uv run --python 3.13 pytest` to run against a specific Python version.
+# If you want a specific python version: `uv run --python 3.13 pytest`
 test:
 	uv run pytest
 
 coverage:
-	uv run pytest --cov=staticjinja --cov-report=xml
+	uv run --python 3.13 pytest --cov=staticjinja --cov-report=xml --cov-config=pyproject.toml
 	# Generate the html view of the coverage results, for local viewing.
 	uv run coverage html
 
