@@ -9,10 +9,6 @@ staticjinja
     :target: https://github.com/staticjinja/staticjinja/actions?query=branch%3Amain
     :alt: Build and Testing Status
 
-.. image:: https://readthedocs.org/projects/staticjinja/badge/?version=stable
-    :target: https://staticjinja.readthedocs.io/en/stable/?badge=stable&style=plastic
-    :alt: Documentation Status
-
 .. image:: https://codecov.io/gh/staticjinja/staticjinja/branch/main/graph/badge.svg?token=En337ZXsPK
     :target: https://codecov.io/gh/staticjinja/staticjinja
     :alt: Test coverage status
@@ -58,8 +54,7 @@ To install staticjinja, simply:
 Documentation
 -------------
 
-Documentation is available at
-https://staticjinja.readthedocs.io.
+Documentation is available at https://staticjinja.github.io/staticjinja
 
 Contribute
 ----------

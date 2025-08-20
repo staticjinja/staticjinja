@@ -9,7 +9,7 @@ features. But using template engines to build static websites is really useful.
 staticjinja is designed to be lightweight (under 500 lines of source code), and
 to be easy to use, learn, and extend, enabling you to focus on making your site.
 
-Documentation is available at https://staticjinja.readthedocs.org.
+Documentation is available at https://staticjinja.github.io/staticjinja/.
 
 Please file bugs, view source code, and contribute at
 https://github.com/staticjinja/staticjinja/

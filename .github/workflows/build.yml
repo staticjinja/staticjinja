@@ -70,7 +70,7 @@ jobs:
         with:
           name: html-docs
           path: docs/build/html/
-      - name: Deploy
+      - name: Deploy to GitHub Pages (gh-pages branch)
         uses: peaceiris/actions-gh-pages@v3
         if: github.ref == 'refs/heads/main'
         with:

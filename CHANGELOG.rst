@@ -15,6 +15,9 @@ Changed
 
 * (internal) Switch to uv as our package manager from poetry. Switch to ruff from black
   and flake8. Use uv to manage python versions instead of tox.
+* Switched to hosting docs on github pages.
+  The readthedocs provider was too out of our control.
+  Now we can build the static html ourselves and upload it ourselves.
 
 Added
 ^^^^^

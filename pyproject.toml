@@ -36,7 +36,8 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/staticjinja/staticjinja"
 Repository = "https://github.com/staticjinja/staticjinja"
-Documentation = "https://staticjinja.readthedocs.io"
+"Issue Tracker" = "https://github.com/staticjinja/staticjinja/issues"
+Documentation = "https://staticjinja.github.io/staticjinja/"
 
 [project.scripts]
 staticjinja = "staticjinja.cli:main"
