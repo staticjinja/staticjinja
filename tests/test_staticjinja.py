@@ -23,6 +23,13 @@ def test_templates(site: Site) -> None:
     assert [t.name for t in site.templates] == expected
 
 
+def test_is_static_directory_boundary(site: Site) -> None:
+    """Only files inside a static dir are static, not name-prefix matches."""
+    site.staticpaths = ["policies/"]
+    assert site.is_static("policies/document_1.pdf")
+    assert not site.is_static("policies.html")
+
+
 def test_get_context(site: Site) -> None:
     assert site.get_context(site.get_template("template1.html")) == {}
     assert site.get_context(site.get_template("template2.html")) == {"a": 1}

@@ -305,7 +305,11 @@ class Site:
 
         """
         path = Path(filename).as_posix()
-        return any(path.startswith(Path(sp).as_posix()) for sp in self.staticpaths)
+        return any(
+            path == Path(sp).as_posix()
+            or path.startswith(Path(sp).as_posix().rstrip("/") + "/")
+            for sp in self.staticpaths
+        )
 
     def is_partial(self, filename: FilePath) -> bool:
         """Check if a file is partial. Partial files are not
